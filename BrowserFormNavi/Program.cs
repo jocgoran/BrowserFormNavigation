@@ -1,13 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using BrowserFormNavi.Model;
+using BrowserFormNavi.View;
+using BrowserFormNavi.Controller;
 
 namespace BrowserFormNavi
 {
     static class Program
     {
+        public static FormNavi formNavi;
+        public static BrowserView browserView;
+        public static BrowserData browserData;
+        public static Navigation navigation;
+
         /// <summary>
         /// Punto di ingresso principale dell'applicazione.
         /// </summary>
@@ -16,7 +21,9 @@ namespace BrowserFormNavi
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            browserData = new BrowserData();           
+            navigation = new Navigation();
+            Application.Run(formNavi = new FormNavi());
         }
     }
 }
