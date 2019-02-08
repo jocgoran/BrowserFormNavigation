@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\AutmatedFiller.cs" />
+    <Compile Include="Controller\AutomatedFiller.cs" />
     <Compile Include="Controller\Navigation.cs" />
     <Compile Include="Controller\ReadingBrowserForm.cs" />
     <Compile Include="Controller\WritingBrowserForm.cs" />

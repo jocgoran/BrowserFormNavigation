@@ -8,10 +8,22 @@ namespace BrowserFormNavi
 {
     static class Program
     {
-        public static FormNavi formNavi;
-        public static BrowserView browserView;
-        public static BrowserData browserData;
+        // Controller objects
+        public static AutomatedFiller automatedFiller;
         public static Navigation navigation;
+        public static ReadingBrowserForm readingBrowserForm;
+        public static WritingBrowserForm writingBrowserForm;
+
+        // Model Objects
+        public static BrowserData browserData;
+        public static FormData formData;
+
+        // View objects
+        public static BrowserView browserView;
+        public static FormNavi formNavi;
+
+        // Globalerror code
+        public static int error=0;
 
         /// <summary>
         /// Punto di ingresso principale dell'applicazione.
@@ -21,8 +33,20 @@ namespace BrowserFormNavi
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            browserData = new BrowserData();           
+
+            // Controller objects
+            automatedFiller = new AutomatedFiller();
             navigation = new Navigation();
+            readingBrowserForm = new ReadingBrowserForm();
+            writingBrowserForm = new WritingBrowserForm();
+
+            // Model Objects
+            browserData = new BrowserData();
+            formData = new FormData();
+
+            // View objects
+            browserView = new BrowserView();
+
             Application.Run(formNavi = new FormNavi());
         }
     }

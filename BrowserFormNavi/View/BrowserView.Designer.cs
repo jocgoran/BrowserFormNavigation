@@ -1,6 +1,6 @@
 ﻿namespace BrowserFormNavi.View
 {
-    partial class BrowserView
+    sealed partial class BrowserView
     {
         /// <summary>
         /// Required designer variable.

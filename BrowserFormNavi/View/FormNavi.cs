@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using BrowserFormNavi.Controller;
 
 namespace BrowserFormNavi
 {
@@ -13,6 +12,16 @@ namespace BrowserFormNavi
         private void OpenPage(object sender, System.EventArgs e)
         {
             Program.navigation.OpenPage();
+        }
+
+        private void CopyDataToBrowser(object sender, System.EventArgs e)
+        {
+            Program.writingBrowserForm.CopyDataToBrowser();
+        }
+
+        private void InvokeFormSubmit(object sender, System.EventArgs e)
+        {
+            Program.writingBrowserForm.InvokeFormSubmit();
         }
     }
 }

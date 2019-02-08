@@ -4,13 +4,11 @@ namespace BrowserFormNavi.Model
 {
     sealed class BrowserData
     {
-        public string URLToLoad;
-        public string DOM;
+        public bool FormExtracted;
 
         public BrowserData()
             {
-            URLToLoad = "";
-            DOM = "";
+            FormExtracted = false;
             }
     }
 }

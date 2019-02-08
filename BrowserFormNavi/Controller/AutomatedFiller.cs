@@ -1,6 +1,6 @@
 ﻿namespace BrowserFormNavi.Controller
 {
-    class AutmatedFiller
+    sealed class AutomatedFiller
     {
 
         public static int SaveHistoricData()
