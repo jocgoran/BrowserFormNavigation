@@ -5,49 +5,94 @@ namespace BrowserFormNavi.Controller
 {
     sealed class WritingBrowserForm
     {
-     
+
         public int CopyDataToBrowser()
         {
+            if (Program.formNavi.comboBox2.SelectedItem == null)
+            {
+                MessageBox.Show("Choose a form", "Missong data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return 1;
+            }
+
             // read the form that have to be submitted  
-            int iChoosenFormNr = Convert.ToInt32(Program.formNavi.comboBox2.SelectedItem)-1;
+            string ChoosenFormNr = Program.formNavi.comboBox2.SelectedItem.ToString();
 
-            // extract the correct form
-            HtmlElementCollection forms = Program.browserView.webBrowser1.Document.GetElementsByTagName("form");
-            HtmlElement form = forms[iChoosenFormNr];
-
+            // loop over all the rows of data grid
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
-                string cellValue = "";
-                if(row.Cells["value"].Value != null)
-                    cellValue = row.Cells["value"].Value.ToString();
+                // last row is empty
+                if (row.Cells["FormID"].Value == null) continue;
 
-                // set the corresponding element in Browser depending on ID
-                if (row.Cells["id"].Value != null)
-                { 
-                    Program.browserView.webBrowser1.Document.GetElementById(row.Cells["id"].Value.ToString()).SetAttribute("value", cellValue);
-                }
-                // set the corresponding element in Browser depending on ID
-                else if (row.Cells["name"].Value != null)
-                { 
-                    //Program.browserView.webBrowser1.Document.getElementsByName(row.Cells["name"].Value.ToString()).SetAttribute("value", cellValue);
-                }
+                // handle only chooen form data
+                if (row.Cells["FormID"].Value.ToString() == ChoosenFormNr)
+                {
+                    // loop over all the input to find where to copy the value
+                    HtmlElementCollection forms = Program.browserView.webBrowser1.Document.GetElementsByTagName("form");
+                    foreach (HtmlElement form in forms)
+                    {
+                        HtmlElementCollection inputs = form.GetElementsByTagName("input");
+                        foreach (HtmlElement input in inputs)
+                        {
+                            // if the input match the entry in the DataGrid 
+                            if (input.GetAttribute("BFN_ID") == row.Cells["BFN_ID"].Value.ToString())
+                            {
+                                string cellValue = row.Cells["value"].Value.ToString();
 
-            }
+                                // set value to the browser
+                                input.SetAttribute("value", cellValue);
+
+                            } // end if BFN_ID
+                        } // end loop input
+                    } // end loop form
+                } // end if choosen FormID
+            } // end DataGrid loop
 
             return 0;
         }
 
         public int InvokeFormSubmit()
         {
+            // read the form that have to be submitted  
+            string ChoosenFormNr = Program.formNavi.comboBox2.SelectedItem.ToString();
+
             // reset the Browser loading var
             Program.browserData.FormExtracted = false;
             // clear DataGrid with form data 
             Program.formNavi.dataGridView1.Rows.Clear();
             // clear drop down menu of choosen form
             Program.formNavi.comboBox2.Items.Clear();
+                       
+            // loop over all the rows of data grid
+            foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
+            {
+                // last row is empty
+                if (row.Cells["FormID"].Value == null) continue;
+                if (row.Cells["Type"].Value == null) continue;
 
-            //submit form
-            Program.browserView.webBrowser1.Document.GetElementById("LoginButton").InvokeMember("click");
+                string formType = row.Cells["Type"].Value.ToString();
+
+                // handle only chooen form data and the type=submit
+                if (row.Cells["FormID"].Value.ToString() == ChoosenFormNr
+                   && formType.ToLower() == "submit")
+                {
+                    // loop over all the input to find where the submit type is
+                    HtmlElementCollection forms = Program.browserView.webBrowser1.Document.GetElementsByTagName("form");
+                    foreach (HtmlElement form in forms)
+                    {
+                        HtmlElementCollection inputs = form.GetElementsByTagName("input");
+                        foreach (HtmlElement input in inputs)
+                        {
+                            if (input.GetAttribute("BFN_ID") == row.Cells["BFN_ID"].Value.ToString())
+                            {
+                                // invoke the Submit
+                                input.InvokeMember("click");
+
+                            } // end if BFN_ID
+                        } // end loop input
+                    } // end loop form
+                } // end if choosen FormID
+            } // end DataGrid loop
+
             return 0;
         }
 

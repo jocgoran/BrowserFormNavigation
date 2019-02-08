@@ -1,4 +1,6 @@
-﻿namespace BrowserFormNavi
+﻿using System.Drawing;
+
+namespace BrowserFormNavi
 {
     sealed partial class FormNavi
     {
@@ -28,13 +30,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.BFN_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FormID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Action1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Name1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NameAttr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Checked = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -42,6 +53,7 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.FillAutoGenertedData = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,10 +80,12 @@
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.BFN_ID,
             this.FormID,
+            this.Tag,
             this.Action1,
             this.Type1,
-            this.Name1,
+            this.NameAttr,
             this.ID,
             this.Value,
             this.Checked});
@@ -80,15 +94,41 @@
             this.dataGridView1.Size = new System.Drawing.Size(921, 510);
             this.dataGridView1.TabIndex = 2;
             // 
+            // BFN_ID
+            // 
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Gray;
+            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle8;
+            this.BFN_ID.FillWeight = 50F;
+            this.BFN_ID.Frozen = true;
+            this.BFN_ID.HeaderText = "BFN_ID";
+            this.BFN_ID.Name = "BFN_ID";
+            this.BFN_ID.ReadOnly = true;
+            this.BFN_ID.Width = 50;
+            // 
             // FormID
             // 
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Gray;
+            this.FormID.DefaultCellStyle = dataGridViewCellStyle9;
+            this.FormID.FillWeight = 50F;
             this.FormID.Frozen = true;
-            this.FormID.HeaderText = "Form";
+            this.FormID.HeaderText = "FormID";
             this.FormID.Name = "FormID";
             this.FormID.ReadOnly = true;
+            this.FormID.Width = 50;
+            // 
+            // Tag
+            // 
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Gray;
+            this.Tag.DefaultCellStyle = dataGridViewCellStyle10;
+            this.Tag.Frozen = true;
+            this.Tag.HeaderText = "Tag";
+            this.Tag.Name = "Tag";
+            this.Tag.ReadOnly = true;
             // 
             // Action1
             // 
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Gray;
+            this.Action1.DefaultCellStyle = dataGridViewCellStyle11;
             this.Action1.Frozen = true;
             this.Action1.HeaderText = "Action";
             this.Action1.Name = "Action1";
@@ -96,20 +136,26 @@
             // 
             // Type1
             // 
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Gray;
+            this.Type1.DefaultCellStyle = dataGridViewCellStyle12;
             this.Type1.Frozen = true;
             this.Type1.HeaderText = "Type";
             this.Type1.Name = "Type1";
             this.Type1.ReadOnly = true;
             // 
-            // Name
+            // NameAttr
             // 
-            this.Name1.Frozen = true;
-            this.Name1.HeaderText = "Name";
-            this.Name1.Name = "Name";
-            this.Name1.ReadOnly = true;
+            dataGridViewCellStyle13.ForeColor = System.Drawing.Color.Gray;
+            this.NameAttr.DefaultCellStyle = dataGridViewCellStyle13;
+            this.NameAttr.Frozen = true;
+            this.NameAttr.HeaderText = "Name";
+            this.NameAttr.Name = "NameAttr";
+            this.NameAttr.ReadOnly = true;
             // 
             // ID
             // 
+            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Gray;
+            this.ID.DefaultCellStyle = dataGridViewCellStyle14;
             this.ID.Frozen = true;
             this.ID.HeaderText = "ID";
             this.ID.Name = "ID";
@@ -156,19 +202,30 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 570);
+            this.button3.Location = new System.Drawing.Point(228, 573);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(193, 20);
+            this.button3.Size = new System.Drawing.Size(193, 27);
             this.button3.TabIndex = 6;
-            this.button3.Text = "CopyToBrowser";
+            this.button3.Text = "Copy to browser";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.CopyDataToBrowser);
+            // 
+            // FillAutoGenertedData
+            // 
+            this.FillAutoGenertedData.Location = new System.Drawing.Point(12, 573);
+            this.FillAutoGenertedData.Name = "FillAutoGenertedData";
+            this.FillAutoGenertedData.Size = new System.Drawing.Size(200, 27);
+            this.FillAutoGenertedData.TabIndex = 7;
+            this.FillAutoGenertedData.Text = "Fill auto generted data";
+            this.FillAutoGenertedData.UseVisualStyleBackColor = true;
+            this.FillAutoGenertedData.Click += new System.EventHandler(this.button4_Click);
             // 
             // FormNavi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(945, 690);
+            this.Controls.Add(this.FillAutoGenertedData);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.comboBox2);
@@ -194,13 +251,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Action;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name1;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BFN_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn FormID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Tag;
         private System.Windows.Forms.DataGridViewTextBoxColumn Action1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NameAttr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.DataGridViewTextBoxColumn Checked;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button FillAutoGenertedData;
     }
 }
 

@@ -23,5 +23,10 @@ namespace BrowserFormNavi
         {
             Program.writingBrowserForm.InvokeFormSubmit();
         }
+
+        private void button4_Click(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }
