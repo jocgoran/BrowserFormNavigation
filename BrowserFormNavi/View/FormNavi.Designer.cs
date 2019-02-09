@@ -88,6 +88,7 @@ namespace BrowserFormNavi
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(921, 510);
             this.dataGridView1.TabIndex = 2;
+            this.dataGridView1.AllowUserToAddRows = false;
             // 
             // BFN_ID
             // 

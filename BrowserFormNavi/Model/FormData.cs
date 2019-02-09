@@ -1,11 +1,13 @@
 ﻿using System.Windows.Forms;
+using System;
 
 namespace BrowserFormNavi.Model
 {
     sealed class FormData
     {
+        public object GetDomain { get; private set; }
 
-        public int GetHistoricalData()
+        public int MatchExactInputData()
         {
             // read the form that have to be submitted  
             string ChoosenFormNr = Program.formNavi.comboBox2.SelectedItem.ToString();
@@ -18,14 +20,23 @@ namespace BrowserFormNavi.Model
                 {
 
                     string url = Program.formNavi.comboBox1.Text;
-                    string domain = Program.formNavi.comboBox1.Text;
-                    string formPageSpecificID = row.Cells["FormID"].Value.ToString();
+                    string domain = new Uri(Program.formNavi.comboBox1.Text).Host;
                     string tag = row.Cells["Tag"].Value.ToString();
                     string type = row.Cells["Type"].Value.ToString();
                     string name = row.Cells["Name"].Value.ToString();
                     string inputFieldID = row.Cells["ID"].Value.ToString();
 
-                    Program.dBAccess.retriveExactValue(url, domain, formPageSpecificID, tag, type, name, inputFieldID);
+                    // insert the input once 
+                    int error = Program.dBAccess.insertInputFormData(url, domain, tag, type, name, inputFieldID);
+
+                    // insert not success - data exists
+                    string value="", sCheckbox="";
+                    Program.dBAccess.retriveExactFormDataValue(url, domain, tag, type, name, inputFieldID, ref value, ref sCheckbox);
+                    if (!string.IsNullOrEmpty(value))
+                        row.Cells["Value"].Value = value;
+                    if (!string.IsNullOrEmpty(sCheckbox))
+                        row.Cells["Checkbox"].Value = sCheckbox;
+
                 } // end row enrichment
             } // end DataGrid loop
 

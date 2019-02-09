@@ -8,9 +8,9 @@
             return 0;
         }
 
-        public int ReadHistoricData()
+        public int AutoFillInputValue()
         {
-            Program.formData.GetHistoricalData();
+            int error=Program.formData.MatchExactInputData();
             return 0;
         }
 

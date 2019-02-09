@@ -28,7 +28,39 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int retriveExactValue(string url, string domain, string formPageSpecificID, string tag, string type, string name, string inputFieldID)
+        public int insertInputFormData(string url, string domain, string tag, string type, string name, string inputFieldID)
+        {
+
+            string sql = "INSERT INTO form (url, domain, tag, type, name, inputFieldID) " +
+                         "SELECT @url, @domain, @tag, @type, @name, @inputFieldID " +
+                         "WHERE NOT EXISTS " +
+                         "(SELECT * FROM form WHERE url=@url AND domain=@domain AND tag=@tag AND type=@type AND name=@name AND inputFieldID=@inputFieldID) ";
+
+            SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
+            sqlCommand.Parameters.Add(new SqlParameter("@url", url));
+            sqlCommand.Parameters.Add(new SqlParameter("@domain", domain));
+            sqlCommand.Parameters.Add(new SqlParameter("@tag", tag));
+            sqlCommand.Parameters.Add(new SqlParameter("@type", type));
+            sqlCommand.Parameters.Add(new SqlParameter("@name", name));
+            sqlCommand.Parameters.Add(new SqlParameter("@inputFieldID", inputFieldID));
+
+            sqlCommand.Connection = sqlConnection;
+            try
+            {
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show(e.Message.ToString(), "Error Message");
+            }
+
+            return 0;
+        }
+
+        public int retriveExactFormDataValue(string url, string domain, string tag, string type, string name, string inputFieldID, 
+                                             ref string value, ref string sCheckbox)
         {
 
             sqlConnection.Open();
@@ -39,7 +71,6 @@ namespace BrowserFormNavi.Model
                                                             "FROM form INNER JOIN historicalParam ON form.id = form_id " +
                                                             "WHERE url=@url " +
                                                             "AND domain=@domain " +
-                                                            "AND formPageSpecificID=@formPageSpecificID " +
                                                             "AND tag=@tag " +
                                                             "AND type=@type " +
                                                             "AND name=@name " +
@@ -48,7 +79,6 @@ namespace BrowserFormNavi.Model
 
             DBAdapter.SelectCommand.Parameters.AddWithValue("@url", url);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@formPageSpecificID", formPageSpecificID);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", tag);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@type", type);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@name", name);
@@ -60,12 +90,13 @@ namespace BrowserFormNavi.Model
             {
                 foreach (DataRow dataRow in exactMatchHistParam.Rows)
                 {
-                    string myValue=dataRow[0].ToString();
-                    string myValue1 = dataRow[1].ToString();
-                    string myValue2 = dataRow[2].ToString();
+                    value = dataRow["value"].ToString();
+                    sCheckbox = dataRow["checked"].ToString();
                 }
             }
-                return 0;
+            sqlConnection.Close();
+
+            return 0;
         }
 
         public int retriveSimilarValue(string domain)
