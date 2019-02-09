@@ -3,17 +3,18 @@
     sealed class AutomatedFiller
     {
 
-        public static int SaveHistoricData()
+        public int SaveHistoricData()
         {
             return 0;
         }
 
-        public static int ReadHistoricData()
+        public int ReadHistoricData()
         {
+            Program.formData.GetHistoricalData();
             return 0;
         }
 
-        public static int GetStatisticValue()
+        public int GetStatisticValue()
         {
             return 0;
         }

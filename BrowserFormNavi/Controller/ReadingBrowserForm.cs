@@ -44,6 +44,8 @@ namespace BrowserFormNavi.Controller
 
                 // add form number to list of form to submit
                 Program.formNavi.comboBox2.Items.Add(formNr);
+                // Preselect the first element
+                Program.formNavi.comboBox2.SelectedIndex=0;
 
                 // set the BrowserFormNavi specific ID of the tag
                 form.SetAttribute("BFN_ID", tagId.ToString());
