@@ -8,7 +8,7 @@ namespace BrowserFormNavi.Controller
 
         public int CopyDataToBrowser()
         {
-            if (Program.formNavi.comboBox2.SelectedItem == null)
+            if (Program.formNavi.comboBox2.SelectedIndex == -1)
             {
                 MessageBox.Show("Choose a form", "Missong data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return 1;
@@ -36,10 +36,16 @@ namespace BrowserFormNavi.Controller
                             // if the input match the entry in the DataGrid 
                             if (input.GetAttribute("BFN_ID") == row.Cells["BFN_ID"].Value.ToString())
                             {
-                                string cellValue = row.Cells["value"].Value.ToString();
+                                string cellValue = "";
+                                if(row.Cells["value"].Value!=null) cellValue=row.Cells["value"].Value.ToString();
+                                string cellChecked = "";
+                                if(row.Cells["checked"].Value!=null) cellChecked=row.Cells["checked"].Value.ToString();
 
                                 // set value to the browser
                                 input.SetAttribute("value", cellValue);
+
+                                // set checked to the browser
+                                input.SetAttribute("checked", cellChecked);
 
                             } // end if BFN_ID
                         } // end loop input
@@ -52,17 +58,13 @@ namespace BrowserFormNavi.Controller
 
         public int InvokeFormSubmit()
         {
-            // read the form that have to be submitted  
-            string ChoosenFormNr = Program.formNavi.comboBox2.SelectedItem.ToString();
-
             // reset the Browser loading var
             Program.browserData.FormExtracted = false;
-            // clear DataGrid with form data 
-            Program.formNavi.dataGridView1.Rows.Clear();
-            // clear drop down menu of choosen form
-            Program.formNavi.comboBox2.Items.Clear();
+
+            // read the form that have to be submitted  
+            string ChoosenFormNr = Program.formNavi.comboBox2.SelectedItem.ToString();
                        
-            // loop over all the rows of data grid
+            // loop over all the rows of data grid to find submit button
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
                 // last row is empty

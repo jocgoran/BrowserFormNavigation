@@ -33,5 +33,15 @@ namespace BrowserFormNavi
         {
             Program.navigation.AutoFillInputValue();
         }
+
+        private void SaveBrowserFilledDataToDatabase(object sender, System.EventArgs e)
+        {
+            Program.navigation.SaveBrowserFilledValuesToDatabase();
+        }
+
+        private void groupBox1_Enter(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

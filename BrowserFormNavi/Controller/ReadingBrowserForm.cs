@@ -12,8 +12,18 @@ namespace BrowserFormNavi.Controller
 
         public int ExtractBrowserForm()
         {
+            // reset the Browser loading var
+            Program.browserData.FormExtracted = false;
+            // clear DataGrid with form data 
+            Program.formNavi.dataGridView1.Rows.Clear();
+            // clear drop down menu of choosen form
+            Program.formNavi.comboBox2.Items.Clear();
+
             //set page title
             Program.browserView.Text = Program.browserView.webBrowser1.DocumentTitle.ToString();
+
+            //copy URl To Form
+            CopyUrlToForm();
 
             // extract the Form tag       
             if (Program.browserView.webBrowser1.Document != null)
@@ -62,7 +72,8 @@ namespace BrowserFormNavi.Controller
                                                             input.GetAttribute("type"),
                                                             input.GetAttribute("name"),
                                                             input.GetAttribute("id"),
-                                                            input.GetAttribute("value"));
+                                                            input.GetAttribute("value"),
+                                                            input.GetAttribute("checked"));
 
                     // set the BrowserFormNavi specific ID of the tag
                     input.SetAttribute("BFN_ID", tagId.ToString());
@@ -95,6 +106,45 @@ namespace BrowserFormNavi.Controller
         {
             //set page URL
             Program.formNavi.comboBox1.Text = Program.browserView.webBrowser1.Url.ToString();
+
+            return 0;
+        }
+
+        public int SaveBrowserValuesToDatabase()
+        {
+            // read the form that have to be submitted  
+            int ChoosenFormNr = Program.formNavi.comboBox2.SelectedIndex;
+
+            // get all the forms
+            HtmlElementCollection forms = Program.browserView.webBrowser1.Document.GetElementsByTagName("form");
+
+            // call the loop over the inputs of my choosen form
+            HtmlElementCollection inputs = forms[ChoosenFormNr].GetElementsByTagName("input");
+            foreach (HtmlElement input in inputs)
+            {
+
+                string url = Program.formNavi.comboBox1.Text;
+                string domain = new Uri(Program.formNavi.comboBox1.Text).Host;
+                string tag = "input";
+                string type = input.GetAttribute("type");
+                string name = input.GetAttribute("name");
+                string inputFieldID = input.GetAttribute("id");
+                string value = input.GetAttribute("value");
+                string sChecked = input.GetAttribute("checked");
+
+                // insert IF NOT EXISTS description of input data
+                int error = Program.dBAccess.InsertInputFormData(url, domain, tag, type, name, inputFieldID);
+
+                // get the FormPK of which to save parameters
+                int FormPK = 0;
+                Program.dBAccess.GetInputPrimaryKey(url, domain, tag, type, name, inputFieldID, ref FormPK);
+ 
+                if(input.GetAttribute("type") != "hidden")
+                {
+                    //save value and checkbox
+                    Program.dBAccess.SaveHistorcalInputParam(FormPK, value, sChecked);
+                }
+            }
 
             return 0;
         }

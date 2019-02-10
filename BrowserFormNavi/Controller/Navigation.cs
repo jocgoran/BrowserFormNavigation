@@ -8,7 +8,8 @@ namespace BrowserFormNavi.Controller
         public int OpenPage()
         {
             // Display the new form.  
-            Program.browserView.Show();
+            if (!Program.browserView.Visible)
+                Program.browserView.Show();
 
             //navigate to you destination 
             Program.browserView.webBrowser1.Navigate(Program.formNavi.comboBox1.Text);
@@ -19,7 +20,7 @@ namespace BrowserFormNavi.Controller
 
         public void ExtractForm(object sender, EventArgs e)
         {
-            if(!Program.browserData.FormExtracted)
+            if (!Program.browserData.FormExtracted)
                 WriteBrowserFormToGrid();
         }
 
@@ -31,7 +32,7 @@ namespace BrowserFormNavi.Controller
 
         public int CopyFromGridToBrowser()
         {
-            Program.writingBrowserForm.CopyDataToBrowser(); 
+            Program.writingBrowserForm.CopyDataToBrowser();
             return 0;
         }
 
@@ -44,6 +45,12 @@ namespace BrowserFormNavi.Controller
         public int AutoFillInputValue()
         {
             Program.automatedFiller.AutoFillInputValue();
+            return 0;
+        }
+
+        public int SaveBrowserFilledValuesToDatabase()
+        {
+            Program.readingBrowserForm.SaveBrowserValuesToDatabase();
             return 0;
         }
     }

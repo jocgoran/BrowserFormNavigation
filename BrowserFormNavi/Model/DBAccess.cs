@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
@@ -11,11 +12,11 @@ namespace BrowserFormNavi.Model
         public SqlConnection sqlConnection;
 
         public DBAccess()
-        { 
+        {
             connectionString = @"Data Source=localhost;Initial Catalog=Browserformnavi;User ID=sa;Password=SsvpZsvd1357;";
             // Set the connection string with pooling option
             connectionString += "Connection Timeout = 30; Connection Lifetime = 0; Min Pool Size = 0; Max Pool Size = 100; Pooling = true; ";
-            
+
             // create connection
             sqlConnection = new SqlConnection(connectionString);
         }
@@ -28,7 +29,7 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int insertInputFormData(string url, string domain, string tag, string type, string name, string inputFieldID)
+        public int InsertInputFormData(string url, string domain, string tag, string type, string name, string inputFieldID)
         {
 
             string sql = "INSERT INTO form (url, domain, tag, type, name, inputFieldID) " +
@@ -59,7 +60,43 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int retriveExactFormDataValue(string url, string domain, string tag, string type, string name, string inputFieldID, 
+        public int GetInputPrimaryKey(string url, string domain, string tag, string type, string name, string inputFieldID, ref int FormPK)
+        {
+            sqlConnection.Open();
+            DataTable tFormPk = new DataTable();
+
+            // select the exact match 
+            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select id " +
+                                                            "FROM form " +
+                                                            "WHERE url=@url " +
+                                                            "AND domain=@domain " +
+                                                            "AND tag=@tag " +
+                                                            "AND type=@type " +
+                                                            "AND name=@name " +
+                                                            "AND inputFieldID=@inputFieldID ", sqlConnection);
+
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@url", url);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", tag);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", type);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", name);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
+
+            DBAdapter.Fill(tFormPk);
+
+            if (tFormPk.Rows.Count > 0)
+            {
+                foreach (DataRow dataRow in tFormPk.Rows)
+                {
+                    FormPK = Convert.ToInt32(dataRow["id"]);
+                }
+            }
+            sqlConnection.Close();
+
+            return 0;
+        }
+
+        public int RetriveExactFormParamValue(string url, string domain, string tag, string type, string name, string inputFieldID,
                                              ref string value, ref string sCheckbox)
         {
 
@@ -99,7 +136,7 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int retriveSimilarValue(string domain)
+        public int RetriveSimilarValue(string domain)
         {
 
             sqlConnection.Open();
@@ -114,7 +151,32 @@ namespace BrowserFormNavi.Model
                                                 "OR inputFieldID=@inputFieldID ", sqlConnection);
             return 0;
         }
+
+        public int SaveHistorcalInputParam(int FormPK, string value, string sChecked)
+        {
+            string sql = "UPDATE historicalParam SET count = count+1 WHERE form_id = @FormPK " +
+                         "IF @@ROWCOUNT = 0 " +
+                         "INSERT INTO historicalParam(form_id, value, checked) VALUES(@FormPK, @value, @sChecked)";
+                       
+            SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
+            sqlCommand.Parameters.Add(new SqlParameter("@FormPK", FormPK));
+            sqlCommand.Parameters.Add(new SqlParameter("@value", value));
+            sqlCommand.Parameters.Add(new SqlParameter("@sChecked", sChecked));
+
+            sqlCommand.Connection = sqlConnection;
+            try
+            {
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show(e.Message.ToString(), "Error Message");
+            }
+
+            return 0;
+        }
+
     }
-
-
 }

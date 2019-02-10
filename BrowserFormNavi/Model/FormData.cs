@@ -5,51 +5,41 @@ namespace BrowserFormNavi.Model
 {
     sealed class FormData
     {
-        public object GetDomain { get; private set; }
 
-        public int MatchExactInputData()
+        public int MatchExactInputData(DataGridViewRow row)
         {
-            // read the form that have to be submitted  
-            string ChoosenFormNr = Program.formNavi.comboBox2.SelectedItem.ToString();
+            string url = Program.formNavi.comboBox1.Text;
+            string domain = new Uri(Program.formNavi.comboBox1.Text).Host;
+            string tag = row.Cells["Tag"].Value.ToString();
+            string type = row.Cells["Type"].Value.ToString();
+            string name = row.Cells["Name"].Value.ToString();
+            string inputFieldID = row.Cells["ID"].Value.ToString();
 
-            // loop over all the rows of data grid
-            foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
-            {
-                // handle only chooen form data
-                if (row.Cells["FormID"].Value.ToString() == ChoosenFormNr)
-                {
+            // search the exact match
+            string value="", sCheckbox="";
+            int success = 1;
+            Program.dBAccess.RetriveExactFormParamValue(url, domain, tag, type, name, inputFieldID, ref value, ref sCheckbox);
+            if (!string.IsNullOrEmpty(value))
+            { 
+                row.Cells["Value"].Value = value;
+                success = 0;
+            }
+            if (!string.IsNullOrEmpty(sCheckbox))
+            { 
+                row.Cells["Checkbox"].Value = sCheckbox;
+                success = 0;
+            }
 
-                    string url = Program.formNavi.comboBox1.Text;
-                    string domain = new Uri(Program.formNavi.comboBox1.Text).Host;
-                    string tag = row.Cells["Tag"].Value.ToString();
-                    string type = row.Cells["Type"].Value.ToString();
-                    string name = row.Cells["Name"].Value.ToString();
-                    string inputFieldID = row.Cells["ID"].Value.ToString();
-
-                    // insert the input once 
-                    int error = Program.dBAccess.insertInputFormData(url, domain, tag, type, name, inputFieldID);
-
-                    // insert not success - data exists
-                    string value="", sCheckbox="";
-                    Program.dBAccess.retriveExactFormDataValue(url, domain, tag, type, name, inputFieldID, ref value, ref sCheckbox);
-                    if (!string.IsNullOrEmpty(value))
-                        row.Cells["Value"].Value = value;
-                    if (!string.IsNullOrEmpty(sCheckbox))
-                        row.Cells["Checkbox"].Value = sCheckbox;
-
-                } // end row enrichment
-            } // end DataGrid loop
-
-            return 0;
+            return success;
 
         }
 
-        public int GetStatisticValue()
+        public int GetMostReliableValue()
         {
             return 0;
         }
 
-        public int SaveHistoricalData()
+        public int SaveFormValues()
         {
             //   table Login | domain - login - password
             //table from | domain - tag - type - id - name - value
