@@ -1,11 +1,10 @@
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\bin\Debug\BrowserFormNavi.exe.config
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\bin\Debug\BrowserFormNavi.exe
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\bin\Debug\BrowserFormNavi.pdb
+C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.FormNavi.resources
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.Properties.Resources.resources
+C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.View.BrowserView.resources
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.csproj.GenerateResource.cache
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.csproj.CoreCompileInputs.cache
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.exe
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.pdb
-C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.csprojAssemblyReference.cache
-C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.FormNavi.resources
-C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.View.BrowserView.resources

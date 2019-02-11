@@ -3,7 +3,7 @@ using System;
 
 namespace BrowserFormNavi.Model
 {
-    sealed class FormData
+    public class FormData
     {
 
         public int MatchExactInputData(DataGridViewRow row)
@@ -16,17 +16,17 @@ namespace BrowserFormNavi.Model
             string inputFieldID = row.Cells["ID"].Value.ToString();
 
             // search the exact match
-            string value="", sCheckbox="";
+            string value="", sChecked="";
             int success = 1;
-            Program.dBAccess.RetriveExactFormParamValue(url, domain, tag, type, name, inputFieldID, ref value, ref sCheckbox);
+            Program.dBAccess.RetriveExactFormParamValue(url, domain, tag, type, name, inputFieldID, ref value, ref sChecked);
             if (!string.IsNullOrEmpty(value))
             { 
                 row.Cells["Value"].Value = value;
                 success = 0;
             }
-            if (!string.IsNullOrEmpty(sCheckbox))
+            if (!string.IsNullOrEmpty(sChecked))
             { 
-                row.Cells["Checkbox"].Value = sCheckbox;
+                row.Cells["Checked"].Value = sChecked;
                 success = 0;
             }
 

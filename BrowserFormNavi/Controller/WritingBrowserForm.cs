@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace BrowserFormNavi.Controller
 {
-    sealed class WritingBrowserForm
+    public class WritingBrowserForm
     {
 
         public int CopyDataToBrowser()

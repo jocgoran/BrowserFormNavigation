@@ -2,7 +2,7 @@
 
 namespace BrowserFormNavi.Model
 {
-    sealed class BrowserData
+    public class BrowserData
     {
         public bool FormExtracted;
 

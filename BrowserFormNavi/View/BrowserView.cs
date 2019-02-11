@@ -2,7 +2,7 @@
 
 namespace BrowserFormNavi.View
 {
-    public sealed partial class BrowserView : Form
+    public partial class BrowserView : Form
     {
         public BrowserView()
         {

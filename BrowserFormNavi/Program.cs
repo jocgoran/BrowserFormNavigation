@@ -6,8 +6,11 @@ using BrowserFormNavi.Controller;
 
 namespace BrowserFormNavi
 {
-    static class Program
+    public static class Program
     {
+        // Global var to stop the navigation loop from the thread 
+        public static bool keepTheNavigationLoopRunning;
+
         // Controller objects
         public static AutomatedFiller automatedFiller;
         public static Navigation navigation;

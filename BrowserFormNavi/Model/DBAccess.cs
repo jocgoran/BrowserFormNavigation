@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace BrowserFormNavi.Model
 {
-    sealed class DBAccess
+    public class DBAccess
     {
 
         public string connectionString;
@@ -21,7 +21,7 @@ namespace BrowserFormNavi.Model
             sqlConnection = new SqlConnection(connectionString);
         }
 
-        public int checkDBConnection()
+        public int CheckDBConnection()
         {
             sqlConnection.Open();
             MessageBox.Show("Connection Open  !");
@@ -97,7 +97,7 @@ namespace BrowserFormNavi.Model
         }
 
         public int RetriveExactFormParamValue(string url, string domain, string tag, string type, string name, string inputFieldID,
-                                             ref string value, ref string sCheckbox)
+                                             ref string value, ref string sChecked)
         {
 
             sqlConnection.Open();
@@ -128,7 +128,7 @@ namespace BrowserFormNavi.Model
                 foreach (DataRow dataRow in exactMatchHistParam.Rows)
                 {
                     value = dataRow["value"].ToString();
-                    sCheckbox = dataRow["checked"].ToString();
+                    sChecked = dataRow["checked"].ToString();
                 }
             }
             sqlConnection.Close();
@@ -154,7 +154,7 @@ namespace BrowserFormNavi.Model
 
         public int SaveHistorcalInputParam(int FormPK, string value, string sChecked)
         {
-            string sql = "UPDATE historicalParam SET count = count+1 WHERE form_id = @FormPK " +
+            string sql = "UPDATE historicalParam SET count = count+1 WHERE form_id=@FormPK AND value=@value AND checked=@sChecked " +
                          "IF @@ROWCOUNT = 0 " +
                          "INSERT INTO historicalParam(form_id, value, checked) VALUES(@FormPK, @value, @sChecked)";
                        

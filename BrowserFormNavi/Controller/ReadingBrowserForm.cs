@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace BrowserFormNavi.Controller
 {
-    class ReadingBrowserForm
+    public class ReadingBrowserForm
     {
 
         public int ExtractBrowserForm()
@@ -73,7 +73,7 @@ namespace BrowserFormNavi.Controller
                                                             input.GetAttribute("name"),
                                                             input.GetAttribute("id"),
                                                             input.GetAttribute("value"),
-                                                            input.GetAttribute("checked"));
+                                                            input.GetAttribute("checked")=="False"?"":"checked");
 
                     // set the BrowserFormNavi specific ID of the tag
                     input.SetAttribute("BFN_ID", tagId.ToString());
@@ -130,7 +130,7 @@ namespace BrowserFormNavi.Controller
                 string name = input.GetAttribute("name");
                 string inputFieldID = input.GetAttribute("id");
                 string value = input.GetAttribute("value");
-                string sChecked = input.GetAttribute("checked");
+                string sChecked = input.GetAttribute("checked") == "False" ? "" : "checked";
 
                 // insert IF NOT EXISTS description of input data
                 int error = Program.dBAccess.InsertInputFormData(url, domain, tag, type, name, inputFieldID);
