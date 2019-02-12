@@ -8,25 +8,26 @@ namespace BrowserFormNavi.Model
 
         public int MatchExactInputData(DataGridViewRow row)
         {
-            string url = Program.formNavi.comboBox1.Text;
-            string domain = new Uri(Program.formNavi.comboBox1.Text).Host;
-            string tag = row.Cells["Tag"].Value.ToString();
-            string type = row.Cells["Type"].Value.ToString();
-            string name = row.Cells["Name"].Value.ToString();
-            string inputFieldID = row.Cells["ID"].Value.ToString();
+            // string url = Program.formNavi.comboBox1.Text;
+            string url = Program.formNavi.GetComboBoxSelectedItem(Program.formNavi.comboBox1);
+            string domain = new Uri(url).Host;
+            string tag = Program.formNavi.GetDataGridCell(row, "TagAttribute");
+            string type = Program.formNavi.GetDataGridCell(row, "TypeAttribute");
+            string name = Program.formNavi.GetDataGridCell(row, "NameAttribute");
+            string inputFieldID = Program.formNavi.GetDataGridCell(row, "IDAttribute");
 
             // search the exact match
             string value="", sChecked="";
             int success = 1;
             Program.dBAccess.RetriveExactFormParamValue(url, domain, tag, type, name, inputFieldID, ref value, ref sChecked);
             if (!string.IsNullOrEmpty(value))
-            { 
-                row.Cells["Value"].Value = value;
+            {
+                Program.formNavi.SetDataGridCell(row, "ValueAttribute", value);
                 success = 0;
             }
             if (!string.IsNullOrEmpty(sChecked))
             { 
-                row.Cells["Checked"].Value = sChecked;
+                Program.formNavi.SetDataGridCell(row, "CheckedAttribute", value);
                 success = 0;
             }
 
@@ -36,15 +37,6 @@ namespace BrowserFormNavi.Model
 
         public int GetMostReliableValue()
         {
-            return 0;
-        }
-
-        public int SaveFormValues()
-        {
-            //   table Login | domain - login - password
-            //table from | domain - tag - type - id - name - value
-            //table  AutomatedValue | FormId - value - checked - Count - Error
-
             return 0;
         }
     }

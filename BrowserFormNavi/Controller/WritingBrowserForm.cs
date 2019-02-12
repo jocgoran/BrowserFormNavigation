@@ -8,23 +8,20 @@ namespace BrowserFormNavi.Controller
 
         public int CopyDataToBrowser()
         {
-            if (Program.formNavi.comboBox2.SelectedIndex == -1)
+            if (string.IsNullOrEmpty(Program.formNavi.GetComboBoxSelectedItem(Program.formNavi.comboBox2)))
             {
                 MessageBox.Show("Choose a form", "Missong data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return 1;
             }
 
             // read the form that have to be submitted  
-            string ChoosenFormNr = Program.formNavi.comboBox2.SelectedItem.ToString();
+            string ChoosenFormNr = Program.formNavi.GetComboBoxSelectedItem(Program.formNavi.comboBox2);
 
             // loop over all the rows of data grid
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
-                // last row is empty
-                if (row.Cells["FormID"].Value == null) continue;
-
                 // handle only chooen form data
-                if (row.Cells["FormID"].Value.ToString() == ChoosenFormNr)
+                if (Program.formNavi.GetDataGridCell(row, "FormID") == ChoosenFormNr)
                 {
                     // loop over all the input to find where to copy the value
                     HtmlElementCollection forms = Program.browserView.webBrowser1.Document.GetElementsByTagName("form");
@@ -53,6 +50,9 @@ namespace BrowserFormNavi.Controller
                 } // end if choosen FormID
             } // end DataGrid loop
 
+            // needed to see the new values
+            Program.browserView.webBrowser1.Update();
+
             return 0;
         }
 
@@ -69,9 +69,9 @@ namespace BrowserFormNavi.Controller
             {
                 // last row is empty
                 if (row.Cells["FormID"].Value == null) continue;
-                if (row.Cells["Type"].Value == null) continue;
+                if (row.Cells["TypeAttribute"].Value == null) continue;
 
-                string formType = row.Cells["Type"].Value.ToString();
+                string formType = row.Cells["TypeAttribute"].Value.ToString();
 
                 // handle only chooen form data and the type=submit
                 if (row.Cells["FormID"].Value.ToString() == ChoosenFormNr
@@ -95,6 +95,8 @@ namespace BrowserFormNavi.Controller
                 } // end if choosen FormID
             } // end DataGrid loop
 
+            // needed to see the new values
+            Program.browserView.webBrowser1.Update();
             return 0;
         }
 

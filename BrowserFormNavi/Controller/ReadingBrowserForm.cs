@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi.Controller
@@ -33,6 +29,9 @@ namespace BrowserFormNavi.Controller
                 LoopOverAllForms(forms);
             }
             Program.browserData.FormExtracted = true;
+
+            // needed to see the new values
+            Program.formNavi.dataGridView1.Update();
             return 0;
         }
 
@@ -112,6 +111,7 @@ namespace BrowserFormNavi.Controller
 
         public int SaveBrowserValuesToDatabase()
         {
+            Program.browserView.webBrowser1.Update();
             // read the form that have to be submitted  
             int ChoosenFormNr = Program.formNavi.comboBox2.SelectedIndex;
 

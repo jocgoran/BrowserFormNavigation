@@ -8,3 +8,4 @@ C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFor
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.csproj.CoreCompileInputs.cache
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.exe
 C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.pdb
+C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\obj\Debug\BrowserFormNavi.csprojAssemblyReference.cache

@@ -57,17 +57,14 @@ namespace BrowserFormNavi.Controller
 
         public int StartTheNavigationLoop()
         {
-            Thread t = new Thread(StopTheNavigationLoop);
-            t.Start();
-
             NavigationLoop();
             return 0;
         }
 
-        public void StopTheNavigationLoop()
+        public int StopTheNavigationLoop()
         {
-            MessageBox.Show("Clieck when you want to abort", "Abort", MessageBoxButtons.OK);
             Program.keepTheNavigationLoopRunning = false;
+            return 0;
         }
 
         public int NavigationLoop()
@@ -77,14 +74,19 @@ namespace BrowserFormNavi.Controller
             while (Program.keepTheNavigationLoopRunning)
             {
                 Thread.Sleep(5000);
+                if (!Program.keepTheNavigationLoopRunning) break;
                 AutoFillInputValue();
                 Thread.Sleep(5000);
+                if (!Program.keepTheNavigationLoopRunning) break;
                 CopyFromGridToBrowser();
                 Thread.Sleep(5000);
+                if (!Program.keepTheNavigationLoopRunning) break;
                 SaveBrowserFilledValuesToDatabase();
                 Thread.Sleep(5000);
+                if (!Program.keepTheNavigationLoopRunning) break;
                 InvokeSubmit();
                 Thread.Sleep(5000);
+                if (!Program.keepTheNavigationLoopRunning) break;
                 WriteBrowserFormToGrid();
             }
             return 0;

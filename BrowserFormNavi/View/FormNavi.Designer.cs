@@ -31,13 +31,13 @@ namespace BrowserFormNavi
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -49,16 +49,18 @@ namespace BrowserFormNavi
             this.btnCheckDBConnection = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button5 = new System.Windows.Forms.Button();
+            this.buttonStop = new System.Windows.Forms.Button();
+            this.buttonStart = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.BFN_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FormID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Tag = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Action1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Checked = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TagAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ActionAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TypeAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NameAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IDAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CheckedAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -70,7 +72,8 @@ namespace BrowserFormNavi
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(804, 21);
             this.comboBox1.TabIndex = 0;
-            this.comboBox1.Text = "https://sdp.newaccess.ch";
+            this.comboBox1.Text = "Url to navigate";
+            this.comboBox1.Items.Add("https://sdp.newaccess.ch/");
             // 
             // button1
             // 
@@ -89,13 +92,13 @@ namespace BrowserFormNavi
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BFN_ID,
             this.FormID,
-            this.Tag,
-            this.Action1,
-            this.Type,
-            this.Name,
-            this.ID,
-            this.Value,
-            this.Checked});
+            this.TagAttribute,
+            this.ActionAttribute,
+            this.TypeAttribute,
+            this.NameAttribute,
+            this.IDAttribute,
+            this.ValueAttribute,
+            this.CheckedAttribute});
             this.dataGridView1.Location = new System.Drawing.Point(12, 54);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(921, 510);
@@ -170,7 +173,8 @@ namespace BrowserFormNavi
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button5);
+            this.groupBox1.Controls.Add(this.buttonStop);
+            this.groupBox1.Controls.Add(this.buttonStart);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Location = new System.Drawing.Point(12, 578);
             this.groupBox1.Name = "groupBox1";
@@ -179,20 +183,31 @@ namespace BrowserFormNavi
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Perform recursively automated";
             // 
-            // button5
+            // buttonStop
             // 
-            this.button5.Location = new System.Drawing.Point(156, -1);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(54, 22);
-            this.button5.TabIndex = 11;
-            this.button5.Text = "Start";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.StartTheNavigation);
+            this.buttonStop.Enabled = false;
+            this.buttonStop.Location = new System.Drawing.Point(216, -1);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(56, 22);
+            this.buttonStop.TabIndex = 12;
+            this.buttonStop.Text = "Stop";
+            this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.StopTheNavigation);
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(156, -1);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(54, 22);
+            this.buttonStart.TabIndex = 11;
+            this.buttonStart.Text = "Start";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.StartTheNavigation);
             // 
             // BFN_ID
             // 
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Gray;
-            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Gray;
+            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle8;
             this.BFN_ID.FillWeight = 50F;
             this.BFN_ID.Frozen = true;
             this.BFN_ID.HeaderText = "BFN_ID";
@@ -202,8 +217,8 @@ namespace BrowserFormNavi
             // 
             // FormID
             // 
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Gray;
-            this.FormID.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Gray;
+            this.FormID.DefaultCellStyle = dataGridViewCellStyle9;
             this.FormID.FillWeight = 50F;
             this.FormID.Frozen = true;
             this.FormID.HeaderText = "FormID";
@@ -211,62 +226,62 @@ namespace BrowserFormNavi
             this.FormID.ReadOnly = true;
             this.FormID.Width = 50;
             // 
-            // Tag
+            // TagAttribute
             // 
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Gray;
-            this.Tag.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Tag.Frozen = true;
-            this.Tag.HeaderText = "Tag";
-            this.Tag.Name = "Tag";
-            this.Tag.ReadOnly = true;
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Gray;
+            this.TagAttribute.DefaultCellStyle = dataGridViewCellStyle10;
+            this.TagAttribute.Frozen = true;
+            this.TagAttribute.HeaderText = "Tag";
+            this.TagAttribute.Name = "TagAttribute";
+            this.TagAttribute.ReadOnly = true;
             // 
-            // Action1
+            // ActionAttribute
             // 
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Gray;
-            this.Action1.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Action1.Frozen = true;
-            this.Action1.HeaderText = "Action";
-            this.Action1.Name = "Action1";
-            this.Action1.ReadOnly = true;
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Gray;
+            this.ActionAttribute.DefaultCellStyle = dataGridViewCellStyle11;
+            this.ActionAttribute.Frozen = true;
+            this.ActionAttribute.HeaderText = "Action";
+            this.ActionAttribute.Name = "ActionAttribute";
+            this.ActionAttribute.ReadOnly = true;
             // 
-            // Type
+            // TypeAttribute
             // 
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Gray;
-            this.Type.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Type.Frozen = true;
-            this.Type.HeaderText = "Type";
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Gray;
+            this.TypeAttribute.DefaultCellStyle = dataGridViewCellStyle12;
+            this.TypeAttribute.Frozen = true;
+            this.TypeAttribute.HeaderText = "Type";
+            this.TypeAttribute.Name = "TypeAttribute";
+            this.TypeAttribute.ReadOnly = true;
             // 
-            // Name
+            // NameAttribute
             // 
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Gray;
-            this.Name.DefaultCellStyle = dataGridViewCellStyle6;
-            this.Name.Frozen = true;
-            this.Name.HeaderText = "Name";
-            this.Name.Name = "Name";
-            this.Name.ReadOnly = true;
+            dataGridViewCellStyle13.ForeColor = System.Drawing.Color.Gray;
+            this.NameAttribute.DefaultCellStyle = dataGridViewCellStyle13;
+            this.NameAttribute.Frozen = true;
+            this.NameAttribute.HeaderText = "Name";
+            this.NameAttribute.Name = "NameAttribute";
+            this.NameAttribute.ReadOnly = true;
             // 
-            // ID
+            // IDAttribute
             // 
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Gray;
-            this.ID.DefaultCellStyle = dataGridViewCellStyle7;
-            this.ID.Frozen = true;
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
+            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Gray;
+            this.IDAttribute.DefaultCellStyle = dataGridViewCellStyle14;
+            this.IDAttribute.Frozen = true;
+            this.IDAttribute.HeaderText = "ID";
+            this.IDAttribute.Name = "IDAttribute";
+            this.IDAttribute.ReadOnly = true;
             // 
-            // Value
+            // ValueAttribute
             // 
-            this.Value.Frozen = true;
-            this.Value.HeaderText = "Value";
-            this.Value.Name = "Value";
+            this.ValueAttribute.Frozen = true;
+            this.ValueAttribute.HeaderText = "Value";
+            this.ValueAttribute.Name = "ValueAttribute";
             // 
-            // Checked
+            // CheckedAttribute
             // 
-            this.Checked.Frozen = true;
-            this.Checked.HeaderText = "Checked";
-            this.Checked.Name = "Checked";
+            this.CheckedAttribute.Frozen = true;
+            this.CheckedAttribute.HeaderText = "Checked";
+            this.CheckedAttribute.Name = "CheckedAttribute";
             // 
             // FormNavi
             // 
@@ -283,6 +298,7 @@ namespace BrowserFormNavi
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.groupBox1);
+            this.Name = "FormNavi";
             this.Text = "Automated formular extractor and formular submitter";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -292,27 +308,29 @@ namespace BrowserFormNavi
         }
 
         #endregion
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.Button button2;
+        public System.Windows.Forms.ComboBox comboBox1;
+        public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.DataGridView dataGridView1;
+        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.ComboBox comboBox2;
+        public System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button FillAutoGenertedData;
         private System.Windows.Forms.Button btnCheckDBConnection;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button buttonStart;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private Button buttonStop;
         private DataGridViewTextBoxColumn BFN_ID;
         private DataGridViewTextBoxColumn FormID;
-        private new DataGridViewTextBoxColumn Tag;
-        private DataGridViewTextBoxColumn Action1;
-        private DataGridViewTextBoxColumn Type;
-        private new DataGridViewTextBoxColumn Name;
-        private DataGridViewTextBoxColumn ID;
-        private DataGridViewTextBoxColumn Value;
-        private DataGridViewTextBoxColumn Checked;
+        private DataGridViewTextBoxColumn TagAttribute;
+        private DataGridViewTextBoxColumn ActionAttribute;
+        private DataGridViewTextBoxColumn TypeAttribute;
+        private DataGridViewTextBoxColumn NameAttribute;
+        private DataGridViewTextBoxColumn IDAttribute;
+        private DataGridViewTextBoxColumn ValueAttribute;
+        private DataGridViewTextBoxColumn CheckedAttribute;
     }
 }
 
