@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BrowserFormNavi.View;
+using System;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -8,10 +9,18 @@ namespace BrowserFormNavi.Controller
     {
         public int OpenPage()
         {
+            Program.browserView.Dispose();
+            Program.browserView.Open();
+            if (Program.browserView==null)
+            {
+                Program.browserView = new BrowserView();
+            }
+
             // Display the new form.  
             if (!Program.browserView.Visible)
+            {
                 Program.browserView.Show();
-
+            }
             //navigate to you destination 
             Program.browserView.webBrowser1.Navigate(Program.formNavi.comboBox1.Text);
             Program.browserView.webBrowser1.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(ExtractForm);

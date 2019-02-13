@@ -5,16 +5,21 @@ namespace BrowserFormNavi
 {
     delegate void EnableButtonDelegate(Button button, bool enable);
     delegate string GetComboBoxSelectedItemDelegate(ComboBox comboBoxName);
+    delegate int GetComboBoxSelectedIndexDelegate(ComboBox comboBoxName);
     delegate void SetDataGridCellDelegate(DataGridViewRow row, string colName, string value);
     delegate string GetDataGridCellDelegate(DataGridViewRow row, string colName);
+    delegate void DataGridViewClearDelegate();
+    delegate void ComboBoxClearDelegate(ComboBox comboBoxName);
+    delegate void EnableComboBoxDelegate(ComboBox comboBoxName, bool enable);
+
     public partial class FormNavi : Form
     {
         public FormNavi()
         {
             InitializeComponent();
 
-            backgroundWorker1.DoWork += backgroundWorker1_DoWork;
-            backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;  //Tell the user how the process went
+            backgroundWorker1.DoWork += BackgroundWorker1_DoWork;
+            backgroundWorker1.RunWorkerCompleted += BackgroundWorker1_RunWorkerCompleted;  //Tell the user how the process went
             backgroundWorker1.WorkerSupportsCancellation = true; //Allow for the process to be cancelled
         }
 
@@ -33,7 +38,7 @@ namespace BrowserFormNavi
             Program.navigation.InvokeSubmit();
         }
 
-        private void checkDBConnection(object sender, System.EventArgs e)
+        private void CheckDBConnection(object sender, System.EventArgs e)
         {
             Program.dBAccess.CheckDBConnection();
         }
@@ -63,11 +68,16 @@ namespace BrowserFormNavi
 
         // This event handler deals with the results of the
         // background operation.
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void BackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.EnableButton(buttonStart, true);
-            this.EnableButton(buttonStop, false);
-            this.EnableButton(FillAutoGenertedData, true);
+            EnableButton(buttonStart, true);
+            EnableButton(buttonStop, false);
+            EnableButton(FillAutoGenertedData, true);
+            EnableButton(CopyToBrowser, true);
+            EnableButton(SaveBrowserValuesToDB, true);
+            EnableButton(Go, true);
+            EnableButton(Submit, true);
+            EnableComboBox(comboBox2, true);
         }
 
         private void StartTheNavigation(object sender, System.EventArgs e)
@@ -75,12 +85,17 @@ namespace BrowserFormNavi
             backgroundWorker1.RunWorkerAsync();
         }
 
-        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             // FormNavi.Invoke(FormNavi.button5.Enable = false);         
-            this.EnableButton(buttonStart, false);
-            this.EnableButton(buttonStop, true);
-            this.EnableButton(FillAutoGenertedData, false); 
+            EnableButton(buttonStart, false);
+            EnableButton(buttonStop, true);
+            EnableButton(FillAutoGenertedData, false);
+            EnableButton(CopyToBrowser, false);
+            EnableButton(SaveBrowserValuesToDB, false);
+            EnableButton(Go, false);
+            EnableButton(Submit, false);
+            EnableComboBox(comboBox2, false);
             Program.navigation.StartTheNavigationLoop();
         }
 
@@ -113,12 +128,25 @@ namespace BrowserFormNavi
             }
         }
 
+        public int GetComboBoxSelectedIndex(ComboBox comboBoxName)
+        {
+            if (comboBoxName.InvokeRequired)
+            {
+                GetComboBoxSelectedIndexDelegate gsid = new GetComboBoxSelectedIndexDelegate(GetComboBoxSelectedIndex);
+                return (int)comboBoxName.Invoke(gsid, new object[] { comboBoxName });
+            }
+            else
+            {
+                return comboBoxName.SelectedIndex;
+            }
+        }
+
         public void SetDataGridCell(DataGridViewRow row, string colName, string value)
         {
-            if (Program.formNavi.dataGridView1.InvokeRequired)
+            if (dataGridView1.InvokeRequired)
             {
                 SetDataGridCellDelegate sdgcd = new SetDataGridCellDelegate(SetDataGridCell);
-                Program.formNavi.dataGridView1.Invoke(sdgcd, new object[] { row, colName, value});
+                dataGridView1.Invoke(sdgcd, new object[] { row, colName, value});
             }
             else
             {
@@ -136,6 +164,45 @@ namespace BrowserFormNavi
             else
             {
                 return row.Cells[colName].Value.ToString();
+            }
+        }
+
+        public void DataGridViewClear()
+        {
+            if (dataGridView1.InvokeRequired)
+            {
+                DataGridViewClearDelegate dgwcl = new DataGridViewClearDelegate(DataGridViewClear);
+                dataGridView1.Invoke(dgwcl, new object[] { });
+            }
+            else
+            {
+                dataGridView1.Rows.Clear();
+            }
+        }
+
+        public void ComboBoxClear(ComboBox comboBoxName)
+        {
+            if (comboBoxName.InvokeRequired)
+            {
+                ComboBoxClearDelegate cbcd = new ComboBoxClearDelegate(ComboBoxClear);
+                comboBoxName.Invoke(cbcd, new object[] { });
+            }
+            else
+            {
+                comboBoxName.Items.Clear();
+            }
+        }
+
+        public void EnableComboBox(ComboBox comboBoxName, bool enable)
+        {
+            if (comboBoxName.InvokeRequired)
+            {
+                EnableComboBoxDelegate ebd = new EnableComboBoxDelegate(EnableComboBox);
+                comboBoxName.Invoke(ebd, new object[] { comboBoxName, enable });
+            }
+            else
+            {
+                comboBoxName.Enabled = enable;
             }
         }
     }

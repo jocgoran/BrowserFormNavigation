@@ -23,20 +23,29 @@ namespace BrowserFormNavi.Controller
                 // handle only chooen form data
                 if (Program.formNavi.GetDataGridCell(row, "FormID") == ChoosenFormNr)
                 {
-                    // loop over all the input to find where to copy the value
-                    HtmlElementCollection forms = Program.browserView.webBrowser1.Document.GetElementsByTagName("form");
+                    // get the Browser document thread safe
+                    HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
+
+                    // loop over all the forms to find where to copy the value
+                    HtmlElementCollection forms = htmlDocument.GetElementsByTagName("form");
                     foreach (HtmlElement form in forms)
                     {
                         HtmlElementCollection inputs = form.GetElementsByTagName("input");
                         foreach (HtmlElement input in inputs)
                         {
                             // if the input match the entry in the DataGrid 
-                            if (input.GetAttribute("BFN_ID") == row.Cells["BFN_ID"].Value.ToString())
+                            if (input.GetAttribute("BFN_ID") == Program.formNavi.GetDataGridCell(row, "BFN_ID"))
                             {
                                 string cellValue = "";
-                                if(row.Cells["value"].Value!=null) cellValue=row.Cells["value"].Value.ToString();
+                                if (string.IsNullOrEmpty(Program.formNavi.GetDataGridCell(row, "valueAttribute")) == false)
+                                {
+                                    cellValue = Program.formNavi.GetDataGridCell(row, "valueAttribute");
+                                }
                                 string cellChecked = "";
-                                if(row.Cells["checked"].Value!=null) cellChecked=row.Cells["checked"].Value.ToString();
+                                if (string.IsNullOrEmpty(Program.formNavi.GetDataGridCell(row, "checkedAttribute")) == false)
+                                {
+                                    cellChecked = Program.formNavi.GetDataGridCell(row, "checkedAttribute");
+                                }
 
                                 // set value to the browser
                                 input.SetAttribute("value", cellValue);
@@ -50,9 +59,6 @@ namespace BrowserFormNavi.Controller
                 } // end if choosen FormID
             } // end DataGrid loop
 
-            // needed to see the new values
-            Program.browserView.webBrowser1.Update();
-
             return 0;
         }
 
@@ -62,8 +68,8 @@ namespace BrowserFormNavi.Controller
             Program.browserData.FormExtracted = false;
 
             // read the form that have to be submitted  
-            string ChoosenFormNr = Program.formNavi.comboBox2.SelectedItem.ToString();
-                       
+            string ChoosenFormNr = Program.formNavi.GetComboBoxSelectedItem(Program.formNavi.comboBox2);
+
             // loop over all the rows of data grid to find submit button
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
@@ -77,8 +83,11 @@ namespace BrowserFormNavi.Controller
                 if (row.Cells["FormID"].Value.ToString() == ChoosenFormNr
                    && formType.ToLower() == "submit")
                 {
+                    // get the Browser document thread safe
+                    HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
+
                     // loop over all the input to find where the submit type is
-                    HtmlElementCollection forms = Program.browserView.webBrowser1.Document.GetElementsByTagName("form");
+                    HtmlElementCollection forms = htmlDocument.GetElementsByTagName("form");
                     foreach (HtmlElement form in forms)
                     {
                         HtmlElementCollection inputs = form.GetElementsByTagName("input");
@@ -95,10 +104,7 @@ namespace BrowserFormNavi.Controller
                 } // end if choosen FormID
             } // end DataGrid loop
 
-            // needed to see the new values
-            Program.browserView.webBrowser1.Update();
             return 0;
         }
-
-}
+    }
 }

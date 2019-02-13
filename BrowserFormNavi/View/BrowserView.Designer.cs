@@ -28,28 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
             // webBrowser1
             // 
-            webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-            webBrowser1.Location = new System.Drawing.Point(0, 0);
-            webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            webBrowser1.Name = "webBrowser1";
-            webBrowser1.Size = new System.Drawing.Size(800, 450);
-            webBrowser1.TabIndex = 0;
+            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(800, 450);
+            this.webBrowser1.TabIndex = 0;
             // 
-            // WebBrowser
+            // BrowserView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(webBrowser1);
-            this.Name = "WebBrowser";
+            this.Controls.Add(this.webBrowser1);
+            this.Name = "BrowserView";
             this.Text = "WebBrowser";
             this.ResumeLayout(false);
-            PerformLayout();
 
         }
 

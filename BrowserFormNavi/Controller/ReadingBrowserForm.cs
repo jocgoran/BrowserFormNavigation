@@ -11,9 +11,9 @@ namespace BrowserFormNavi.Controller
             // reset the Browser loading var
             Program.browserData.FormExtracted = false;
             // clear DataGrid with form data 
-            Program.formNavi.dataGridView1.Rows.Clear();
+            Program.formNavi.DataGridViewClear();
             // clear drop down menu of choosen form
-            Program.formNavi.comboBox2.Items.Clear();
+            Program.formNavi.ComboBoxClear(Program.formNavi.comboBox2);
 
             //set page title
             Program.browserView.Text = Program.browserView.webBrowser1.DocumentTitle.ToString();
@@ -30,8 +30,6 @@ namespace BrowserFormNavi.Controller
             }
             Program.browserData.FormExtracted = true;
 
-            // needed to see the new values
-            Program.formNavi.dataGridView1.Update();
             return 0;
         }
 
@@ -111,20 +109,23 @@ namespace BrowserFormNavi.Controller
 
         public int SaveBrowserValuesToDatabase()
         {
-            Program.browserView.webBrowser1.Update();
+
             // read the form that have to be submitted  
-            int ChoosenFormNr = Program.formNavi.comboBox2.SelectedIndex;
+            int ChoosenFormNr = Program.formNavi.GetComboBoxSelectedIndex(Program.formNavi.comboBox2);
+
+            // get the Browser document thread safe
+            HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
 
             // get all the forms
-            HtmlElementCollection forms = Program.browserView.webBrowser1.Document.GetElementsByTagName("form");
+            HtmlElementCollection forms = htmlDocument.GetElementsByTagName("form");
 
             // call the loop over the inputs of my choosen form
             HtmlElementCollection inputs = forms[ChoosenFormNr].GetElementsByTagName("input");
             foreach (HtmlElement input in inputs)
             {
 
-                string url = Program.formNavi.comboBox1.Text;
-                string domain = new Uri(Program.formNavi.comboBox1.Text).Host;
+                string url = Program.formNavi.GetComboBoxSelectedItem(Program.formNavi.comboBox1);
+                string domain = new Uri(url).Host;
                 string tag = "input";
                 string type = input.GetAttribute("type");
                 string name = input.GetAttribute("name");
