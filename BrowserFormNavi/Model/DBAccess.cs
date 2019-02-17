@@ -29,18 +29,20 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int InsertInputFormData(string url, string domain, string tag, string type, string name, string inputFieldID)
+        public int InsertInputFormData(string url, string domain, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
         {
 
-            string sql = "INSERT INTO form (url, domain, tag, type, name, inputFieldID) " +
-                         "SELECT @url, @domain, @tag, @type, @name, @inputFieldID " +
+            string sql = "INSERT INTO form (url, domain, tag, class, role, type, name, inputFieldID) " +
+                         "SELECT @url, @domain, @tag, @class, @role, @type, @name, @inputFieldID " +
                          "WHERE NOT EXISTS " +
-                         "(SELECT * FROM form WHERE url=@url AND domain=@domain AND tag=@tag AND type=@type AND name=@name AND inputFieldID=@inputFieldID) ";
+                         "(SELECT * FROM form WHERE url=@url AND domain=@domain AND tag=@tag AND class=@class AND role=@role AND type=@type AND name=@name AND inputFieldID=@inputFieldID) ";
 
             SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
             sqlCommand.Parameters.Add(new SqlParameter("@url", url));
             sqlCommand.Parameters.Add(new SqlParameter("@domain", domain));
             sqlCommand.Parameters.Add(new SqlParameter("@tag", tag));
+            sqlCommand.Parameters.Add(new SqlParameter("@class", classAttribute));
+            sqlCommand.Parameters.Add(new SqlParameter("@role", role));
             sqlCommand.Parameters.Add(new SqlParameter("@type", type));
             sqlCommand.Parameters.Add(new SqlParameter("@name", name));
             sqlCommand.Parameters.Add(new SqlParameter("@inputFieldID", inputFieldID));
@@ -60,7 +62,7 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int GetInputPrimaryKey(string url, string domain, string tag, string type, string name, string inputFieldID, ref int FormPK)
+        public int GetInputPrimaryKey(string url, string domain, string tag, string classAttribute, string role, string type, string name, string inputFieldID, ref int FormPK)
         {
             sqlConnection.Open();
             DataTable tFormPk = new DataTable();
@@ -71,6 +73,8 @@ namespace BrowserFormNavi.Model
                                                             "WHERE url=@url " +
                                                             "AND domain=@domain " +
                                                             "AND tag=@tag " +
+                                                            "AND class=@class " +
+                                                            "AND role=@role " +
                                                             "AND type=@type " +
                                                             "AND name=@name " +
                                                             "AND inputFieldID=@inputFieldID ", sqlConnection);
@@ -78,6 +82,8 @@ namespace BrowserFormNavi.Model
             DBAdapter.SelectCommand.Parameters.AddWithValue("@url", url);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", tag);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@class", classAttribute);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", role);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@type", type);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@name", name);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
@@ -96,7 +102,7 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int RetriveExactFormParamValue(string url, string domain, string tag, string type, string name, string inputFieldID,
+        public int RetriveExactFormParamValue(string url, string domain, string tag, string classAttribute, string role, string type, string name, string inputFieldID,
                                              ref string value, ref string sChecked)
         {
 
@@ -109,14 +115,19 @@ namespace BrowserFormNavi.Model
                                                             "WHERE url=@url " +
                                                             "AND domain=@domain " +
                                                             "AND tag=@tag " +
+                                                            "AND class=@class " +
+                                                            "AND role=@role " +
                                                             "AND type=@type " +
                                                             "AND name=@name " +
                                                             "AND inputFieldID=@inputFieldID " +
-                                                            "AND error = 0", sqlConnection);
+                                                            "AND error = 0 " +
+                                                            "ORDER BY COUNT DESC", sqlConnection);
 
             DBAdapter.SelectCommand.Parameters.AddWithValue("@url", url);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", tag);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@class", classAttribute);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", role);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@type", type);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@name", name);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
@@ -125,11 +136,9 @@ namespace BrowserFormNavi.Model
 
             if (exactMatchHistParam.Rows.Count > 0)
             {
-                foreach (DataRow dataRow in exactMatchHistParam.Rows)
-                {
-                    value = dataRow["value"].ToString();
-                    sChecked = dataRow["checked"].ToString();
-                }
+                // access directly only the first row 
+                value = exactMatchHistParam.Rows[0]["value"].ToString();
+                sChecked = exactMatchHistParam.Rows[0]["checked"].ToString();
             }
             sqlConnection.Close();
 

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi
@@ -31,25 +32,16 @@ namespace BrowserFormNavi
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.Go = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.BFN_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FormID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TagAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ActionAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TypeAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NameAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IDAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CheckedAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.Submit = new System.Windows.Forms.Button();
@@ -58,9 +50,21 @@ namespace BrowserFormNavi
             this.btnCheckDBConnection = new System.Windows.Forms.Button();
             this.SaveBrowserValuesToDB = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ExtractFormFromBrowser = new System.Windows.Forms.Button();
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonStart = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.BFN_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FormID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TagAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClassAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ActionAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RoleAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TypeAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NameAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IDAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CheckedAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -70,7 +74,8 @@ namespace BrowserFormNavi
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "https://sdp.newaccess.ch/",
-            "http://pamela.joc.ch"});
+            "http://pamela.joc.ch",
+            "https://badoo.com/signin"});
             this.comboBox1.Location = new System.Drawing.Point(12, 13);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(804, 21);
@@ -90,12 +95,15 @@ namespace BrowserFormNavi
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BFN_ID,
             this.FormID,
             this.TagAttribute,
+            this.ClassAttribute,
             this.ActionAttribute,
+            this.RoleAttribute,
             this.TypeAttribute,
             this.NameAttribute,
             this.IDAttribute,
@@ -103,96 +111,17 @@ namespace BrowserFormNavi
             this.CheckedAttribute});
             this.dataGridView1.Location = new System.Drawing.Point(12, 54);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(921, 510);
+            this.dataGridView1.Size = new System.Drawing.Size(1039, 510);
             this.dataGridView1.TabIndex = 2;
-            // 
-            // BFN_ID
-            // 
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Gray;
-            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle1;
-            this.BFN_ID.FillWeight = 50F;
-            this.BFN_ID.Frozen = true;
-            this.BFN_ID.HeaderText = "BFN_ID";
-            this.BFN_ID.Name = "BFN_ID";
-            this.BFN_ID.ReadOnly = true;
-            this.BFN_ID.Width = 50;
-            // 
-            // FormID
-            // 
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Gray;
-            this.FormID.DefaultCellStyle = dataGridViewCellStyle2;
-            this.FormID.FillWeight = 50F;
-            this.FormID.Frozen = true;
-            this.FormID.HeaderText = "FormID";
-            this.FormID.Name = "FormID";
-            this.FormID.ReadOnly = true;
-            this.FormID.Width = 50;
-            // 
-            // TagAttribute
-            // 
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Gray;
-            this.TagAttribute.DefaultCellStyle = dataGridViewCellStyle3;
-            this.TagAttribute.Frozen = true;
-            this.TagAttribute.HeaderText = "Tag";
-            this.TagAttribute.Name = "TagAttribute";
-            this.TagAttribute.ReadOnly = true;
-            // 
-            // ActionAttribute
-            // 
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Gray;
-            this.ActionAttribute.DefaultCellStyle = dataGridViewCellStyle4;
-            this.ActionAttribute.Frozen = true;
-            this.ActionAttribute.HeaderText = "Action";
-            this.ActionAttribute.Name = "ActionAttribute";
-            this.ActionAttribute.ReadOnly = true;
-            // 
-            // TypeAttribute
-            // 
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Gray;
-            this.TypeAttribute.DefaultCellStyle = dataGridViewCellStyle5;
-            this.TypeAttribute.Frozen = true;
-            this.TypeAttribute.HeaderText = "Type";
-            this.TypeAttribute.Name = "TypeAttribute";
-            this.TypeAttribute.ReadOnly = true;
-            // 
-            // NameAttribute
-            // 
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Gray;
-            this.NameAttribute.DefaultCellStyle = dataGridViewCellStyle6;
-            this.NameAttribute.Frozen = true;
-            this.NameAttribute.HeaderText = "Name";
-            this.NameAttribute.Name = "NameAttribute";
-            this.NameAttribute.ReadOnly = true;
-            // 
-            // IDAttribute
-            // 
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Gray;
-            this.IDAttribute.DefaultCellStyle = dataGridViewCellStyle7;
-            this.IDAttribute.Frozen = true;
-            this.IDAttribute.HeaderText = "ID";
-            this.IDAttribute.Name = "IDAttribute";
-            this.IDAttribute.ReadOnly = true;
-            // 
-            // ValueAttribute
-            // 
-            this.ValueAttribute.Frozen = true;
-            this.ValueAttribute.HeaderText = "Value";
-            this.ValueAttribute.Name = "ValueAttribute";
-            // 
-            // CheckedAttribute
-            // 
-            this.CheckedAttribute.Frozen = true;
-            this.CheckedAttribute.HeaderText = "Checked";
-            this.CheckedAttribute.Name = "CheckedAttribute";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(19, 657);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(101, 13);
+            this.label1.Size = new System.Drawing.Size(92, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Invoke Submit Form";
+            this.label1.Text = "BNF_ID to invoke";
             // 
             // comboBox2
             // 
@@ -214,7 +143,7 @@ namespace BrowserFormNavi
             // 
             // CopyToBrowser
             // 
-            this.CopyToBrowser.Location = new System.Drawing.Point(179, 613);
+            this.CopyToBrowser.Location = new System.Drawing.Point(293, 613);
             this.CopyToBrowser.Name = "CopyToBrowser";
             this.CopyToBrowser.Size = new System.Drawing.Size(98, 27);
             this.CopyToBrowser.TabIndex = 6;
@@ -224,7 +153,7 @@ namespace BrowserFormNavi
             // 
             // FillAutoGenertedData
             // 
-            this.FillAutoGenertedData.Location = new System.Drawing.Point(22, 613);
+            this.FillAutoGenertedData.Location = new System.Drawing.Point(136, 613);
             this.FillAutoGenertedData.Name = "FillAutoGenertedData";
             this.FillAutoGenertedData.Size = new System.Drawing.Size(151, 27);
             this.FillAutoGenertedData.TabIndex = 7;
@@ -244,7 +173,7 @@ namespace BrowserFormNavi
             // 
             // SaveBrowserValuesToDB
             // 
-            this.SaveBrowserValuesToDB.Location = new System.Drawing.Point(283, 613);
+            this.SaveBrowserValuesToDB.Location = new System.Drawing.Point(397, 613);
             this.SaveBrowserValuesToDB.Name = "SaveBrowserValuesToDB";
             this.SaveBrowserValuesToDB.Size = new System.Drawing.Size(177, 27);
             this.SaveBrowserValuesToDB.TabIndex = 9;
@@ -254,15 +183,26 @@ namespace BrowserFormNavi
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ExtractFormFromBrowser);
             this.groupBox1.Controls.Add(this.buttonStop);
             this.groupBox1.Controls.Add(this.buttonStart);
             this.groupBox1.Controls.Add(this.Submit);
             this.groupBox1.Location = new System.Drawing.Point(12, 578);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(458, 108);
+            this.groupBox1.Size = new System.Drawing.Size(574, 108);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Perform recursively automated";
+            // 
+            // ExtractFormFromBrowser
+            // 
+            this.ExtractFormFromBrowser.Location = new System.Drawing.Point(6, 35);
+            this.ExtractFormFromBrowser.Name = "ExtractFormFromBrowser";
+            this.ExtractFormFromBrowser.Size = new System.Drawing.Size(114, 27);
+            this.ExtractFormFromBrowser.TabIndex = 11;
+            this.ExtractFormFromBrowser.Text = "Extract from browser";
+            this.ExtractFormFromBrowser.UseVisualStyleBackColor = true;
+            this.ExtractFormFromBrowser.Click += new System.EventHandler(this.ExtractFromBrowser);
             // 
             // buttonStop
             // 
@@ -285,11 +225,105 @@ namespace BrowserFormNavi
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.StartTheNavigation);
             // 
+            // BFN_ID
+            // 
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Gray;
+            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle8;
+            this.BFN_ID.FillWeight = 50F;
+            this.BFN_ID.Frozen = true;
+            this.BFN_ID.HeaderText = "BFN_ID";
+            this.BFN_ID.Name = "BFN_ID";
+            this.BFN_ID.ReadOnly = true;
+            this.BFN_ID.Width = 50;
+            // 
+            // FormID
+            // 
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Gray;
+            this.FormID.DefaultCellStyle = dataGridViewCellStyle9;
+            this.FormID.FillWeight = 50F;
+            this.FormID.Frozen = true;
+            this.FormID.HeaderText = "FormID";
+            this.FormID.Name = "FormID";
+            this.FormID.ReadOnly = true;
+            this.FormID.Width = 50;
+            // 
+            // TagAttribute
+            // 
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Gray;
+            this.TagAttribute.DefaultCellStyle = dataGridViewCellStyle10;
+            this.TagAttribute.Frozen = true;
+            this.TagAttribute.HeaderText = "Tag";
+            this.TagAttribute.Name = "TagAttribute";
+            this.TagAttribute.ReadOnly = true;
+            this.TagAttribute.Width = 50;
+            // 
+            // ClassAttribute
+            // 
+            this.ClassAttribute.Frozen = true;
+            this.ClassAttribute.HeaderText = "Class";
+            this.ClassAttribute.Name = "ClassAttribute";
+            this.ClassAttribute.ReadOnly = true;
+            // 
+            // ActionAttribute
+            // 
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Gray;
+            this.ActionAttribute.DefaultCellStyle = dataGridViewCellStyle11;
+            this.ActionAttribute.Frozen = true;
+            this.ActionAttribute.HeaderText = "Action";
+            this.ActionAttribute.Name = "ActionAttribute";
+            this.ActionAttribute.ReadOnly = true;
+            // 
+            // RoleAttribute
+            // 
+            this.RoleAttribute.Frozen = true;
+            this.RoleAttribute.HeaderText = "Role";
+            this.RoleAttribute.Name = "RoleAttribute";
+            this.RoleAttribute.ReadOnly = true;
+            // 
+            // TypeAttribute
+            // 
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Gray;
+            this.TypeAttribute.DefaultCellStyle = dataGridViewCellStyle12;
+            this.TypeAttribute.Frozen = true;
+            this.TypeAttribute.HeaderText = "Type";
+            this.TypeAttribute.Name = "TypeAttribute";
+            this.TypeAttribute.ReadOnly = true;
+            // 
+            // NameAttribute
+            // 
+            dataGridViewCellStyle13.ForeColor = System.Drawing.Color.Gray;
+            this.NameAttribute.DefaultCellStyle = dataGridViewCellStyle13;
+            this.NameAttribute.Frozen = true;
+            this.NameAttribute.HeaderText = "Name";
+            this.NameAttribute.Name = "NameAttribute";
+            this.NameAttribute.ReadOnly = true;
+            // 
+            // IDAttribute
+            // 
+            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Gray;
+            this.IDAttribute.DefaultCellStyle = dataGridViewCellStyle14;
+            this.IDAttribute.Frozen = true;
+            this.IDAttribute.HeaderText = "ID";
+            this.IDAttribute.Name = "IDAttribute";
+            this.IDAttribute.ReadOnly = true;
+            // 
+            // ValueAttribute
+            // 
+            this.ValueAttribute.Frozen = true;
+            this.ValueAttribute.HeaderText = "Value";
+            this.ValueAttribute.Name = "ValueAttribute";
+            // 
+            // CheckedAttribute
+            // 
+            this.CheckedAttribute.Frozen = true;
+            this.CheckedAttribute.HeaderText = "Checked";
+            this.CheckedAttribute.Name = "CheckedAttribute";
+            // 
             // FormNavi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 698);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1063, 698);
             this.Controls.Add(this.SaveBrowserValuesToDB);
             this.Controls.Add(this.btnCheckDBConnection);
             this.Controls.Add(this.FillAutoGenertedData);
@@ -302,7 +336,7 @@ namespace BrowserFormNavi
             this.Controls.Add(this.groupBox1);
             this.Name = "FormNavi";
             this.Text = "Automated formular extractor and formular submitter";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -310,24 +344,27 @@ namespace BrowserFormNavi
         }
 
         #endregion
-        public System.Windows.Forms.ComboBox comboBox1;
-        public System.Windows.Forms.Button Go;
-        public System.Windows.Forms.DataGridView dataGridView1;
-        public System.Windows.Forms.Label label1;
-        public System.Windows.Forms.ComboBox comboBox2;
-        public System.Windows.Forms.Button Submit;
-        private System.Windows.Forms.Button CopyToBrowser;
-        private System.Windows.Forms.Button FillAutoGenertedData;
-        private System.Windows.Forms.Button btnCheckDBConnection;
-        private System.Windows.Forms.Button SaveBrowserValuesToDB;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button buttonStart;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private Button buttonStop;
+        public ComboBox comboBox1;
+        public Button Go;
+        public DataGridView dataGridView1;
+        public Label label1;
+        public ComboBox comboBox2;
+        public Button Submit;
+        public Button CopyToBrowser;
+        public Button FillAutoGenertedData;
+        public Button btnCheckDBConnection;
+        public Button SaveBrowserValuesToDB;
+        public GroupBox groupBox1;
+        public Button buttonStart;
+        public BackgroundWorker backgroundWorker1;
+        public Button buttonStop;
+        public Button ExtractFormFromBrowser;
         private DataGridViewTextBoxColumn BFN_ID;
         private DataGridViewTextBoxColumn FormID;
         private DataGridViewTextBoxColumn TagAttribute;
+        private DataGridViewTextBoxColumn ClassAttribute;
         private DataGridViewTextBoxColumn ActionAttribute;
+        private DataGridViewTextBoxColumn RoleAttribute;
         private DataGridViewTextBoxColumn TypeAttribute;
         private DataGridViewTextBoxColumn NameAttribute;
         private DataGridViewTextBoxColumn IDAttribute;

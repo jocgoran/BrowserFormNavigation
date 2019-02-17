@@ -1,4 +1,6 @@
-﻿namespace BrowserFormNavi.View
+﻿using System.Windows.Forms;
+
+namespace BrowserFormNavi.View
 {
     public partial class BrowserView
     {
@@ -28,12 +30,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.webBrowser1 = new WebBrowser();
             this.SuspendLayout();
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.Dock = DockStyle.Fill;
             this.webBrowser1.Location = new System.Drawing.Point(0, 0);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
@@ -43,7 +45,7 @@
             // BrowserView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.webBrowser1);
             this.Name = "BrowserView";
@@ -54,6 +56,6 @@
 
         #endregion
 
-        public System.Windows.Forms.WebBrowser webBrowser1;
+        public WebBrowser webBrowser1;
     }
 }

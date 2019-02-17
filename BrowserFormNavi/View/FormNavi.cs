@@ -1,16 +1,25 @@
 ﻿using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi
 {
-    delegate void EnableButtonDelegate(Button button, bool enable);
-    delegate string GetComboBoxSelectedItemDelegate(ComboBox comboBoxName);
-    delegate int GetComboBoxSelectedIndexDelegate(ComboBox comboBoxName);
-    delegate void SetDataGridCellDelegate(DataGridViewRow row, string colName, string value);
-    delegate string GetDataGridCellDelegate(DataGridViewRow row, string colName);
-    delegate void DataGridViewClearDelegate();
-    delegate void ComboBoxClearDelegate(ComboBox comboBoxName);
-    delegate void EnableComboBoxDelegate(ComboBox comboBoxName, bool enable);
+    internal delegate void EnableButtonDelegate(Button button, bool enable);
+    internal delegate string GetComboBoxSelectedItemDelegate(ComboBox comboBoxName);
+    internal delegate string GetComboBoxTextDelegate(ComboBox comboBoxName);
+    internal delegate void SetComboBoxTextDelegate(ComboBox comboBoxName, string text);
+    internal delegate int GetComboBoxSelectedIndexDelegate(ComboBox comboBoxName);
+    internal delegate void SetDataGridCellDelegate(DataGridViewRow row, string colName, string value);
+    internal delegate string GetDataGridCellDelegate(DataGridViewRow row, string colName);
+    internal delegate void DataGridViewClearDelegate();
+    internal delegate void ComboBoxClearDelegate(ComboBox comboBoxName);
+    internal delegate void EnableComboBoxDelegate(ComboBox comboBoxName, bool enable);
+    internal delegate void SetButtonColorDelegate(Button buttonName, Color color);
+    internal delegate void SetButtonTextColorDelegate(Button buttonName, Color color);
+    internal delegate void AddRowToDataGridDelegate(object[] rowData);
+    internal delegate void AddItemToComboBoxDelegate(ComboBox comboBox, int formNr);
+    internal delegate void SetSelectedIndexDelegate(ComboBox comboBox, int index);
+    internal delegate void ButtonPerformClickDelegate(Button button);
 
     public partial class FormNavi : Form
     {
@@ -53,7 +62,7 @@ namespace BrowserFormNavi
             Program.navigation.SaveBrowserFilledValuesToDatabase();
         }
 
-        private void StopTheNavigation(object sender, System.EventArgs e)
+        public void StopTheNavigation(object sender, System.EventArgs e)
         {
             int error=Program.navigation.StopTheNavigationLoop();
             if(error==0)
@@ -77,7 +86,7 @@ namespace BrowserFormNavi
             EnableButton(SaveBrowserValuesToDB, true);
             EnableButton(Go, true);
             EnableButton(Submit, true);
-            EnableComboBox(comboBox2, true);
+            //EnableComboBox(comboBox2, true);
         }
 
         private void StartTheNavigation(object sender, System.EventArgs e)
@@ -95,7 +104,7 @@ namespace BrowserFormNavi
             EnableButton(SaveBrowserValuesToDB, false);
             EnableButton(Go, false);
             EnableButton(Submit, false);
-            EnableComboBox(comboBox2, false);
+            //EnableComboBox(comboBox2, false);
             Program.navigation.StartTheNavigationLoop();
         }
 
@@ -124,7 +133,35 @@ namespace BrowserFormNavi
             }
             else
             {
+                // handle null cell
+                if (comboBoxName.SelectedItem == null) return "";
                 return comboBoxName.SelectedItem.ToString();
+            }
+        }
+
+        public string GetComboBoxText(ComboBox comboBoxName)
+        {
+            if (comboBoxName.InvokeRequired)
+            {
+                GetComboBoxTextDelegate gcbt = new GetComboBoxTextDelegate(GetComboBoxText);
+                return (string)comboBoxName.Invoke(gcbt, new object[] { comboBoxName });
+            }
+            else
+            {
+                return comboBoxName.Text;
+            }
+        }
+
+        public void SetComboBoxText(ComboBox comboBoxName, string text)
+        {
+            if (comboBoxName.InvokeRequired)
+            {
+                SetComboBoxTextDelegate scbt = new SetComboBoxTextDelegate(SetComboBoxText);
+                comboBoxName.Invoke(scbt, new object[] { comboBoxName, text });
+            }
+            else
+            {
+                comboBoxName.Text = text;
             }
         }
 
@@ -163,6 +200,8 @@ namespace BrowserFormNavi
             }
             else
             {
+                // handle null cell
+                if (row.Cells[colName].Value == null) return "";
                 return row.Cells[colName].Value.ToString();
             }
         }
@@ -185,7 +224,7 @@ namespace BrowserFormNavi
             if (comboBoxName.InvokeRequired)
             {
                 ComboBoxClearDelegate cbcd = new ComboBoxClearDelegate(ComboBoxClear);
-                comboBoxName.Invoke(cbcd, new object[] { });
+                comboBoxName.Invoke(cbcd, new object[] { comboBoxName });
             }
             else
             {
@@ -197,13 +236,97 @@ namespace BrowserFormNavi
         {
             if (comboBoxName.InvokeRequired)
             {
-                EnableComboBoxDelegate ebd = new EnableComboBoxDelegate(EnableComboBox);
-                comboBoxName.Invoke(ebd, new object[] { comboBoxName, enable });
+                EnableComboBoxDelegate ecbd = new EnableComboBoxDelegate(EnableComboBox);
+                comboBoxName.Invoke(ecbd, new object[] { comboBoxName, enable });
             }
             else
             {
                 comboBoxName.Enabled = enable;
             }
+        }
+
+        public void SetButtonColor(Button buttonName, Color color)
+        {
+            if (buttonName.InvokeRequired)
+            {
+                SetButtonColorDelegate sbcd = new SetButtonColorDelegate(SetButtonColor);
+                buttonName.Invoke(sbcd, new object[] { buttonName, color });
+            }
+            else
+            {
+                buttonName.BackColor = color;
+            }
+        }
+
+        public void SetButtonTextColor(Button buttonName, Color color)
+        {
+            if (buttonName.InvokeRequired)
+            {
+                SetButtonTextColorDelegate sbtcd = new SetButtonTextColorDelegate(SetButtonTextColor);
+                buttonName.Invoke(sbtcd, new object[] { buttonName, color });
+            }
+            else
+            {
+                buttonName.ForeColor = color;
+            }
+        }
+        
+        public void AddRowToDataGrid(object[] rowData)
+        {
+            if (dataGridView1.InvokeRequired)
+            {
+                AddRowToDataGridDelegate artdg = new AddRowToDataGridDelegate(AddRowToDataGrid);
+                dataGridView1.Invoke(artdg, new object[] { rowData });
+            }
+            else
+            {
+                dataGridView1.Rows.Add(rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8], rowData[9]);
+            }
+        }
+
+        public void AddItemToComboBox(ComboBox comboBox, int tagId)
+        {
+            if (comboBox.InvokeRequired)
+            {
+                AddItemToComboBoxDelegate aitcbd = new AddItemToComboBoxDelegate(AddItemToComboBox);
+                comboBox.Invoke(aitcbd, new object[] { comboBox, tagId });
+            }
+            else
+            {
+                comboBox.Items.Add(tagId);
+            }
+        }
+
+        public void SetSelectedIndex(ComboBox comboBox, int index)
+        {
+            if (comboBox.InvokeRequired)
+            {
+                SetSelectedIndexDelegate ssi = new SetSelectedIndexDelegate(AddItemToComboBox);
+                comboBox.Invoke(ssi, new object[] { comboBox, index });
+            }
+            else
+            {
+                if(comboBox.Items.Count>0)
+                   comboBox.SelectedIndex = index;
+            }
+        }
+
+        public void ButtonPerformClick(Button button)
+        {
+            if (button.InvokeRequired)
+            {
+                ButtonPerformClickDelegate bpcd = new ButtonPerformClickDelegate(ButtonPerformClick);
+                button.Invoke(bpcd, new object[] { button });
+            }
+            else
+            {
+                button.PerformClick();
+            }
+        }
+
+        private void ExtractFromBrowser(object sender, System.EventArgs e)
+        {
+            Program.navigation.WriteBrowserFormToGrid();
         }
     }
 }
