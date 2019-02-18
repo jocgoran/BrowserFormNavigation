@@ -38,7 +38,7 @@ namespace BrowserFormNavi.Controller
             // extract the div tag       
             if (htmlDocument != null)
             {
-                HtmlElementCollection divs = htmlDocument.GetElementsByTagName("div");
+                //HtmlElementCollection divs = htmlDocument.GetElementsByTagName("div");
                 // call the loop overthe forms
                 LoopOverAllDivs(divs, ref tagId);
             }
