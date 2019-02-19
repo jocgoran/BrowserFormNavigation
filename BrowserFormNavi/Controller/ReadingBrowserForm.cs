@@ -38,11 +38,12 @@ namespace BrowserFormNavi.Controller
             // extract the div tag       
             if (htmlDocument != null)
             {
-                //HtmlElementCollection divs = htmlDocument.GetElementsByTagName("div");
+                HtmlElementCollection divs = htmlDocument.GetElementsByTagName("div");
                 // call the loop overthe forms
                 LoopOverAllDivs(divs, ref tagId);
             }
 
+            Program.formNavi.SetLastComboBoxItem(Program.formNavi.comboBox2);
             Program.browserData.FormExtracted = true;
 
             return 0;
@@ -119,9 +120,6 @@ namespace BrowserFormNavi.Controller
                     Program.formNavi.AddItemToComboBox(Program.formNavi.comboBox2, tagId);
                 }
             }
-
-            // Preselect the first element
-            Program.formNavi.SetSelectedIndex(Program.formNavi.comboBox2,0);
 
             return 0;
         }

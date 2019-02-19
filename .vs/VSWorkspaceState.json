@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\BrowserFormNavi",
+    "\\BrowserFormNavi\\Controller",
+    "\\BrowserFormNavi\\Model",
+    "\\BrowserFormNavi\\Properties",
+    "\\BrowserFormNavi\\View"
+  ],
+  "SelectedNode": "\\BrowserFormNavi\\Controller\\ReadingBrowserForm.cs",
+  "PreviewInSolutionExplorer": false
+}

@@ -18,8 +18,9 @@ namespace BrowserFormNavi
     internal delegate void SetButtonTextColorDelegate(Button buttonName, Color color);
     internal delegate void AddRowToDataGridDelegate(object[] rowData);
     internal delegate void AddItemToComboBoxDelegate(ComboBox comboBox, int formNr);
-    internal delegate void SetSelectedIndexDelegate(ComboBox comboBox, int index);
     internal delegate void ButtonPerformClickDelegate(Button button);
+    internal delegate void SetComboBoxItemDelegate(ComboBox comboBoxName, int item);
+    internal delegate void SetLastComboBoxItemDelegate(ComboBox comboBoxName);
 
     public partial class FormNavi : Form
     {
@@ -86,7 +87,7 @@ namespace BrowserFormNavi
             EnableButton(SaveBrowserValuesToDB, true);
             EnableButton(Go, true);
             EnableButton(Submit, true);
-            //EnableComboBox(comboBox2, true);
+            EnableComboBox(comboBox2, true);
         }
 
         private void StartTheNavigation(object sender, System.EventArgs e)
@@ -104,7 +105,7 @@ namespace BrowserFormNavi
             EnableButton(SaveBrowserValuesToDB, false);
             EnableButton(Go, false);
             EnableButton(Submit, false);
-            //EnableComboBox(comboBox2, false);
+            EnableComboBox(comboBox2, false);
             Program.navigation.StartTheNavigationLoop();
         }
 
@@ -133,7 +134,7 @@ namespace BrowserFormNavi
             }
             else
             {
-                // handle null cell
+                // handle null selection
                 if (comboBoxName.SelectedItem == null) return "";
                 return comboBoxName.SelectedItem.ToString();
             }
@@ -297,20 +298,6 @@ namespace BrowserFormNavi
             }
         }
 
-        public void SetSelectedIndex(ComboBox comboBox, int index)
-        {
-            if (comboBox.InvokeRequired)
-            {
-                SetSelectedIndexDelegate ssi = new SetSelectedIndexDelegate(AddItemToComboBox);
-                comboBox.Invoke(ssi, new object[] { comboBox, index });
-            }
-            else
-            {
-                if(comboBox.Items.Count>0)
-                   comboBox.SelectedIndex = index;
-            }
-        }
-
         public void ButtonPerformClick(Button button)
         {
             if (button.InvokeRequired)
@@ -324,6 +311,34 @@ namespace BrowserFormNavi
             }
         }
 
+        public void SetComboBoxItem(ComboBox comboBox, int item)
+        {
+            if (comboBox.InvokeRequired)
+            {
+                SetComboBoxItemDelegate scbvd = new SetComboBoxItemDelegate(SetComboBoxItem);
+                comboBox.Invoke(scbvd, new object[] { comboBox, item });
+            }
+            else
+            {
+                if(comboBox.Items.Count>0)
+                   comboBox.SelectedItem = item;
+            }
+        }
+
+        public void SetLastComboBoxItem(ComboBox comboBox)
+        {
+            if (comboBox.InvokeRequired)
+            {
+                SetLastComboBoxItemDelegate slcbid = new SetLastComboBoxItemDelegate(SetLastComboBoxItem);
+                comboBox.Invoke(slcbid, new object[] { comboBox });
+            }
+            else
+            {
+                if (comboBox.Items.Count > 0)
+                    comboBox.SelectedIndex = comboBox.Items.Count-1;
+            }
+        }
+        
         private void ExtractFromBrowser(object sender, System.EventArgs e)
         {
             Program.navigation.WriteBrowserFormToGrid();

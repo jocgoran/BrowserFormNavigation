@@ -22,7 +22,7 @@ namespace BrowserFormNavi.Controller
             // Display the new form.  
             if (!Program.browserView.Visible)
             {
-                Program.browserView.Show();
+                Program.browserView.ShowBrowserView();
             }
 
             //navigate to you destination 
@@ -93,49 +93,41 @@ namespace BrowserFormNavi.Controller
         public int NavigationLoop()
         {
             Program.keepTheNavigationLoopRunning = true;
-            // perform all the steps with 5 seconds waithing
+
+            Random rnd = new Random();
+            int minRandom = 800;
+            int maxRandom = 1000;
+            
             while (Program.keepTheNavigationLoopRunning)
             {
                 Program.formNavi.SetButtonColor(Program.formNavi.ExtractFormFromBrowser, Color.Green);
-                Thread.Sleep(1000);
+                Thread.Sleep(rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 WriteBrowserFormToGrid();
                 
                 Program.formNavi.SetButtonColor(Program.formNavi.FillAutoGenertedData, Color.Green);
-                Thread.Sleep(2000);
+                Thread.Sleep(rnd.Next(minRandom+200, maxRandom+200));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 AutoFillInputValue();
 
-                // exit if some input values are empty
-                //if (Program.browserData.GetRowNr("TagAttribute", "input", "ValueAttribute", "") > -1)
-                //    Program.formNavi.ButtonPerformClick(Program.formNavi.buttonStop);
-
                 Program.formNavi.SetButtonColor(Program.formNavi.CopyToBrowser, Color.Green);
-                Thread.Sleep(1000);
+                Thread.Sleep(rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 CopyFromGridToBrowser();
 
                 Program.formNavi.SetButtonColor(Program.formNavi.SaveBrowserValuesToDB, Color.Green);
-                Thread.Sleep(1000);
+                Thread.Sleep(rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 SaveBrowserFilledValuesToDatabase();
 
                 // Select the Index 5
-                Program.formNavi.SetSelectedIndex(Program.formNavi.comboBox2, 5);
-
+                Program.formNavi.SetComboBoxItem(Program.formNavi.comboBox2, 6);
 
                 Program.formNavi.SetButtonColor(Program.formNavi.Submit, Color.Green);
-                Thread.Sleep(1000);
+                Thread.Sleep(rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 InvokeSubmit();
 
-                //Thread.Sleep(5000);
-                //if (!Program.keepTheNavigationLoopRunning) break;
-                //WriteBrowserFormToGrid();
-                
-                // exit if there is no submit type
-                //if (Program.browserData.GetRowNr("TypeAttribute", "submit") == -1)
-                //    Program.formNavi.ButtonPerformClick(Program.formNavi.buttonStop);
             }
             return 0;
         }

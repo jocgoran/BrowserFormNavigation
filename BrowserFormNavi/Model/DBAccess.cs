@@ -13,7 +13,7 @@ namespace BrowserFormNavi.Model
 
         public DBAccess()
         {
-            connectionString = @"Data Source=localhost;Initial Catalog=Browserformnavi;User ID=sa;Password=SsvpZsvd1357;";
+            connectionString = @"Data Source=localhost;Initial Catalog=Browserformnavi;User ID=sa;Password=sa;";
             // Set the connection string with pooling option
             connectionString += "Connection Timeout = 30; Connection Lifetime = 0; Min Pool Size = 0; Max Pool Size = 100; Pooling = true; ";
 

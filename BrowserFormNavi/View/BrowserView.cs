@@ -10,6 +10,7 @@ namespace BrowserFormNavi.View
         internal delegate string GetHtmlDocumentNameDelegate();
         internal delegate string GetHtmlDocumentUrlDelegate();
         internal delegate void SetFormTextDelegate(string text);
+        internal delegate void ShowBrowserViewDelegate();
 
         public BrowserView()
         {
@@ -65,6 +66,19 @@ namespace BrowserFormNavi.View
             else
             {
                 Text = text;
+            }
+        }
+
+        public void ShowBrowserView()
+        {
+            if (InvokeRequired)
+            {
+                ShowBrowserViewDelegate sbw = new ShowBrowserViewDelegate(ShowBrowserView);
+                Invoke(sbw, new object[] { });
+            }
+            else
+            {
+                this.Show();
             }
         }
     }

@@ -56,7 +56,7 @@ namespace BrowserFormNavi.Controller
 
             // read the form that have to be submitted  
             string ChoosenBFNID = Program.formNavi.GetComboBoxSelectedItem(Program.formNavi.comboBox2);
-            ChoosenBFNID = "6";
+
             // loop over all the rows of data grid to find submit button
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
