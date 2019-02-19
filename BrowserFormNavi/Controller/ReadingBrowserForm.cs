@@ -90,7 +90,7 @@ namespace BrowserFormNavi.Controller
                     input.SetAttribute("BFN_ID", tagId.ToString());
 
                     // add the ID of submit input
-                    if (input.GetAttribute("type") == "submit")
+                    if (input.GetAttribute("type") == "submit" || input.GetAttribute("type") == "image")
                         Program.formNavi.AddItemToComboBox(Program.formNavi.comboBox2, tagId);
                 }
 
