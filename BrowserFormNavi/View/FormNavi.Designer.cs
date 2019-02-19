@@ -73,8 +73,6 @@ namespace BrowserFormNavi
             // 
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "https://sdp.newaccess.ch/",
-            "http://pamela.joc.ch",
             "https://badoo.com/signin"});
             this.comboBox1.Location = new System.Drawing.Point(12, 13);
             this.comboBox1.Name = "comboBox1";
