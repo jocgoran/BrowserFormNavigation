@@ -1,23 +1,13 @@
-﻿using System.ComponentModel;
-using System.Drawing;
+﻿using System;
+using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi
 {
-    // Button
-    internal delegate void EnableButtonDelegate(Button button, bool enable);
-    internal delegate void SetButtonColorDelegate(Button buttonName, Color color);
-    internal delegate void SetButtonTextColorDelegate(Button buttonName, Color color);
-    internal delegate void ButtonPerformClickDelegate(Button button);
-
     // ComboBox
-    internal delegate string GetComboBoxSelectedItemDelegate(ComboBox comboBoxName);
-    internal delegate string GetComboBoxTextDelegate(ComboBox comboBoxName);
-    internal delegate void SetComboBoxTextDelegate(ComboBox comboBoxName, string text);
     internal delegate void ComboBoxClearDelegate(ComboBox comboBoxName);
-    internal delegate void EnableComboBoxDelegate(ComboBox comboBoxName, bool enable);
     internal delegate void AddItemToComboBoxDelegate(ComboBox comboBox, int formNr);
-    internal delegate void SetComboBoxItemDelegate(ComboBox comboBoxName, object item);
     internal delegate void SetLastComboBoxItemDelegate(ComboBox comboBoxName);
 
 
@@ -26,6 +16,10 @@ namespace BrowserFormNavi
     internal delegate void SetDataGridCellDelegate(DataGridViewRow row, string colName, string value);
     internal delegate void DataGridViewClearDelegate();
     internal delegate void AddRowToDataGridDelegate(object[] rowData);
+
+    internal delegate object GetPropertyValueDelegate(object instance, string strPropertyName);
+    internal delegate void   SetPropertyValueDelegate(dynamic instance, string strPropertyName, object newValue);
+    internal delegate void   GetMethodDelegate(object instance, string strMethodName, object[] arguments);
 
     public partial class FormNavi : Form
     {
@@ -85,14 +79,14 @@ namespace BrowserFormNavi
         // background operation.
         private void BackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            EnableButton(buttonStart, true);
-            EnableButton(buttonStop, false);
-            EnableButton(FillAutoGenertedData, true);
-            EnableButton(CopyToBrowser, true);
-            EnableButton(SaveBrowserValuesToDB, true);
-            EnableButton(Go, true);
-            EnableButton(Submit, true);
-            EnableComboBox(comboBox2, true);
+            SetPropertyValue(buttonStart, "Enabled", true);
+            SetPropertyValue(buttonStop, "Enabled", false);
+            SetPropertyValue(FillAutoGenertedData, "Enabled", true);
+            SetPropertyValue(CopyToBrowser, "Enabled", true);
+            SetPropertyValue(SaveBrowserValuesToDB, "Enabled", true);
+            SetPropertyValue(Go, "Enabled", true);
+            SetPropertyValue(Submit, "Enabled", true);
+            SetPropertyValue(comboBox2, "Enabled", true);
         }
 
         private void StartTheNavigation(object sender, System.EventArgs e)
@@ -102,74 +96,17 @@ namespace BrowserFormNavi
 
         private void BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            // FormNavi.Invoke(FormNavi.button5.Enable = false);         
-            EnableButton(buttonStart, false);
-            EnableButton(buttonStop, true);
-            EnableButton(FillAutoGenertedData, false);
-            EnableButton(CopyToBrowser, false);
-            EnableButton(SaveBrowserValuesToDB, false);
-            EnableButton(Go, false);
-            EnableButton(Submit, false);
-            EnableComboBox(comboBox2, false);
+            SetPropertyValue(buttonStart, "Enabled", false);
+            SetPropertyValue(buttonStop, "Enabled", true);
+            SetPropertyValue(FillAutoGenertedData, "Enabled", false);
+            SetPropertyValue(CopyToBrowser, "Enabled", false);
+            SetPropertyValue(SaveBrowserValuesToDB, "Enabled", false);
+            SetPropertyValue(Go, "Enabled", false);
+            SetPropertyValue(Submit, "Enabled", false);
+            SetPropertyValue(comboBox2, "Enabled", false);
             Program.navigation.StartTheNavigationLoop();
         }
 
-        private void EnableButton(Button button, bool enable)
-        {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (button.InvokeRequired)
-            {
-                EnableButtonDelegate ebd = new EnableButtonDelegate(EnableButton);
-                button.Invoke(ebd, new object[] { button, enable });
-            }
-            else
-            {
-                button.Enabled = enable;
-            }
-        }
-
-        public string GetComboBoxSelectedItem(ComboBox comboBoxName)
-        {
-            if (comboBoxName.InvokeRequired)
-            {
-                GetComboBoxSelectedItemDelegate gsid = new GetComboBoxSelectedItemDelegate(GetComboBoxSelectedItem);
-                return (string)comboBoxName.Invoke(gsid, new object[] { comboBoxName });
-            }
-            else
-            {
-                // handle null selection
-                if (comboBoxName.SelectedItem == null) return "";
-                return comboBoxName.SelectedItem.ToString();
-            }
-        }
-
-        public string GetComboBoxText(ComboBox comboBoxName)
-        {
-            if (comboBoxName.InvokeRequired)
-            {
-                GetComboBoxTextDelegate gcbt = new GetComboBoxTextDelegate(GetComboBoxText);
-                return (string)comboBoxName.Invoke(gcbt, new object[] { comboBoxName });
-            }
-            else
-            {
-                return comboBoxName.Text;
-            }
-        }
-
-        public void SetComboBoxText(ComboBox comboBoxName, string text)
-        {
-            if (comboBoxName.InvokeRequired)
-            {
-                SetComboBoxTextDelegate scbt = new SetComboBoxTextDelegate(SetComboBoxText);
-                comboBoxName.Invoke(scbt, new object[] { comboBoxName, text });
-            }
-            else
-            {
-                comboBoxName.Text = text;
-            }
-        }
 
         public void SetDataGridCell(DataGridViewRow row, string colName, string value)
         {
@@ -224,46 +161,7 @@ namespace BrowserFormNavi
                 comboBoxName.Items.Clear();
             }
         }
-
-        public void EnableComboBox(ComboBox comboBoxName, bool enable)
-        {
-            if (comboBoxName.InvokeRequired)
-            {
-                EnableComboBoxDelegate ecbd = new EnableComboBoxDelegate(EnableComboBox);
-                comboBoxName.Invoke(ecbd, new object[] { comboBoxName, enable });
-            }
-            else
-            {
-                comboBoxName.Enabled = enable;
-            }
-        }
-
-        public void SetButtonColor(Button buttonName, Color color)
-        {
-            if (buttonName.InvokeRequired)
-            {
-                SetButtonColorDelegate sbcd = new SetButtonColorDelegate(SetButtonColor);
-                buttonName.Invoke(sbcd, new object[] { buttonName, color });
-            }
-            else
-            {
-                buttonName.BackColor = color;
-            }
-        }
-
-        public void SetButtonTextColor(Button buttonName, Color color)
-        {
-            if (buttonName.InvokeRequired)
-            {
-                SetButtonTextColorDelegate sbtcd = new SetButtonTextColorDelegate(SetButtonTextColor);
-                buttonName.Invoke(sbtcd, new object[] { buttonName, color });
-            }
-            else
-            {
-                buttonName.ForeColor = color;
-            }
-        }
-        
+       
         public void AddRowToDataGrid(object[] rowData)
         {
             if (dataGridView1.InvokeRequired)
@@ -290,33 +188,6 @@ namespace BrowserFormNavi
             }
         }
 
-        public void ButtonPerformClick(Button button)
-        {
-            if (button.InvokeRequired)
-            {
-                ButtonPerformClickDelegate bpcd = new ButtonPerformClickDelegate(ButtonPerformClick);
-                button.Invoke(bpcd, new object[] { button });
-            }
-            else
-            {
-                button.PerformClick();
-            }
-        }
-
-        public void SetComboBoxItem(ComboBox comboBox, object item)
-        {
-            if (comboBox.InvokeRequired)
-            {
-                SetComboBoxItemDelegate scbvd = new SetComboBoxItemDelegate(SetComboBoxItem);
-                comboBox.Invoke(scbvd, new object[] { comboBox, item });
-            }
-            else
-            {
-                if(comboBox.Items.Count>0)
-                   comboBox.SelectedItem = item;
-            }
-        }
-
         public void SetLastComboBoxItem(ComboBox comboBox)
         {
             if (comboBox.InvokeRequired)
@@ -338,12 +209,61 @@ namespace BrowserFormNavi
 
         private void SubmitSpecial(object sender, System.EventArgs e)
         {
-            EnableButton(submitSpecial, false);
-            EnableComboBox(comboBox3, false);
+            SetPropertyValue(submitSpecial, "Enabled", false);
+            SetPropertyValue(comboBox3, "Enabled", false);
             Program.navigation.SubmitSpecial();
-            EnableButton(submitSpecial, true);
-            EnableComboBox(comboBox3, true);
+            SetPropertyValue(submitSpecial, "Enabled", true);
+            SetPropertyValue(comboBox3, "Enabled", true);
             
         }
+
+        public object GetPropertyValue(dynamic instance, string strPropertyName)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (instance.InvokeRequired)
+            {
+                GetPropertyValueDelegate gpvd = new GetPropertyValueDelegate(GetPropertyValue);
+                return instance.Invoke(gpvd, new object[] { instance, strPropertyName });
+            }
+            else
+            {
+                Type type = instance.GetType();
+                PropertyInfo propertyInfo = type.GetProperty(strPropertyName);
+                return propertyInfo.GetValue(instance, new object[] { });
+            }
+        }
+
+        public void SetPropertyValue(dynamic instance, string strPropertyName, object newValue)
+        {
+            if (instance.InvokeRequired)
+            {
+                SetPropertyValueDelegate spvd = new SetPropertyValueDelegate(SetPropertyValue);
+                instance.Invoke(spvd, new object[] { instance, strPropertyName, newValue });
+            }
+            else
+            {
+                Type type = instance.GetType();
+                PropertyInfo propertyInfo = type.GetProperty(strPropertyName);
+                propertyInfo.SetValue(instance, newValue, null);
+            }
+        }
+
+        public void GetMethod(dynamic instance, string strMethodName, object[] arguments)
+        {
+            if (instance.InvokeRequired)
+            {
+                GetMethodDelegate gmd = new GetMethodDelegate(GetMethod);
+                instance.Invoke(gmd, new object[] { instance, strMethodName, arguments });
+            }
+            else
+            {
+                Type type = instance.GetType();
+                MethodInfo methodInfo = type.GetMethod(strMethodName);
+                methodInfo.Invoke(instance, arguments);
+            }
+        }
+
     }
 }

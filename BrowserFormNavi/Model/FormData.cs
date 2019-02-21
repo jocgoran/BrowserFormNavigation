@@ -8,7 +8,7 @@ namespace BrowserFormNavi.Model
 
         public int MatchExactInputData(DataGridViewRow row)
         {
-            string url = Program.formNavi.GetComboBoxText(Program.formNavi.comboBox1);
+            string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.comboBox1, "Text");
             string domain = new Uri(url).Host;
             string tag = Program.formNavi.GetDataGridCell(row, "TagAttribute");
             string classAttribute = Program.formNavi.GetDataGridCell(row, "ClassAttribute");

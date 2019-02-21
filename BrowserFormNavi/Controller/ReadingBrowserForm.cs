@@ -124,13 +124,13 @@ namespace BrowserFormNavi.Controller
         public int CopyUrlToForm()
         {
             //set page URL
-            Program.formNavi.SetComboBoxText(Program.formNavi.comboBox1, Program.browserView.GetHtmlDocumentUrl());
+            Program.formNavi.SetPropertyValue(Program.formNavi.comboBox1, "Text" ,Program.browserView.GetHtmlDocumentUrl());
             return 0;
         }
 
         public int SaveBrowserValuesToDatabase()
         {
-            string url = Program.formNavi.GetComboBoxText(Program.formNavi.comboBox1);
+            string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.comboBox1, "Text");
             string domain = new Uri(url).Host;
 
             // get the Browser document thread safe

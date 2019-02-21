@@ -40,41 +40,41 @@ namespace BrowserFormNavi.Controller
 
         public int WriteBrowserFormToGrid()
         {
-            Program.formNavi.SetButtonColor(Program.formNavi.ExtractFormFromBrowser, Color.Green);
+            Program.formNavi.SetPropertyValue(Program.formNavi.ExtractFormFromBrowser, "BackColor", Color.Green);
             Program.readingBrowserForm.ExtractBrowserForm();
-            Program.formNavi.SetButtonColor(Program.formNavi.ExtractFormFromBrowser, Color.LightGray);
+            Program.formNavi.SetPropertyValue(Program.formNavi.ExtractFormFromBrowser, "BackColor", Color.LightGray);
             return 0;
         }
 
         public int CopyFromGridToBrowser()
         {
-            Program.formNavi.SetButtonColor(Program.formNavi.CopyToBrowser, Color.Green);
+            Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
             Program.writingBrowserForm.CopyDataToBrowser();
-            Program.formNavi.SetButtonColor(Program.formNavi.CopyToBrowser, Color.LightGray);
+            Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.LightGray);
             return 0;
         }
 
         public int InvokeSubmit()
         {
-            Program.formNavi.SetButtonColor(Program.formNavi.Submit, Color.Green);
+            Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
             Program.writingBrowserForm.InvokeFormSubmit();
-            Program.formNavi.SetButtonColor(Program.formNavi.Submit, Color.LightGray);
+            Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.LightGray);
             return 0;
         }
 
         public int AutoFillInputValue()
         {
-            Program.formNavi.SetButtonColor(Program.formNavi.FillAutoGenertedData,Color.Green);
+            Program.formNavi.SetPropertyValue(Program.formNavi.FillAutoGenertedData, "BackColor", Color.Green);
             Program.automatedFiller.AutoFillInputValue();
-            Program.formNavi.SetButtonColor(Program.formNavi.FillAutoGenertedData, Color.LightGray);
+            Program.formNavi.SetPropertyValue(Program.formNavi.FillAutoGenertedData, "BackColor", Color.LightGray);
             return 0;
         }
 
         public int SaveBrowserFilledValuesToDatabase()
         {
-            Program.formNavi.SetButtonColor(Program.formNavi.SaveBrowserValuesToDB, Color.Green);
+            Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.Green);
             Program.readingBrowserForm.SaveBrowserValuesToDatabase();
-            Program.formNavi.SetButtonColor(Program.formNavi.SaveBrowserValuesToDB, Color.LightGray);
+            Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.LightGray);
             return 0;
         }
 
@@ -99,30 +99,30 @@ namespace BrowserFormNavi.Controller
             
             while (Program.keepTheNavigationLoopRunning)
             {
-                Program.formNavi.SetButtonColor(Program.formNavi.ExtractFormFromBrowser, Color.Green);
+                Program.formNavi.SetPropertyValue(Program.formNavi.ExtractFormFromBrowser, "BackColor", Color.Green);
                 Thread.Sleep(Program.rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 WriteBrowserFormToGrid();
                 
-                Program.formNavi.SetButtonColor(Program.formNavi.FillAutoGenertedData, Color.Green);
+                Program.formNavi.SetPropertyValue(Program.formNavi.FillAutoGenertedData, "BackColor", Color.Green);
                 Thread.Sleep(Program.rnd.Next(minRandom+200, maxRandom+200));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 AutoFillInputValue();
 
-                Program.formNavi.SetButtonColor(Program.formNavi.CopyToBrowser, Color.Green);
+                Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
                 Thread.Sleep(Program.rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 CopyFromGridToBrowser();
 
-                Program.formNavi.SetButtonColor(Program.formNavi.SaveBrowserValuesToDB, Color.Green);
+                Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.Green);
                 Thread.Sleep(Program.rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 SaveBrowserFilledValuesToDatabase();
 
                 // Select the Index 5
-                Program.formNavi.SetComboBoxItem(Program.formNavi.comboBox2, 8);
+                Program.formNavi.SetPropertyValue(Program.formNavi.comboBox2, "SelectedItem", 8);
 
-                Program.formNavi.SetButtonColor(Program.formNavi.Submit, Color.Green);
+                Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
                 Thread.Sleep(Program.rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 InvokeSubmit();
