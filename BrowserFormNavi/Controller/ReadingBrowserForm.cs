@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace BrowserFormNavi.Controller
 {
@@ -24,23 +25,94 @@ namespace BrowserFormNavi.Controller
             // get the Browser document thread safe
             HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
 
-            // set the tagId
-            int tagId = 0;
-
-            // extract the Form tag       
+            // looop over all tags 
             if (htmlDocument != null)
             {
-                HtmlElementCollection forms = htmlDocument.GetElementsByTagName("form");
-                // call the loop overthe forms
-                LoopOverAllForms(forms, ref tagId);
-            }
+                // set the tagId
+                int tagId = 0;
 
-            // extract the div tag       
-            if (htmlDocument != null)
-            {
-                HtmlElementCollection divs = htmlDocument.GetElementsByTagName("div");
-                // call the loop overthe forms
-                LoopOverAllDivs(divs, ref tagId);
+                foreach (HtmlElement tagElement in htmlDocument.All)
+                {
+                    //get the TagName
+                    string tagName = tagElement.TagName;
+                    
+                    //skip some not handlable tags 
+                    bool skipExtraction = true;
+                    if (string.Equals(tagName, "input", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(tagName, "button", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(tagName, "div", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(tagName, "a", StringComparison.OrdinalIgnoreCase))
+                        skipExtraction = false;
+
+                    if (skipExtraction) continue;
+
+                    string typeAttribute = tagElement.GetAttribute("type");
+                    string roleAttribute = tagElement.GetAttribute("role");
+
+                    bool extractFromBrowserToForm = false;
+                    bool addInvokeToComboBox = false;
+
+                    // decide what should be exported?
+                    if (string.Equals(tagName, "input", StringComparison.OrdinalIgnoreCase)
+                        && !string.Equals(typeAttribute, "hidden", StringComparison.OrdinalIgnoreCase))
+                        extractFromBrowserToForm = true;
+
+                    if (string.Equals(tagName, "button", StringComparison.OrdinalIgnoreCase)
+                        && string.Equals(typeAttribute, "submit", StringComparison.OrdinalIgnoreCase))
+                        extractFromBrowserToForm = true;
+
+                    if (string.Equals(tagName, "div", StringComparison.OrdinalIgnoreCase)
+                        && string.Equals(roleAttribute, "button", StringComparison.OrdinalIgnoreCase))
+                        extractFromBrowserToForm = true;
+
+                    if (string.Equals(tagName, "a", StringComparison.OrdinalIgnoreCase)
+                        && string.Equals(roleAttribute, "button", StringComparison.OrdinalIgnoreCase))
+                        extractFromBrowserToForm = true;
+
+                    // decide if element can be invoked
+                    if (string.Equals(tagName, "input", StringComparison.OrdinalIgnoreCase) 
+                        && string.Equals(typeAttribute, "submit", StringComparison.OrdinalIgnoreCase))
+                        addInvokeToComboBox = true;
+
+                    if (string.Equals(tagName, "input", StringComparison.OrdinalIgnoreCase) 
+                        && string.Equals(typeAttribute, "image", StringComparison.OrdinalIgnoreCase))
+                        addInvokeToComboBox = true;
+
+                    if (string.Equals(tagName, "button", StringComparison.OrdinalIgnoreCase)
+                        && string.Equals(typeAttribute, "submit", StringComparison.OrdinalIgnoreCase))
+                        addInvokeToComboBox = true;
+
+                    if (string.Equals(tagName, "div", StringComparison.OrdinalIgnoreCase)
+                        && string.Equals(roleAttribute, "button", StringComparison.OrdinalIgnoreCase))
+                        addInvokeToComboBox = true;
+
+                    if (string.Equals(tagName, "a", StringComparison.OrdinalIgnoreCase)
+                        && string.Equals(roleAttribute, "button", StringComparison.OrdinalIgnoreCase))
+                        addInvokeToComboBox = true;
+
+                    if (extractFromBrowserToForm == false) continue;
+
+                    // copy browser form data to Form
+                    Program.formNavi.AddRowToDataGrid(new object[] {++tagId,
+                                                                tagName,
+                                                                tagElement.GetAttribute("className"),
+                                                                tagElement.GetAttribute("data-testid"),
+                                                                tagElement.GetAttribute("aria-pressed"),
+                                                                tagElement.GetAttribute("role"),
+                                                                tagElement.GetAttribute("type"),
+                                                                tagElement.GetAttribute("name"),
+                                                                tagElement.GetAttribute("id"),
+                                                                tagElement.GetAttribute("value"),
+                                                                tagElement.GetAttribute("checked")=="False"?"":"checked" });
+
+                    // set the BrowserFormNavi specific ID of the tag
+                    tagElement.SetAttribute("BFN_ID", tagId.ToString());
+
+                    // add the ID of submit input
+                    if (addInvokeToComboBox)
+                        Program.formNavi.AddItemToComboBox(Program.formNavi.comboBox2, tagId);
+                }
+            
             }
 
             Program.formNavi.SetLastComboBoxItem(Program.formNavi.comboBox2);
@@ -49,116 +121,10 @@ namespace BrowserFormNavi.Controller
             return 0;
         }
 
-        public int LoopOverAllForms(HtmlElementCollection forms, ref int tagId)
-        {
-            int formNr = 0;
-            foreach (HtmlElement form in forms)
-            {
-                // copy browser form data to Form
-                Program.formNavi.AddRowToDataGrid(new object[] {++tagId,
-                                                                ++formNr,
-                                                                "form",
-                                                                "",
-                                                                form.GetAttribute("action"),
-                                                                "",
-                                                                form.GetAttribute("type"),
-                                                                form.GetAttribute("name"),
-                                                                form.GetAttribute("id"),
-                                                                form.GetAttribute("value") });
-
-                // set the BrowserFormNavi specific ID of the tag
-                form.SetAttribute("BFN_ID", tagId.ToString());
-
-                // call the loop over the inputs
-                HtmlElementCollection inputs = form.GetElementsByTagName("input");
-                foreach (HtmlElement input in inputs)
-                {
-                    // copy browser form data to Form
-                    Program.formNavi.AddRowToDataGrid(new object[] {++tagId,
-                                                                    formNr,
-                                                                    "input",
-                                                                    "",
-                                                                    input.GetAttribute("action"),
-                                                                    "",
-                                                                    input.GetAttribute("type"),
-                                                                    input.GetAttribute("name"),
-                                                                    input.GetAttribute("id"),
-                                                                    input.GetAttribute("value"),
-                                                                    input.GetAttribute("checked")=="False"?"":"checked" });
-
-                    // set the BrowserFormNavi specific ID of the tag
-                    input.SetAttribute("BFN_ID", tagId.ToString());
-
-                    // add the ID of submit input
-                    if (input.GetAttribute("type") == "submit" || input.GetAttribute("type") == "image")
-                        Program.formNavi.AddItemToComboBox(Program.formNavi.comboBox2, tagId);
-                }
-
-                // call the loop over the buttons in form
-                HtmlElementCollection buttons = form.GetElementsByTagName("button");
-                foreach (HtmlElement button in buttons)
-                {
-                    // we are interested only in submit buttons
-                    if (button.GetAttribute("type") != "submit") continue;
-
-                    // copy browser form data to Form
-                    Program.formNavi.AddRowToDataGrid(new object[] {++tagId,
-                                                                    formNr,
-                                                                    "button",
-                                                                    "",
-                                                                    button.GetAttribute("action"),
-                                                                    "",
-                                                                    button.GetAttribute("type"),
-                                                                    button.GetAttribute("name"),
-                                                                    button.GetAttribute("id"),
-                                                                    button.GetAttribute("value") });
-
-                    // set the BrowserFormNavi specific ID of the tag
-                    button.SetAttribute("BFN_ID", tagId.ToString());
-
-                    // add the ID of submit button
-                    Program.formNavi.AddItemToComboBox(Program.formNavi.comboBox2, tagId);
-                }
-            }
-
-            return 0;
-        }
-
-        public int LoopOverAllDivs(HtmlElementCollection divs, ref int tagId)
-        {
-            foreach (HtmlElement div in divs)
-            {
-                //check that the div contains the role=button
-                if(div.GetAttribute("role")=="button")
-                { 
-
-                    // copy browser form data to Form
-                    Program.formNavi.AddRowToDataGrid(new object[] {++tagId,
-                                                                    "",
-                                                                    "div",
-                                                                    div.GetAttribute("className"),
-                                                                    div.GetAttribute("action"),
-                                                                    div.GetAttribute("role"),
-                                                                    div.GetAttribute("type"),
-                                                                    div.GetAttribute("name"),
-                                                                    div.GetAttribute("id"),
-                                                                    div.GetAttribute("value") });
-
-                    // set the BrowserFormNavi specific ID of the tag
-                    div.SetAttribute("BFN_ID", tagId.ToString());
-
-                    // add the ID to be able to invoke the button
-                    Program.formNavi.AddItemToComboBox(Program.formNavi.comboBox2, tagId);
-                }
-            }
-            return 0;
-        }
-
-
-         public int CopyUrlToForm()
+        public int CopyUrlToForm()
         {
             //set page URL
-      //      Program.formNavi.SetComboBoxText(Program.formNavi.comboBox1, Program.browserView.GetHtmlDocumentUrl());
+            Program.formNavi.SetComboBoxText(Program.formNavi.comboBox1, Program.browserView.GetHtmlDocumentUrl());
             return 0;
         }
 

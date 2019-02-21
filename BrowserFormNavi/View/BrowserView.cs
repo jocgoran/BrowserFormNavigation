@@ -47,7 +47,7 @@ namespace BrowserFormNavi.View
         {
             if (webBrowser1.InvokeRequired)
             {
-                GetHtmlDocumentUrlDelegate gebtud = new GetHtmlDocumentUrlDelegate(GetHtmlDocumentName);
+                GetHtmlDocumentUrlDelegate gebtud = new GetHtmlDocumentUrlDelegate(GetHtmlDocumentUrl);
                 return (string)webBrowser1.Invoke(gebtud, new object[] { });
             }
             else

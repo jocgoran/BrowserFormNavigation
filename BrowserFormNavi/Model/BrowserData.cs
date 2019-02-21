@@ -31,11 +31,14 @@ namespace BrowserFormNavi.Model
             return rowIndex;
         }
 
-        public int GetRowNr(string colName1, string searchValue1, string colName2, string searchValue2)
+        public int GetRowNr(int startRowIndex, string colName1, string searchValue1, string colName2, string searchValue2)
         {
             int rowIndex = -1;
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
+                // skip the first rows
+                if (row.Index < startRowIndex) continue;
+
                 // Need to check for null if new row is exposed
                 if (row.Cells[colName1].Value != null) 
                 {

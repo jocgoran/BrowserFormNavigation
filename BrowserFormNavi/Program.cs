@@ -16,6 +16,8 @@ namespace BrowserFormNavi
         public static Navigation navigation;
         public static ReadingBrowserForm readingBrowserForm;
         public static WritingBrowserForm writingBrowserForm;
+        public static SpecialSubmitter specialSubmitter;
+        public static Random rnd;
 
         // Model Objects
         public static BrowserData browserData;
@@ -43,6 +45,8 @@ namespace BrowserFormNavi
             navigation = new Navigation();
             readingBrowserForm = new ReadingBrowserForm();
             writingBrowserForm = new WritingBrowserForm();
+            specialSubmitter = new SpecialSubmitter();
+            rnd = new Random();
 
             // Model Objects
             browserData = new BrowserData();

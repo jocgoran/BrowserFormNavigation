@@ -94,41 +94,46 @@ namespace BrowserFormNavi.Controller
         {
             Program.keepTheNavigationLoopRunning = true;
 
-            Random rnd = new Random();
             int minRandom = 800;
             int maxRandom = 1000;
             
             while (Program.keepTheNavigationLoopRunning)
             {
                 Program.formNavi.SetButtonColor(Program.formNavi.ExtractFormFromBrowser, Color.Green);
-                Thread.Sleep(rnd.Next(minRandom, maxRandom));
+                Thread.Sleep(Program.rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 WriteBrowserFormToGrid();
                 
                 Program.formNavi.SetButtonColor(Program.formNavi.FillAutoGenertedData, Color.Green);
-                Thread.Sleep(rnd.Next(minRandom+200, maxRandom+200));
+                Thread.Sleep(Program.rnd.Next(minRandom+200, maxRandom+200));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 AutoFillInputValue();
 
                 Program.formNavi.SetButtonColor(Program.formNavi.CopyToBrowser, Color.Green);
-                Thread.Sleep(rnd.Next(minRandom, maxRandom));
+                Thread.Sleep(Program.rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 CopyFromGridToBrowser();
 
                 Program.formNavi.SetButtonColor(Program.formNavi.SaveBrowserValuesToDB, Color.Green);
-                Thread.Sleep(rnd.Next(minRandom, maxRandom));
+                Thread.Sleep(Program.rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 SaveBrowserFilledValuesToDatabase();
 
                 // Select the Index 5
-                Program.formNavi.SetComboBoxItem(Program.formNavi.comboBox2, 6);
+                Program.formNavi.SetComboBoxItem(Program.formNavi.comboBox2, 8);
 
                 Program.formNavi.SetButtonColor(Program.formNavi.Submit, Color.Green);
-                Thread.Sleep(rnd.Next(minRandom, maxRandom));
+                Thread.Sleep(Program.rnd.Next(minRandom, maxRandom));
                 if (!Program.keepTheNavigationLoopRunning) break;
                 InvokeSubmit();
 
             }
+            return 0;
+        }
+
+        public int SubmitSpecial()
+        {
+            Program.specialSubmitter.LikeEverytingOnFacebook(); 
             return 0;
         }
     }

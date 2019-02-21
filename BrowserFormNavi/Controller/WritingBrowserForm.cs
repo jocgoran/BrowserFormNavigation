@@ -63,7 +63,7 @@ namespace BrowserFormNavi.Controller
                 // check the row BNF_ID
                 if (Program.formNavi.GetDataGridCell(row, "BFN_ID") == ChoosenBFNID)
                 {
-                    // read if the submit is an input or a button
+                    // read the tagName of submit
                     String submitTagName = Program.formNavi.GetDataGridCell(row, "TagAttribute");
 
                     // get the Browser document thread safe

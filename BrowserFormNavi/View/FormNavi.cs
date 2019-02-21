@@ -4,23 +4,28 @@ using System.Windows.Forms;
 
 namespace BrowserFormNavi
 {
+    // Button
     internal delegate void EnableButtonDelegate(Button button, bool enable);
+    internal delegate void SetButtonColorDelegate(Button buttonName, Color color);
+    internal delegate void SetButtonTextColorDelegate(Button buttonName, Color color);
+    internal delegate void ButtonPerformClickDelegate(Button button);
+
+    // ComboBox
     internal delegate string GetComboBoxSelectedItemDelegate(ComboBox comboBoxName);
     internal delegate string GetComboBoxTextDelegate(ComboBox comboBoxName);
     internal delegate void SetComboBoxTextDelegate(ComboBox comboBoxName, string text);
-    internal delegate int GetComboBoxSelectedIndexDelegate(ComboBox comboBoxName);
-    internal delegate void SetDataGridCellDelegate(DataGridViewRow row, string colName, string value);
-    internal delegate string GetDataGridCellDelegate(DataGridViewRow row, string colName);
-    internal delegate void DataGridViewClearDelegate();
     internal delegate void ComboBoxClearDelegate(ComboBox comboBoxName);
     internal delegate void EnableComboBoxDelegate(ComboBox comboBoxName, bool enable);
-    internal delegate void SetButtonColorDelegate(Button buttonName, Color color);
-    internal delegate void SetButtonTextColorDelegate(Button buttonName, Color color);
-    internal delegate void AddRowToDataGridDelegate(object[] rowData);
     internal delegate void AddItemToComboBoxDelegate(ComboBox comboBox, int formNr);
-    internal delegate void ButtonPerformClickDelegate(Button button);
-    internal delegate void SetComboBoxItemDelegate(ComboBox comboBoxName, int item);
+    internal delegate void SetComboBoxItemDelegate(ComboBox comboBoxName, object item);
     internal delegate void SetLastComboBoxItemDelegate(ComboBox comboBoxName);
+
+
+    // DataGrid
+    internal delegate string GetDataGridCellDelegate(DataGridViewRow row, string colName);
+    internal delegate void SetDataGridCellDelegate(DataGridViewRow row, string colName, string value);
+    internal delegate void DataGridViewClearDelegate();
+    internal delegate void AddRowToDataGridDelegate(object[] rowData);
 
     public partial class FormNavi : Form
     {
@@ -166,19 +171,6 @@ namespace BrowserFormNavi
             }
         }
 
-        public int GetComboBoxSelectedIndex(ComboBox comboBoxName)
-        {
-            if (comboBoxName.InvokeRequired)
-            {
-                GetComboBoxSelectedIndexDelegate gsid = new GetComboBoxSelectedIndexDelegate(GetComboBoxSelectedIndex);
-                return (int)comboBoxName.Invoke(gsid, new object[] { comboBoxName });
-            }
-            else
-            {
-                return comboBoxName.SelectedIndex;
-            }
-        }
-
         public void SetDataGridCell(DataGridViewRow row, string colName, string value)
         {
             if (dataGridView1.InvokeRequired)
@@ -281,7 +273,7 @@ namespace BrowserFormNavi
             }
             else
             {
-                dataGridView1.Rows.Add(rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8], rowData[9]);
+                dataGridView1.Rows.Add(rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8]);
             }
         }
 
@@ -311,7 +303,7 @@ namespace BrowserFormNavi
             }
         }
 
-        public void SetComboBoxItem(ComboBox comboBox, int item)
+        public void SetComboBoxItem(ComboBox comboBox, object item)
         {
             if (comboBox.InvokeRequired)
             {
@@ -342,6 +334,16 @@ namespace BrowserFormNavi
         private void ExtractFromBrowser(object sender, System.EventArgs e)
         {
             Program.navigation.WriteBrowserFormToGrid();
+        }
+
+        private void SubmitSpecial(object sender, System.EventArgs e)
+        {
+            EnableButton(submitSpecial, false);
+            EnableComboBox(comboBox3, false);
+            Program.navigation.SubmitSpecial();
+            EnableButton(submitSpecial, true);
+            EnableComboBox(comboBox3, true);
+            
         }
     }
 }
