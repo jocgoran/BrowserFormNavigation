@@ -209,10 +209,8 @@ namespace BrowserFormNavi
 
         private void SubmitSpecial(object sender, System.EventArgs e)
         {
-            SetPropertyValue(submitSpecial, "Enabled", false);
             SetPropertyValue(comboBox3, "Enabled", false);
             Program.navigation.SubmitSpecial();
-            SetPropertyValue(submitSpecial, "Enabled", true);
             SetPropertyValue(comboBox3, "Enabled", true);
             
         }
@@ -265,5 +263,9 @@ namespace BrowserFormNavi
             }
         }
 
+        private void LoadDomainSettings(object sender, EventArgs e)
+        {
+            Program.navigation.LoadDomainSettings();
+        }
     }
 }

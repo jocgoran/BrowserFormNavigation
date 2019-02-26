@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -187,5 +188,26 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
+        public int GetDomainSettings(string domain, ref HashSet<string> tagsAndAttributesToExport)
+        {
+
+            sqlConnection.Open();
+            DataTable domainSettings = new DataTable();
+            
+            // select the eisting settings
+            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select * from domainExportingSettings where domain=@domain ", sqlConnection);
+
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
+
+            DBAdapter.Fill(domainSettings);
+
+            for (int i=0; i<domainSettings.Rows.Count; ++i)
+            {
+                tagsAndAttributesToExport.Add(domainSettings.Rows[i]["tagAndAttribute"].ToString());
+            }
+            sqlConnection.Close();
+
+            return 0;
+        }
     }
 }
