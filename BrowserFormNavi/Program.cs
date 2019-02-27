@@ -17,6 +17,7 @@ namespace BrowserFormNavi
         public static ReadingBrowserForm readingBrowserForm;
         public static WritingBrowserForm writingBrowserForm;
         public static SpecialSubmitter specialSubmitter;
+        public static WebMiner webMiner;
         public static Random rnd;
 
         // Model Objects
@@ -46,6 +47,7 @@ namespace BrowserFormNavi
             readingBrowserForm = new ReadingBrowserForm();
             writingBrowserForm = new WritingBrowserForm();
             specialSubmitter = new SpecialSubmitter();
+            webMiner = new WebMiner();
             rnd = new Random();
 
             // Model Objects

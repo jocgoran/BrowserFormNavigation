@@ -67,6 +67,7 @@
     <Compile Include="Controller\Navigation.cs" />
     <Compile Include="Controller\ReadingBrowserForm.cs" />
     <Compile Include="Controller\SpecialSubmitter.cs" />
+    <Compile Include="Controller\WebMiner.cs" />
     <Compile Include="Controller\WritingBrowserForm.cs" />
     <Compile Include="Model\DBAccess.cs" />
     <Compile Include="View\FormNavi.cs">
