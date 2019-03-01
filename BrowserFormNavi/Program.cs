@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using BrowserFormNavi.Model;
 using BrowserFormNavi.View;
 using BrowserFormNavi.Controller;
+using BrowserFormNavi.Controller.LayeredPrediction;
 
 namespace BrowserFormNavi
 {
@@ -19,6 +20,11 @@ namespace BrowserFormNavi
         public static SpecialSubmitter specialSubmitter;
         public static WebMiner webMiner;
         public static Random rnd;
+
+        // Layered prediction
+        public static StatisticalPrediction statisticalPrediction;
+        public static UIComponent uIComponent;
+        public static UserRule userRule;
 
         // Model Objects
         public static BrowserData browserData;
@@ -49,6 +55,11 @@ namespace BrowserFormNavi
             specialSubmitter = new SpecialSubmitter();
             webMiner = new WebMiner();
             rnd = new Random();
+
+            // Layered prediction
+            statisticalPrediction = new StatisticalPrediction();
+            uIComponent = new UIComponent();
+            userRule = new UserRule();
 
             // Model Objects
             browserData = new BrowserData();

@@ -30,17 +30,17 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int InsertInputFormData(string url, string domain, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
+        public int InsertInputFormData(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
         {
 
-            string sql = "INSERT INTO form (url, domain, tag, class, role, type, name, inputFieldID) " +
-                         "SELECT @url, @domain, @tag, @class, @role, @type, @name, @inputFieldID " +
+            string sql = "INSERT INTO UIComponent (url, domain_id, tag, class, role, type, name, inputFieldID) " +
+                         "SELECT @url, @domain_id, @tag, @class, @role, @type, @name, @inputFieldID " +
                          "WHERE NOT EXISTS " +
-                         "(SELECT * FROM form WHERE url=@url AND domain=@domain AND tag=@tag AND class=@class AND role=@role AND type=@type AND name=@name AND inputFieldID=@inputFieldID) ";
+                         "(SELECT * FROM UIComponent WHERE url=@url AND domain_id=@domain_id AND tag=@tag AND class=@class AND role=@role AND type=@type AND name=@name AND inputFieldID=@inputFieldID) ";
 
             SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
             sqlCommand.Parameters.Add(new SqlParameter("@url", url));
-            sqlCommand.Parameters.Add(new SqlParameter("@domain", domain));
+            sqlCommand.Parameters.Add(new SqlParameter("@domain_id", domain_id));
             sqlCommand.Parameters.Add(new SqlParameter("@tag", tag));
             sqlCommand.Parameters.Add(new SqlParameter("@class", classAttribute));
             sqlCommand.Parameters.Add(new SqlParameter("@role", role));
@@ -58,21 +58,27 @@ namespace BrowserFormNavi.Model
             catch (SqlException e)
             {
                 MessageBox.Show(e.Message.ToString(), "Error Message");
+                LogWriter.LogWrite(e.Message.ToString());
+            }
+            finally
+            {
+                sqlConnection.Close();
             }
 
             return 0;
         }
+        
 
-        public int GetInputPrimaryKey(string url, string domain, string tag, string classAttribute, string role, string type, string name, string inputFieldID, ref int FormPK)
+        public int GetInputPrimaryKey(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID, ref int UIComponentID)
         {
             sqlConnection.Open();
             DataTable tFormPk = new DataTable();
 
             // select the exact match 
-            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select id " +
-                                                            "FROM form " +
+            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select UIComponent.id " +
+                                                            "FROM UIComponent " +
                                                             "WHERE url=@url " +
-                                                            "AND domain=@domain " +
+                                                            "AND domain_id=@domain_id " +
                                                             "AND tag=@tag " +
                                                             "AND class=@class " +
                                                             "AND role=@role " +
@@ -81,7 +87,7 @@ namespace BrowserFormNavi.Model
                                                             "AND inputFieldID=@inputFieldID ", sqlConnection);
 
             DBAdapter.SelectCommand.Parameters.AddWithValue("@url", url);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", domain_id);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", tag);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@class", classAttribute);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@role", role);
@@ -95,7 +101,7 @@ namespace BrowserFormNavi.Model
             {
                 foreach (DataRow dataRow in tFormPk.Rows)
                 {
-                    FormPK = Convert.ToInt32(dataRow["id"]);
+                    UIComponentID = Convert.ToInt32(dataRow["id"]);
                 }
             }
             sqlConnection.Close();
@@ -103,7 +109,7 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int RetriveExactFormParamValue(string url, string domain, string tag, string classAttribute, string role, string type, string name, string inputFieldID,
+        public int RetriveExactFormParamValue(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID,
                                              ref string value, ref string sChecked)
         {
 
@@ -112,9 +118,9 @@ namespace BrowserFormNavi.Model
 
             // select the exact match 
             SqlDataAdapter DBAdapter = new SqlDataAdapter("Select historicalParam.* " +
-                                                            "FROM form INNER JOIN historicalParam ON form.id = form_id " +
+                                                            "FROM UIComponent INNER JOIN historicalParam ON UIComponent.id = UIComponent_id " +
                                                             "WHERE url=@url " +
-                                                            "AND domain=@domain " +
+                                                            "AND domain_id=@domain_id " +
                                                             "AND tag=@tag " +
                                                             "AND class=@class " +
                                                             "AND role=@role " +
@@ -125,7 +131,7 @@ namespace BrowserFormNavi.Model
                                                             "ORDER BY COUNT DESC", sqlConnection);
 
             DBAdapter.SelectCommand.Parameters.AddWithValue("@url", url);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", domain_id);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", tag);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@class", classAttribute);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@role", role);
@@ -162,14 +168,14 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int SaveHistorcalInputParam(int FormPK, string value, string sChecked)
+        public int SaveHistorcalInputParam(int UIComponent_id, string value, string sChecked)
         {
-            string sql = "UPDATE historicalParam SET count = count+1 WHERE form_id=@FormPK AND value=@value AND checked=@sChecked " +
+            string sql = "UPDATE historicalParam SET count = count+1 WHERE UIComponent_id=@UIComponent_id AND value=@value AND checked=@sChecked " +
                          "IF @@ROWCOUNT = 0 " +
-                         "INSERT INTO historicalParam(form_id, value, checked) VALUES(@FormPK, @value, @sChecked)";
+                         "INSERT INTO historicalParam(UIComponent_id, value, checked) VALUES(@UIComponent_id, @value, @sChecked)";
                        
             SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
-            sqlCommand.Parameters.Add(new SqlParameter("@FormPK", FormPK));
+            sqlCommand.Parameters.Add(new SqlParameter("@UIComponent_id", UIComponent_id));
             sqlCommand.Parameters.Add(new SqlParameter("@value", value));
             sqlCommand.Parameters.Add(new SqlParameter("@sChecked", sChecked));
 
@@ -183,21 +189,26 @@ namespace BrowserFormNavi.Model
             catch (SqlException e)
             {
                 MessageBox.Show(e.Message.ToString(), "Error Message");
+                LogWriter.LogWrite(e.Message.ToString());
+            }
+            finally
+            {
+                sqlConnection.Close();
             }
 
             return 0;
         }
 
-        public int GetDomainSettings(string domain, ref HashSet<string> tagsAndAttributesToExport)
+        public int GetDomainSettings(int domain_id, ref HashSet<string> tagsAndAttributesToExport)
         {
 
             sqlConnection.Open();
             DataTable domainSettings = new DataTable();
             
             // select the eisting settings
-            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select * from domainExportingSettings where domain=@domain ", sqlConnection);
+            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select * from dataMiningSettings where domain_id=@domain_id ", sqlConnection);
 
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", domain_id);
 
             DBAdapter.Fill(domainSettings);
 
@@ -207,6 +218,27 @@ namespace BrowserFormNavi.Model
             }
             sqlConnection.Close();
 
+            return 0;
+        }
+
+        public int updateAppDomainId(string domain)
+        {
+
+            sqlConnection.Open();
+            DataTable domainDt = new DataTable();
+
+            // select the eisting settings
+            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select id from domain where domain=@domain", sqlConnection);
+
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
+
+            DBAdapter.Fill(domainDt);
+
+            for (int i = 0; i < domainDt.Rows.Count; ++i)
+            {
+                Program.browserData.domainId=Convert.ToInt32(domainDt.Rows[i]["id"]);
+            }
+            sqlConnection.Close();
             return 0;
         }
     }

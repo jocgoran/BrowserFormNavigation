@@ -1,4 +1,5 @@
-﻿using BrowserFormNavi.View;
+﻿using BrowserFormNavi.Model;
+using BrowserFormNavi.View;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -97,38 +98,61 @@ namespace BrowserFormNavi.Controller
 
             while (Program.keepTheNavigationLoopRunning)
             {
-                Program.formNavi.SetPropertyValue(Program.formNavi.ExtractFormFromBrowser, "BackColor", Color.Green);
-                int waitEfb = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerExtractFromBrowser, "SelectedItem"));
-                Thread.Sleep(Program.rnd.Next(800*waitEfb, 1200*waitEfb));
-                if (!Program.keepTheNavigationLoopRunning) break;
-                WriteBrowserFormToGrid();
-                
-                Program.formNavi.SetPropertyValue(Program.formNavi.FillAutoGenertedData, "BackColor", Color.Green);
-                int waitFd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerFillData, "SelectedItem"));
-                Thread.Sleep(Program.rnd.Next(800 * waitFd, 1200 * waitFd));
-                if (!Program.keepTheNavigationLoopRunning) break;
-                AutoFillInputValue();
+                try
+                {
+                    // Start the Data Mining
+                    Program.formNavi.SetPropertyValue(Program.formNavi.ExtractFormFromBrowser, "BackColor", Color.Green);
+                    int waitEfb = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerExtractFromBrowser, "SelectedItem"));
+                    Thread.Sleep(Program.rnd.Next(800 * waitEfb, 1200 * waitEfb));
+                    if (!Program.keepTheNavigationLoopRunning) break;
+                    WriteBrowserFormToGrid();
 
-                Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
-                int waitCfb = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerCopyToBrowser, "SelectedItem"));
-                Thread.Sleep(Program.rnd.Next(800 * waitCfb, 1200 * waitCfb));
-                if (!Program.keepTheNavigationLoopRunning) break;
-                CopyFromGridToBrowser();
+                    // Start the automated Form filler
+                    Program.formNavi.SetPropertyValue(Program.formNavi.FillAutoGenertedData, "BackColor", Color.Green);
+                    int waitFd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerFillData, "SelectedItem"));
+                    Thread.Sleep(Program.rnd.Next(800 * waitFd, 1200 * waitFd));
+                    if (!Program.keepTheNavigationLoopRunning) break;
+                    AutoFillInputValue();
 
-                Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.Green);
-                int waitSd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerSaveData, "SelectedItem"));
-                Thread.Sleep(Program.rnd.Next(800 * waitSd, 1200 * waitSd));
-                if (!Program.keepTheNavigationLoopRunning) break;
-                SaveBrowserFilledValuesToDatabase();
+                    // Copy from Grid to Browser
+                    Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
+                    int waitCfb = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerCopyToBrowser, "SelectedItem"));
+                    Thread.Sleep(Program.rnd.Next(800 * waitCfb, 1200 * waitCfb));
+                    if (!Program.keepTheNavigationLoopRunning) break;
+                    CopyFromGridToBrowser();
 
-                // Select the Index 5
-                Program.formNavi.SetPropertyValue(Program.formNavi.comboBox2, "SelectedItem", 6);
+                    // save historical data
+                    Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.Green);
+                    int waitSd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerSaveData, "SelectedItem"));
+                    Thread.Sleep(Program.rnd.Next(800 * waitSd, 1200 * waitSd));
+                    if (!Program.keepTheNavigationLoopRunning) break;
+                    SaveBrowserFilledValuesToDatabase();
 
-                Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
-                Thread.Sleep(Program.rnd.Next(800, 1200));
-                if (!Program.keepTheNavigationLoopRunning) break;
-                InvokeSubmit();
+                    // Invocke the preselected submit
+                    Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
+                    Thread.Sleep(Program.rnd.Next(800, 1200));
+                    if (!Program.keepTheNavigationLoopRunning) break;
+                    InvokeSubmit();
 
+                    if ((bool)Program.formNavi.GetPropertyValue(Program.formNavi.performLoop, "Checked") == false)
+                    {
+                        Program.keepTheNavigationLoopRunning = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Extract some information from this exception, and then 
+                    if (ex.Source != null)
+                        LogWriter.LogWrite("IOException source: " + ex.Source);
+
+                    // if loop stop without user decision, restart the program
+                    if (Program.keepTheNavigationLoopRunning && (bool)Program.formNavi.GetPropertyValue(Program.formNavi.autoRestart, "Checked"))
+                    {
+                        NavigationLoop();
+                    }
+                    // throw it to the parent method.
+                    throw;
+                }
             }
             return 0;
         }
@@ -142,11 +166,11 @@ namespace BrowserFormNavi.Controller
         public int LoadDomainSettings()
         {
             // get the saved setting on click
-            string domain = (string)Program.formNavi.GetPropertyValue(Program.formNavi.listBox1, "SelectedItem");
+            int domain_id = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.domainSettings, "SelectedIndex"))+1;
 
             // get the settings from database
             HashSet<string> tagsAndAttributesToExport = new HashSet<string>();
-            Program.dBAccess.GetDomainSettings(domain, ref tagsAndAttributesToExport);
+            Program.dBAccess.GetDomainSettings(domain_id, ref tagsAndAttributesToExport);
 
             // loop and fill the TreeView
             TreeNodeCollection nodes = (TreeNodeCollection)Program.formNavi.GetPropertyValue(Program.formNavi.treeView1, "Nodes");

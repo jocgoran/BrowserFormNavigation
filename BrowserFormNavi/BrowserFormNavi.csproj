@@ -63,13 +63,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BrowserFormNaviDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BrowserFormNaviDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Controller\AutomatedFiller.cs" />
+    <Compile Include="Controller\LayeredPrediction\StatisticalPrediction.cs" />
+    <Compile Include="Controller\LayeredPrediction\UIComponent.cs" />
+    <Compile Include="Controller\LayeredPrediction\UserRule.cs" />
     <Compile Include="Controller\Navigation.cs" />
     <Compile Include="Controller\ReadingBrowserForm.cs" />
     <Compile Include="Controller\SpecialSubmitter.cs" />
     <Compile Include="Controller\WebMiner.cs" />
     <Compile Include="Controller\WritingBrowserForm.cs" />
     <Compile Include="Model\DBAccess.cs" />
+    <Compile Include="Model\LogWriter.cs" />
     <Compile Include="View\FormNavi.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +111,17 @@
       <DependentUpon>BrowserView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="BrowserFormNavi.ruleset" />
+    <None Include="BrowserFormNaviDataSet.xsc">
+      <DependentUpon>BrowserFormNaviDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="BrowserFormNaviDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BrowserFormNaviDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BrowserFormNaviDataSet.xss">
+      <DependentUpon>BrowserFormNaviDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

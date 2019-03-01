@@ -23,11 +23,14 @@ namespace BrowserFormNavi.Controller
             //copy URl To Form
             CopyUrlToForm();
 
+            //update domainId
+            updateDomainId();
+
             // get the Browser document thread safe
             HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
 
             // passing the document for elaboration
-            Program.webMiner.documentMining(htmlDocument);
+            Program.webMiner.DocumentMining(htmlDocument);
 
             // set the FormNavi fields
             Program.formNavi.SetLastComboBoxItem(Program.formNavi.comboBox2);
@@ -39,14 +42,22 @@ namespace BrowserFormNavi.Controller
         public int CopyUrlToForm()
         {
             //set page URL
-            Program.formNavi.SetPropertyValue(Program.formNavi.comboBox1, "Text" ,Program.browserView.GetHtmlDocumentUrl());
+            Program.formNavi.SetPropertyValue(Program.formNavi.comboBox1, "Text", Program.browserView.GetHtmlDocumentUrl());
+            return 0;
+        }
+
+        public int updateDomainId()
+        {
+            //set page URL
+            string domain = new Uri(Program.browserView.GetHtmlDocumentUrl()).Host;
+            Program.dBAccess.updateAppDomainId(domain);
             return 0;
         }
 
         public int SaveBrowserValuesToDatabase()
         {
             string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.comboBox1, "Text");
-            string domain = new Uri(url).Host;
+            int domainId = Program.browserData.domainId;
 
             // get the Browser document thread safe
             HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
@@ -70,16 +81,16 @@ namespace BrowserFormNavi.Controller
                 string sChecked = input.GetAttribute("checked") == "checked" ? "checked" : "";
 
                 // insert IF NOT EXISTS description of input data
-                int error = Program.dBAccess.InsertInputFormData(url, domain, tag, classAttribute, role, type, name, inputFieldID);
+                int error = Program.dBAccess.InsertInputFormData(url, domainId, tag, classAttribute, role, type, name, inputFieldID);
 
                 // get the FormPK of which to save parameters
-                int FormPK = 0;
-                Program.dBAccess.GetInputPrimaryKey(url, domain, tag, classAttribute, role, type, name, inputFieldID, ref FormPK);
+                int UIComponentID = 0;
+                Program.dBAccess.GetInputPrimaryKey(url, domainId, tag, classAttribute, role, type, name, inputFieldID, ref UIComponentID);
  
                 if(input.GetAttribute("type") != "hidden")
                 {
                     //save value and checkbox
-                    Program.dBAccess.SaveHistorcalInputParam(FormPK, value, sChecked);
+                    Program.dBAccess.SaveHistorcalInputParam(UIComponentID, value, sChecked);
                 }
             }
 
@@ -102,14 +113,14 @@ namespace BrowserFormNavi.Controller
                 string sChecked = div.GetAttribute("checked") == "checked" ? "checked" : "";
 
                 // insert IF NOT EXISTS description of input data
-                int error = Program.dBAccess.InsertInputFormData(url, domain, tag, classAttribute, role, type, name, inputFieldID);
+                int error = Program.dBAccess.InsertInputFormData(url, domainId, tag, classAttribute, role, type, name, inputFieldID);
 
                 // get the FormPK of which to save parameters
-                int FormPK = 0;
-                Program.dBAccess.GetInputPrimaryKey(url, domain, tag, classAttribute, role, type, name, inputFieldID, ref FormPK);
+                int UIComponentID = 0;
+                Program.dBAccess.GetInputPrimaryKey(url, domainId, tag, classAttribute, role, type, name, inputFieldID, ref UIComponentID);
 
                 //save value and checkbox
-                Program.dBAccess.SaveHistorcalInputParam(FormPK, value, sChecked);
+                Program.dBAccess.SaveHistorcalInputParam(UIComponentID, value, sChecked);
             }
 
             return 0;

@@ -209,9 +209,9 @@ namespace BrowserFormNavi
 
         private void SubmitSpecial(object sender, System.EventArgs e)
         {
-            SetPropertyValue(comboBox3, "Enabled", false);
+            SetPropertyValue(formRulesSet, "Enabled", false);
             Program.navigation.SubmitSpecial();
-            SetPropertyValue(comboBox3, "Enabled", true);
+            SetPropertyValue(formRulesSet, "Enabled", true);
             
         }
 
@@ -266,6 +266,12 @@ namespace BrowserFormNavi
         private void LoadDomainSettings(object sender, EventArgs e)
         {
             Program.navigation.LoadDomainSettings();
+        }
+
+        private void FormNavi_Load(object sender, EventArgs e)
+        {
+            // TODO: questa riga di codice carica i dati nella tabella 'browserFormNaviDataSet.domain'. È possibile spostarla o rimuoverla se necessario.
+            this.domainTableAdapter.Fill(this.browserFormNaviDataSet.domain);
         }
     }
 }

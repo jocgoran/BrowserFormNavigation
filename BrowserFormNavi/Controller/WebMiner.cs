@@ -10,7 +10,7 @@ namespace BrowserFormNavi.Controller
         private HashSet<string> icTagsToExport;
         HashSet<string> icAttributesToExport;
 
-        public int documentMining(HtmlDocument htmlDocument)
+        public int DocumentMining(HtmlDocument htmlDocument)
         {
             // looop over all tags 
             if (htmlDocument != null)
@@ -43,9 +43,9 @@ namespace BrowserFormNavi.Controller
 
                 foreach (HtmlElement tagElement in htmlDocument.All)
                 {
-                    if (!tagExactMatch(tagElement)) continue;
+                    if (!TagExactMatch(tagElement)) continue;
 
-                    if (!attributesExactMatch(tagElement)) continue;
+                    if (!AttributesExactMatch(tagElement)) continue;
 
                      // copy browser form data to Form
                     Program.formNavi.AddRowToDataGrid(new object[] {++tagId,
@@ -64,7 +64,7 @@ namespace BrowserFormNavi.Controller
                     tagElement.SetAttribute("BFN_ID", tagId.ToString());
 
                     // add the ID of submit input
-                    if (submitTaxonomie(tagElement))
+                    if (SubmitTaxonomie(tagElement))
                         Program.formNavi.AddItemToComboBox(Program.formNavi.comboBox2, tagId);
                 }
 
@@ -72,7 +72,7 @@ namespace BrowserFormNavi.Controller
             return 0;
         }
 
-        private bool tagExactMatch(HtmlElement tagElement)
+        private bool TagExactMatch(HtmlElement tagElement)
         {
             //check if tag is to export
             if (icTagsToExport.Contains(tagElement.TagName))
@@ -81,7 +81,7 @@ namespace BrowserFormNavi.Controller
             return false;
         }
 
-        private bool attributesExactMatch(HtmlElement tagElement)
+        private bool AttributesExactMatch(HtmlElement tagElement)
         {
             //check if the attributes correspond to the exportation 
             string typeAttribute = tagElement.GetAttribute("type");
@@ -97,7 +97,7 @@ namespace BrowserFormNavi.Controller
             return false;
         }
 
-        private bool submitTaxonomie(HtmlElement tagElement)
+        private bool SubmitTaxonomie(HtmlElement tagElement)
         {
             string typeAttribute = tagElement.GetAttribute("type");
             string roleAttribute = tagElement.GetAttribute("role");
