@@ -5,3 +5,4 @@
 *.lock
 bin/
 obj/
+InstallerBrowserFormNavi/

@@ -3,46 +3,19 @@ using System.Windows.Forms;
 
 namespace BrowserFormNavi.Controller
 {
-    public class WritingBrowserForm
+    public class Automation
     {
-
-        public int CopyDataToBrowser()
+        public int AutoFillInputValue()
         {
             // loop over all the rows of data grid
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
-                // read if the submit is an input or a button
-                String tagName = Program.formNavi.GetDataGridCell(row, "TagAttribute");
+                // add input and try to retrieve exact match
+                int success = Program.statisticalPrediction.MatchExactInputData(row);
 
-                // get the Browser document thread safe
-                HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
-
-                // loop over all the ag elements to find where to copy the value
-                HtmlElementCollection tagNameCollection = htmlDocument.GetElementsByTagName(tagName);
-                foreach (HtmlElement tagNameElement in tagNameCollection)
-                {
-                    // if the input match the entry in the DataGrid 
-                    if (tagNameElement.GetAttribute("BFN_ID") == Program.formNavi.GetDataGridCell(row, "BFN_ID"))
-                    {
-                        string cellValue = "";
-                        if (string.IsNullOrEmpty(Program.formNavi.GetDataGridCell(row, "valueAttribute")) == false)
-                        {
-                            cellValue = Program.formNavi.GetDataGridCell(row, "valueAttribute");
-                        }
-                        string cellChecked = "";
-                        if (string.IsNullOrEmpty(Program.formNavi.GetDataGridCell(row, "checkedAttribute")) == false)
-                        {
-                            cellChecked = Program.formNavi.GetDataGridCell(row, "checkedAttribute");
-                        }
-
-                        // set value to the browser
-                        tagNameElement.SetAttribute("value", cellValue);
-
-                        // set checked to the browser
-                        tagNameElement.SetAttribute("checked", cellChecked);
-
-                    } // end if BFN_ID
-                } // end loop of tagName
+                // if exact match not works, use most reliable data
+                //if(success>0)
+                //    success = Program.formData.GetMostReliableValue();
 
             } // end DataGrid loop
 
@@ -50,7 +23,7 @@ namespace BrowserFormNavi.Controller
         }
 
 
-        public int InvoikeSubmitValue()
+        public int InvoikeAutoSubmitValue()
         {
             // reset the Browser loading var
             Program.browserData.FormExtracted = false;
@@ -91,6 +64,5 @@ namespace BrowserFormNavi.Controller
 
             return 0;
         }
-
     }
 }

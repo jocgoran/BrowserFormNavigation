@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BrowserFormNavi.Controller.LayeredPrediction
 {
-    public class UIComponent
+    public class UIContexter
     {
     }
 }

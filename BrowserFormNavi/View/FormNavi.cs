@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
@@ -30,6 +31,18 @@ namespace BrowserFormNavi
             backgroundWorker1.DoWork += BackgroundWorker1_DoWork;
             backgroundWorker1.RunWorkerCompleted += BackgroundWorker1_RunWorkerCompleted;  //Tell the user how the process went
             backgroundWorker1.WorkerSupportsCancellation = true; //Allow for the process to be cancelled
+
+            // load all the domains that have dataMiningSettings
+            Program.dBAccess.LoadDomainsWithDataMiningSettings();
+            HashSet<string> domainsWithSettings = new HashSet<string>();
+            Program.dBAccess.ColToHashSet("domain", ref domainsWithSettings);
+
+            // add all domains with settings to listbox
+            foreach (string domain in domainsWithSettings)
+            {
+                domains.Items.Add(domain);
+            }
+            
         }
 
         private void OpenPage(object sender, System.EventArgs e)
@@ -268,10 +281,5 @@ namespace BrowserFormNavi
             Program.navigation.LoadDomainSettings();
         }
 
-        private void FormNavi_Load(object sender, EventArgs e)
-        {
-            // TODO: questa riga di codice carica i dati nella tabella 'browserFormNaviDataSet.domain'. È possibile spostarla o rimuoverla se necessario.
-            this.domainTableAdapter.Fill(this.browserFormNaviDataSet.domain);
-        }
     }
 }

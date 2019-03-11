@@ -37,7 +37,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>BrowserFormNavi.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,7 +48,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>BrowserFormNavi.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -63,14 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BrowserFormNaviDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BrowserFormNaviDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Controller\AutomatedFiller.cs" />
+    <Compile Include="Controller\Automation.cs" />
     <Compile Include="Controller\LayeredPrediction\StatisticalPrediction.cs" />
-    <Compile Include="Controller\LayeredPrediction\UIComponent.cs" />
+    <Compile Include="Controller\LayeredPrediction\UIContexter.cs" />
     <Compile Include="Controller\LayeredPrediction\UserRule.cs" />
     <Compile Include="Controller\Navigation.cs" />
     <Compile Include="Controller\ReadingBrowserForm.cs" />
@@ -110,18 +107,6 @@
     <EmbeddedResource Include="View\BrowserView.resx">
       <DependentUpon>BrowserView.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="BrowserFormNavi.ruleset" />
-    <None Include="BrowserFormNaviDataSet.xsc">
-      <DependentUpon>BrowserFormNaviDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="BrowserFormNaviDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>BrowserFormNaviDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="BrowserFormNaviDataSet.xss">
-      <DependentUpon>BrowserFormNaviDataSet.xsd</DependentUpon>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -133,7 +118,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

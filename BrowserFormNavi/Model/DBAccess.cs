@@ -6,11 +6,13 @@ using System.Windows.Forms;
 
 namespace BrowserFormNavi.Model
 {
+
     public class DBAccess
     {
 
-        public string connectionString;
-        public SqlConnection sqlConnection;
+        private static string connectionString;
+        private SqlConnection sqlConnection;
+        private DataTable dataTable = new DataTable();
 
         public DBAccess()
         {
@@ -67,12 +69,11 @@ namespace BrowserFormNavi.Model
 
             return 0;
         }
-        
 
-        public int GetInputPrimaryKey(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID, ref int UIComponentID)
+
+        public int LoadInputPrimaryKey(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
         {
             sqlConnection.Open();
-            DataTable tFormPk = new DataTable();
 
             // select the exact match 
             SqlDataAdapter DBAdapter = new SqlDataAdapter("Select UIComponent.id " +
@@ -95,26 +96,16 @@ namespace BrowserFormNavi.Model
             DBAdapter.SelectCommand.Parameters.AddWithValue("@name", name);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
 
-            DBAdapter.Fill(tFormPk);
+            DBAdapter.Fill(dataTable);
 
-            if (tFormPk.Rows.Count > 0)
-            {
-                foreach (DataRow dataRow in tFormPk.Rows)
-                {
-                    UIComponentID = Convert.ToInt32(dataRow["id"]);
-                }
-            }
             sqlConnection.Close();
 
             return 0;
         }
 
-        public int RetriveExactFormParamValue(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID,
-                                             ref string value, ref string sChecked)
+        public int RetriveExactFormParamValue(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
         {
-
             sqlConnection.Open();
-            DataTable exactMatchHistParam = new DataTable();
 
             // select the exact match 
             SqlDataAdapter DBAdapter = new SqlDataAdapter("Select historicalParam.* " +
@@ -139,14 +130,8 @@ namespace BrowserFormNavi.Model
             DBAdapter.SelectCommand.Parameters.AddWithValue("@name", name);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
 
-            DBAdapter.Fill(exactMatchHistParam);
+            DBAdapter.Fill(dataTable);
 
-            if (exactMatchHistParam.Rows.Count > 0)
-            {
-                // access directly only the first row 
-                value = exactMatchHistParam.Rows[0]["value"].ToString();
-                sChecked = exactMatchHistParam.Rows[0]["checked"].ToString();
-            }
             sqlConnection.Close();
 
             return 0;
@@ -173,7 +158,7 @@ namespace BrowserFormNavi.Model
             string sql = "UPDATE historicalParam SET count = count+1 WHERE UIComponent_id=@UIComponent_id AND value=@value AND checked=@sChecked " +
                          "IF @@ROWCOUNT = 0 " +
                          "INSERT INTO historicalParam(UIComponent_id, value, checked) VALUES(@UIComponent_id, @value, @sChecked)";
-                       
+
             SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
             sqlCommand.Parameters.Add(new SqlParameter("@UIComponent_id", UIComponent_id));
             sqlCommand.Parameters.Add(new SqlParameter("@value", value));
@@ -199,47 +184,90 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int GetDomainSettings(int domain_id, ref HashSet<string> tagsAndAttributesToExport)
+        public int LoadDomainsWithDataMiningSettings()
         {
-
             sqlConnection.Open();
-            DataTable domainSettings = new DataTable();
-            
+
             // select the eisting settings
-            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select * from dataMiningSettings where domain_id=@domain_id ", sqlConnection);
+            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select distinct domain.* from domain INNER JOIN dataMiningSettings ON domain_id = domain.id", sqlConnection);
 
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", domain_id);
+            DBAdapter.Fill(dataTable);
 
-            DBAdapter.Fill(domainSettings);
-
-            for (int i=0; i<domainSettings.Rows.Count; ++i)
-            {
-                tagsAndAttributesToExport.Add(domainSettings.Rows[i]["tagAndAttribute"].ToString());
-            }
             sqlConnection.Close();
 
             return 0;
         }
 
-        public int updateAppDomainId(string domain)
+        public int LoadDomainSettings(int domain)
+        {
+            sqlConnection.Open();
+
+            // select the eisting settings
+            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select * from dataMiningSettings INNER JOIN domain ON domain_id = domain.id where domain=@domain ", sqlConnection);
+
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
+
+            DBAdapter.Fill(dataTable);
+
+            sqlConnection.Close();
+
+            return 0;
+        }
+
+        public int UpdateAppDomainId(string domain)
         {
 
             sqlConnection.Open();
-            DataTable domainDt = new DataTable();
 
             // select the eisting settings
             SqlDataAdapter DBAdapter = new SqlDataAdapter("Select id from domain where domain=@domain", sqlConnection);
 
             DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
 
-            DBAdapter.Fill(domainDt);
+            DBAdapter.Fill(dataTable);
 
-            for (int i = 0; i < domainDt.Rows.Count; ++i)
+            for (int i = 0; i < dataTable.Rows.Count; ++i)
             {
-                Program.browserData.domainId=Convert.ToInt32(domainDt.Rows[i]["id"]);
+                Program.browserData.domainId = Convert.ToInt32(dataTable.Rows[i]["id"]);
             }
             sqlConnection.Close();
             return 0;
         }
+
+        public int ColToHashSet(string colName, ref HashSet<string> sHashSet)
+        {
+            for (int i = 0; i < dataTable.Rows.Count; ++i)
+            {
+                sHashSet.Add(dataTable.Rows[i][colName].ToString());
+            }
+
+            return 0;
+        }
+
+        public int ColToInt(string colName, ref int intValue)
+        {
+            if (dataTable.Rows.Count > 0)
+            {
+                foreach (DataRow dataRow in dataTable.Rows)
+                {
+                    intValue = Convert.ToInt32(dataRow[colName]);
+                }
+            }
+
+            return 0;
+        }
+
+        public int ColToString(string colName1, ref string colValue1, string colName2, ref string colValue2)
+        {
+            if (dataTable.Rows.Count > 0)
+            {
+                // access directly only the first row 
+                colValue1 = dataTable.Rows[0][colName1].ToString();
+                colValue2 = dataTable.Rows[0][colName2].ToString();
+            }
+
+            return 0;
+        }
+
     }
 }

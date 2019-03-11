@@ -24,7 +24,9 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
             // search the exact match
             string value = "", sChecked = "";
             int success = 1;
-            Program.dBAccess.RetriveExactFormParamValue(url, domain, tag, classAttribute, role, type, name, inputFieldID, ref value, ref sChecked);
+            Program.dBAccess.RetriveExactFormParamValue(url, domain, tag, classAttribute, role, type, name, inputFieldID);
+            Program.dBAccess.ColToString("value", ref value, "checked", ref sChecked);
+
             if (!string.IsNullOrEmpty(value))
             {
                 Program.formNavi.SetDataGridCell(row, "ValueAttribute", value);
@@ -40,6 +42,10 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
 
         }
 
+        public int CollaborativeCall()
+        {
 
+            return 0;
+        }
     }
 }

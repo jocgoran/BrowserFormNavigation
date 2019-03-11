@@ -32,7 +32,6 @@ namespace BrowserFormNavi
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -74,6 +73,8 @@ namespace BrowserFormNavi
             this.btnCheckDBConnection = new System.Windows.Forms.Button();
             this.SaveBrowserValuesToDB = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.invokeRulesSet = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.fillPredefinedData = new System.Windows.Forms.Label();
             this.performLoop = new System.Windows.Forms.CheckBox();
@@ -92,18 +93,11 @@ namespace BrowserFormNavi
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonStart = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.domainSettings = new System.Windows.Forms.ListBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.label2 = new System.Windows.Forms.Label();
-            this.invokeRulesSet = new System.Windows.Forms.ComboBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.browserFormNaviDataSet = new BrowserFormNavi.BrowserFormNaviDataSet();
-            this.domainBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.domainTableAdapter = new BrowserFormNavi.BrowserFormNaviDataSetTableAdapters.domainTableAdapter();
+            this.domains = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.browserFormNaviDataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.domainBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBox1
@@ -337,6 +331,26 @@ namespace BrowserFormNavi
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Perform recursively automated";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(217, 109);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(51, 13);
+            this.label8.TabIndex = 27;
+            this.label8.Text = "Rules set";
+            // 
+            // invokeRulesSet
+            // 
+            this.invokeRulesSet.FormattingEnabled = true;
+            this.invokeRulesSet.Items.AddRange(new object[] {
+            "Like everyone on badoo",
+            "Like everything on facebook"});
+            this.invokeRulesSet.Location = new System.Drawing.Point(220, 125);
+            this.invokeRulesSet.Name = "invokeRulesSet";
+            this.invokeRulesSet.Size = new System.Drawing.Size(169, 21);
+            this.invokeRulesSet.TabIndex = 26;
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -440,6 +454,7 @@ namespace BrowserFormNavi
             this.timerSaveData.Name = "timerSaveData";
             this.timerSaveData.Size = new System.Drawing.Size(37, 21);
             this.timerSaveData.TabIndex = 17;
+            this.timerSaveData.Text = "1";
             // 
             // timerCopyToBrowser
             // 
@@ -457,6 +472,7 @@ namespace BrowserFormNavi
             this.timerCopyToBrowser.Name = "timerCopyToBrowser";
             this.timerCopyToBrowser.Size = new System.Drawing.Size(37, 21);
             this.timerCopyToBrowser.TabIndex = 16;
+            this.timerCopyToBrowser.Text = "1";
             // 
             // timerFillData
             // 
@@ -474,6 +490,7 @@ namespace BrowserFormNavi
             this.timerFillData.Name = "timerFillData";
             this.timerFillData.Size = new System.Drawing.Size(37, 21);
             this.timerFillData.TabIndex = 15;
+            this.timerFillData.Text = "1";
             // 
             // label3
             // 
@@ -500,6 +517,7 @@ namespace BrowserFormNavi
             this.timerExtractFromBrowser.Name = "timerExtractFromBrowser";
             this.timerExtractFromBrowser.Size = new System.Drawing.Size(37, 21);
             this.timerExtractFromBrowser.TabIndex = 13;
+            this.timerExtractFromBrowser.Text = "1";
             // 
             // ExtractFormFromBrowser
             // 
@@ -531,17 +549,6 @@ namespace BrowserFormNavi
             this.buttonStart.Text = "Start";
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.StartTheNavigation);
-            // 
-            // domainSettings
-            // 
-            this.domainSettings.DataSource = this.domainBindingSource;
-            this.domainSettings.DisplayMember = "domain";
-            this.domainSettings.FormattingEnabled = true;
-            this.domainSettings.Location = new System.Drawing.Point(164, 64);
-            this.domainSettings.Name = "domainSettings";
-            this.domainSettings.Size = new System.Drawing.Size(156, 82);
-            this.domainSettings.TabIndex = 13;
-            this.domainSettings.Click += new System.EventHandler(this.LoadDomainSettings);
             // 
             // treeView1
             // 
@@ -581,48 +588,23 @@ namespace BrowserFormNavi
             this.label2.TabIndex = 15;
             this.label2.Text = "Load specific settings";
             // 
-            // invokeRulesSet
+            // domains
             // 
-            this.invokeRulesSet.FormattingEnabled = true;
-            this.invokeRulesSet.Items.AddRange(new object[] {
-            "Like everyone on badoo",
-            "Like everything on facebook"});
-            this.invokeRulesSet.Location = new System.Drawing.Point(220, 125);
-            this.invokeRulesSet.Name = "invokeRulesSet";
-            this.invokeRulesSet.Size = new System.Drawing.Size(169, 21);
-            this.invokeRulesSet.TabIndex = 26;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(217, 109);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(51, 13);
-            this.label8.TabIndex = 27;
-            this.label8.Text = "Rules set";
-            // 
-            // browserFormNaviDataSet
-            // 
-            this.browserFormNaviDataSet.DataSetName = "BrowserFormNaviDataSet";
-            this.browserFormNaviDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // domainBindingSource
-            // 
-            this.domainBindingSource.DataMember = "domain";
-            this.domainBindingSource.DataSource = this.browserFormNaviDataSet;
-            // 
-            // domainTableAdapter
-            // 
-            this.domainTableAdapter.ClearBeforeFill = true;
+            this.domains.FormattingEnabled = true;
+            this.domains.Location = new System.Drawing.Point(168, 64);
+            this.domains.Name = "domains";
+            this.domains.Size = new System.Drawing.Size(125, 82);
+            this.domains.TabIndex = 16;
+            this.domains.Click += new System.EventHandler(this.LoadDomainSettings);
             // 
             // FormNavi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1124, 770);
+            this.Controls.Add(this.domains);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.treeView1);
-            this.Controls.Add(this.domainSettings);
             this.Controls.Add(this.btnCheckDBConnection);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.Go);
@@ -630,13 +612,9 @@ namespace BrowserFormNavi
             this.Controls.Add(this.groupBox1);
             this.Name = "FormNavi";
             this.Text = "Automated formular extractor and formular submitter";
-            this.Load += new System.EventHandler(this.FormNavi_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LoadDomainSettings);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.browserFormNaviDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.domainBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -669,7 +647,6 @@ namespace BrowserFormNavi
         private DataGridViewTextBoxColumn IDAttribute;
         private DataGridViewTextBoxColumn ValueAttribute;
         private DataGridViewTextBoxColumn CheckedAttribute;
-        public ListBox domainSettings;
         public TreeView treeView1;
         public Label label2;
         public ComboBox timerExtractFromBrowser;
@@ -687,9 +664,7 @@ namespace BrowserFormNavi
         public Label label7;
         public Label label8;
         public ComboBox invokeRulesSet;
-        private BrowserFormNaviDataSet browserFormNaviDataSet;
-        private BindingSource domainBindingSource;
-        private BrowserFormNaviDataSetTableAdapters.domainTableAdapter domainTableAdapter;
+        public ListBox domains;
     }
 }
 

@@ -13,7 +13,7 @@ namespace BrowserFormNavi
         public static bool keepTheNavigationLoopRunning;
 
         // Controller objects
-        public static AutomatedFiller automatedFiller;
+        public static Automation automation;
         public static Navigation navigation;
         public static ReadingBrowserForm readingBrowserForm;
         public static WritingBrowserForm writingBrowserForm;
@@ -23,7 +23,7 @@ namespace BrowserFormNavi
 
         // Layered prediction
         public static StatisticalPrediction statisticalPrediction;
-        public static UIComponent uIComponent;
+        public static UIContexter uIComponent;
         public static UserRule userRule;
 
         // Model Objects
@@ -48,7 +48,7 @@ namespace BrowserFormNavi
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Controller objects
-            automatedFiller = new AutomatedFiller();
+            automation = new Automation();
             navigation = new Navigation();
             readingBrowserForm = new ReadingBrowserForm();
             writingBrowserForm = new WritingBrowserForm();
@@ -58,7 +58,7 @@ namespace BrowserFormNavi
 
             // Layered prediction
             statisticalPrediction = new StatisticalPrediction();
-            uIComponent = new UIComponent();
+            uIComponent = new UIContexter();
             userRule = new UserRule();
 
             // Model Objects

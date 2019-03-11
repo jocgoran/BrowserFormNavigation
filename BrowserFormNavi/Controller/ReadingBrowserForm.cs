@@ -24,7 +24,7 @@ namespace BrowserFormNavi.Controller
             CopyUrlToForm();
 
             //update domainId
-            updateDomainId();
+            UpdateDomainId();
 
             // get the Browser document thread safe
             HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
@@ -46,11 +46,11 @@ namespace BrowserFormNavi.Controller
             return 0;
         }
 
-        public int updateDomainId()
+        public int UpdateDomainId()
         {
             //set page URL
             string domain = new Uri(Program.browserView.GetHtmlDocumentUrl()).Host;
-            Program.dBAccess.updateAppDomainId(domain);
+            Program.dBAccess.UpdateAppDomainId(domain);
             return 0;
         }
 
@@ -85,9 +85,10 @@ namespace BrowserFormNavi.Controller
 
                 // get the FormPK of which to save parameters
                 int UIComponentID = 0;
-                Program.dBAccess.GetInputPrimaryKey(url, domainId, tag, classAttribute, role, type, name, inputFieldID, ref UIComponentID);
- 
-                if(input.GetAttribute("type") != "hidden")
+                Program.dBAccess.LoadInputPrimaryKey(url, domainId, tag, classAttribute, role, type, name, inputFieldID);
+                Program.dBAccess.ColToInt("id", ref UIComponentID);
+
+                if (input.GetAttribute("type") != "hidden")
                 {
                     //save value and checkbox
                     Program.dBAccess.SaveHistorcalInputParam(UIComponentID, value, sChecked);
@@ -117,7 +118,8 @@ namespace BrowserFormNavi.Controller
 
                 // get the FormPK of which to save parameters
                 int UIComponentID = 0;
-                Program.dBAccess.GetInputPrimaryKey(url, domainId, tag, classAttribute, role, type, name, inputFieldID, ref UIComponentID);
+                Program.dBAccess.LoadInputPrimaryKey(url, domainId, tag, classAttribute, role, type, name, inputFieldID);
+                Program.dBAccess.ColToInt("id", ref UIComponentID);
 
                 //save value and checkbox
                 Program.dBAccess.SaveHistorcalInputParam(UIComponentID, value, sChecked);

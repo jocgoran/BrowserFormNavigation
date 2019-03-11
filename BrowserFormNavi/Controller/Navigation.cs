@@ -56,10 +56,18 @@ namespace BrowserFormNavi.Controller
             return 0;
         }
 
+        public int InvokeAutoSubmit()
+        {
+            Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
+            Program.automation.InvoikeAutoSubmitValue();
+            Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.LightGray);
+            return 0;
+        }
+
         public int InvokeSubmit()
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
-            Program.writingBrowserForm.InvokeFormSubmit();
+            Program.writingBrowserForm.InvoikeSubmitValue();
             Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.LightGray);
             return 0;
         }
@@ -67,7 +75,7 @@ namespace BrowserFormNavi.Controller
         public int AutoFillInputValue()
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.FillAutoGenertedData, "BackColor", Color.Green);
-            Program.automatedFiller.AutoFillInputValue();
+            Program.automation.AutoFillInputValue();
             Program.formNavi.SetPropertyValue(Program.formNavi.FillAutoGenertedData, "BackColor", Color.LightGray);
             return 0;
         }
@@ -128,11 +136,11 @@ namespace BrowserFormNavi.Controller
                     if (!Program.keepTheNavigationLoopRunning) break;
                     SaveBrowserFilledValuesToDatabase();
 
-                    // Invocke the preselected submit
+                    // Invoke the correct submit
                     Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
                     Thread.Sleep(Program.rnd.Next(800, 1200));
                     if (!Program.keepTheNavigationLoopRunning) break;
-                    InvokeSubmit();
+                    InvokeAutoSubmit();
 
                     if ((bool)Program.formNavi.GetPropertyValue(Program.formNavi.performLoop, "Checked") == false)
                     {
@@ -166,20 +174,23 @@ namespace BrowserFormNavi.Controller
         public int LoadDomainSettings()
         {
             // get the saved setting on click
-            int domain_id = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.domainSettings, "SelectedIndex"))+1;
+            string domain = (string)Program.formNavi.GetPropertyValue(Program.formNavi.domains, "SelectedItem");
 
             // get the settings from database
+            Program.dBAccess.LoadDomainSettings(domain);
             HashSet<string> tagsAndAttributesToExport = new HashSet<string>();
-            Program.dBAccess.GetDomainSettings(domain_id, ref tagsAndAttributesToExport);
+            Program.dBAccess.ColToHashSet("tagAndAttribute", ref tagsAndAttributesToExport);
 
             // loop and fill the TreeView
             TreeNodeCollection nodes = (TreeNodeCollection)Program.formNavi.GetPropertyValue(Program.formNavi.treeView1, "Nodes");
             foreach (TreeNode node in nodes)
             {
+                // check defined and uncheck not defined nodes
                 node.Checked = tagsAndAttributesToExport.Contains(node.Name) ? true : false;
 
                 foreach (TreeNode child in node.Nodes)
                 {
+                    // check defined and uncheck not defined nodes
                     child.Checked = tagsAndAttributesToExport.Contains(child.Name) ? true : false;
                 }
                     
