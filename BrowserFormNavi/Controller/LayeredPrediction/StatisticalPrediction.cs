@@ -13,7 +13,9 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
         public int MatchExactInputData(DataGridViewRow row)
         {
             string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.comboBox1, "Text");
-            int domain = Program.browserData.domainId;
+            Program.dBAccess.LoadDomain(Program.browserData.domain);
+            int domainId = 0;
+            Program.dBAccess.ColToInt("id", ref domainId);
             string tag = Program.formNavi.GetDataGridCell(row, "TagAttribute");
             string classAttribute = Program.formNavi.GetDataGridCell(row, "ClassAttribute");
             string role = Program.formNavi.GetDataGridCell(row, "RoleAttribute");
@@ -24,7 +26,7 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
             // search the exact match
             string value = "", sChecked = "";
             int success = 1;
-            Program.dBAccess.RetriveExactFormParamValue(url, domain, tag, classAttribute, role, type, name, inputFieldID);
+            Program.dBAccess.RetriveExactFormParamValue(url, domainId, tag, classAttribute, role, type, name, inputFieldID);
             Program.dBAccess.ColToString("value", ref value, "checked", ref sChecked);
 
             if (!string.IsNullOrEmpty(value))

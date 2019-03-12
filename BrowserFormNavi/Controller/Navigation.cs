@@ -185,6 +185,7 @@ namespace BrowserFormNavi.Controller
             TreeNodeCollection nodes = (TreeNodeCollection)Program.formNavi.GetPropertyValue(Program.formNavi.treeView1, "Nodes");
             foreach (TreeNode node in nodes)
             {
+                node.Checked = false;
                 // check defined and uncheck not defined nodes
                 node.Checked = tagsAndAttributesToExport.Contains(node.Name) ? true : false;
 

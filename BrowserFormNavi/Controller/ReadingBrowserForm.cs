@@ -24,7 +24,7 @@ namespace BrowserFormNavi.Controller
             CopyUrlToForm();
 
             //update domainId
-            UpdateDomainId();
+            UpdateDomain();
 
             // get the Browser document thread safe
             HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
@@ -46,18 +46,20 @@ namespace BrowserFormNavi.Controller
             return 0;
         }
 
-        public int UpdateDomainId()
+        public int UpdateDomain()
         {
             //set page URL
-            string domain = new Uri(Program.browserView.GetHtmlDocumentUrl()).Host;
-            Program.dBAccess.UpdateAppDomainId(domain);
+            Program.browserData.domain = new Uri(Program.browserView.GetHtmlDocumentUrl()).Host;
             return 0;
         }
 
         public int SaveBrowserValuesToDatabase()
         {
             string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.comboBox1, "Text");
-            int domainId = Program.browserData.domainId;
+            // get the domainId
+            Program.dBAccess.LoadDomain(Program.browserData.domain);
+            int domainId = 0;
+            Program.dBAccess.ColToInt("id", ref domainId);
 
             // get the Browser document thread safe
             HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();

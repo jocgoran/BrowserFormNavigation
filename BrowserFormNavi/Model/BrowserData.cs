@@ -6,7 +6,7 @@ namespace BrowserFormNavi.Model
     public class BrowserData
     {
         public bool FormExtracted;
-        public int domainId;
+        public string domain;
 
         public BrowserData()
             {

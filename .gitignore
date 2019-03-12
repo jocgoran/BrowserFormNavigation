@@ -6,3 +6,5 @@
 bin/
 obj/
 InstallerBrowserFormNavi/
+release/
+debug/

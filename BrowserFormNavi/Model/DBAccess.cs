@@ -32,6 +32,18 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
+        //public int GetDBdata(string queryName, object[] parameters)
+        //{
+        //    dataTable.Clear();
+        //    sqlConnection.Open();
+
+
+        //    DBAdapter.Fill(dataTable);
+        //    sqlConnection.Close();
+
+        //    return 0;
+        //}
+
         public int InsertInputFormData(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
         {
 
@@ -73,6 +85,7 @@ namespace BrowserFormNavi.Model
 
         public int LoadInputPrimaryKey(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
         {
+            dataTable.Clear();
             sqlConnection.Open();
 
             // select the exact match 
@@ -97,7 +110,6 @@ namespace BrowserFormNavi.Model
             DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
 
             DBAdapter.Fill(dataTable);
-
             sqlConnection.Close();
 
             return 0;
@@ -105,6 +117,7 @@ namespace BrowserFormNavi.Model
 
         public int RetriveExactFormParamValue(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
         {
+            dataTable.Clear();
             sqlConnection.Open();
 
             // select the exact match 
@@ -131,7 +144,6 @@ namespace BrowserFormNavi.Model
             DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
 
             DBAdapter.Fill(dataTable);
-
             sqlConnection.Close();
 
             return 0;
@@ -186,50 +198,43 @@ namespace BrowserFormNavi.Model
 
         public int LoadDomainsWithDataMiningSettings()
         {
+            dataTable.Clear();
             sqlConnection.Open();
 
             // select the eisting settings
             SqlDataAdapter DBAdapter = new SqlDataAdapter("Select distinct domain.* from domain INNER JOIN dataMiningSettings ON domain_id = domain.id", sqlConnection);
 
             DBAdapter.Fill(dataTable);
-
             sqlConnection.Close();
 
             return 0;
         }
 
-        public int LoadDomainSettings(int domain)
+        public int LoadDomainSettings(string domain)
         {
+            dataTable.Clear();
             sqlConnection.Open();
 
             // select the eisting settings
             SqlDataAdapter DBAdapter = new SqlDataAdapter("Select * from dataMiningSettings INNER JOIN domain ON domain_id = domain.id where domain=@domain ", sqlConnection);
-
             DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
 
             DBAdapter.Fill(dataTable);
-
             sqlConnection.Close();
 
             return 0;
         }
 
-        public int UpdateAppDomainId(string domain)
+        public int LoadDomain(string domain)
         {
-
+            dataTable.Clear();
             sqlConnection.Open();
 
             // select the eisting settings
             SqlDataAdapter DBAdapter = new SqlDataAdapter("Select id from domain where domain=@domain", sqlConnection);
-
             DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
 
             DBAdapter.Fill(dataTable);
-
-            for (int i = 0; i < dataTable.Rows.Count; ++i)
-            {
-                Program.browserData.domainId = Convert.ToInt32(dataTable.Rows[i]["id"]);
-            }
             sqlConnection.Close();
             return 0;
         }
