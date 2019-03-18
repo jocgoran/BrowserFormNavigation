@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi.Model
@@ -13,6 +14,7 @@ namespace BrowserFormNavi.Model
         private static string connectionString;
         private SqlConnection sqlConnection;
         private DataTable dataTable = new DataTable();
+        private SqlDataAdapter DBAdapter;
 
         public DBAccess()
         {
@@ -22,6 +24,9 @@ namespace BrowserFormNavi.Model
 
             // create connection
             sqlConnection = new SqlConnection(connectionString);
+
+            // create adapter
+            DBAdapter = new SqlDataAdapter("", sqlConnection);
         }
 
         public int CheckDBConnection()
@@ -32,17 +37,25 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        //public int GetDBdata(string queryName, object[] parameters)
-        //{
-        //    dataTable.Clear();
-        //    sqlConnection.Open();
+        public int GetDBData(string methodName, object[] parameters)
+        {
+            // reset instance var
+            dataTable.Clear();
+            DBAdapter.SelectCommand.Cancel();
+            DBAdapter.SelectCommand.Parameters.Clear();
+            //openconnection
+            sqlConnection.Open();
 
+            // invoke correct method
+            MethodInfo method = this.GetType().GetMethod(methodName);
+            method.Invoke(this, new object[] { parameters });
 
-        //    DBAdapter.Fill(dataTable);
-        //    sqlConnection.Close();
+            // fill values and close connection
+            DBAdapter.Fill(dataTable);
+            sqlConnection.Close();
 
-        //    return 0;
-        //}
+            return 0;
+        }
 
         public int InsertInputFormData(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
         {
@@ -83,76 +96,62 @@ namespace BrowserFormNavi.Model
         }
 
 
-        public int LoadInputPrimaryKey(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
-        {
-            dataTable.Clear();
-            sqlConnection.Open();
-
+        public int UIComponentPrimaryKey(object[] parameters)
+        { 
             // select the exact match 
-            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select UIComponent.id " +
-                                                            "FROM UIComponent " +
-                                                            "WHERE url=@url " +
-                                                            "AND domain_id=@domain_id " +
-                                                            "AND tag=@tag " +
-                                                            "AND class=@class " +
-                                                            "AND role=@role " +
-                                                            "AND type=@type " +
-                                                            "AND name=@name " +
-                                                            "AND inputFieldID=@inputFieldID ", sqlConnection);
+            DBAdapter.SelectCommand.CommandText =   "Select UIComponent.id " +
+                                                    "FROM UIComponent " +
+                                                    "WHERE url=@url " +
+                                                    "AND domain_id=@domain_id " +
+                                                    "AND tag=@tag " +
+                                                    "AND class=@class " +
+                                                    "AND role=@role " +
+                                                    "AND type=@type " +
+                                                    "AND name=@name " +
+                                                    "AND inputFieldID=@inputFieldID ";
 
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@url", url);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", domain_id);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", tag);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@class", classAttribute);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", role);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", type);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", name);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
-
-            DBAdapter.Fill(dataTable);
-            sqlConnection.Close();
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@url", parameters[0]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", parameters[1]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", parameters[2]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@class", parameters[3]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", parameters[4]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", parameters[5]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", parameters[6]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", parameters[7]);
 
             return 0;
         }
 
-        public int RetriveExactFormParamValue(string url, int domain_id, string tag, string classAttribute, string role, string type, string name, string inputFieldID)
+        public int ExactFormParamValue(object[] parameters)
         {
-            dataTable.Clear();
-            sqlConnection.Open();
-
             // select the exact match 
-            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select historicalParam.* " +
-                                                            "FROM UIComponent INNER JOIN historicalParam ON UIComponent.id = UIComponent_id " +
-                                                            "WHERE url=@url " +
-                                                            "AND domain_id=@domain_id " +
-                                                            "AND tag=@tag " +
-                                                            "AND class=@class " +
-                                                            "AND role=@role " +
-                                                            "AND type=@type " +
-                                                            "AND name=@name " +
-                                                            "AND inputFieldID=@inputFieldID " +
-                                                            "AND error = 0 " +
-                                                            "ORDER BY COUNT DESC", sqlConnection);
+            DBAdapter.SelectCommand.CommandText =   "Select historicalParam.* " +
+                                                    "FROM UIComponent INNER JOIN historicalParam ON UIComponent.id = UIComponent_id " +
+                                                    "WHERE url=@url " +
+                                                    "AND domain_id=@domain_id " +
+                                                    "AND tag=@tag " +
+                                                    "AND class=@class " +
+                                                    "AND role=@role " +
+                                                    "AND type=@type " +
+                                                    "AND name=@name " +
+                                                    "AND inputFieldID=@inputFieldID " +
+                                                    "AND error = 0 " +
+                                                    "ORDER BY COUNT DESC";
 
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@url", url);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", domain_id);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", tag);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@class", classAttribute);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", role);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", type);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", name);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", inputFieldID);
-
-            DBAdapter.Fill(dataTable);
-            sqlConnection.Close();
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@url", parameters[0]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", parameters[1]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", parameters[2]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@class", parameters[3]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", parameters[4]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", parameters[5]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", parameters[6]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", parameters[7]);
 
             return 0;
         }
 
-        public int RetriveSimilarValue(string domain)
+        public int RetriveSimilarValue(object[] parameters)
         {
-
-            sqlConnection.Open();
             // select the exact match 
             SqlCommand cmd = new SqlCommand("Select * from login where url=@url " +
                                                 "OR domain=@domain " +
@@ -196,48 +195,63 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int LoadDomainsWithDataMiningSettings()
+        public int DomainsWithDataMiningSettings(object[] parameters)
         {
-            dataTable.Clear();
-            sqlConnection.Open();
-
             // select the eisting settings
-            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select distinct domain.* from domain INNER JOIN dataMiningSettings ON domain_id = domain.id", sqlConnection);
-
-            DBAdapter.Fill(dataTable);
-            sqlConnection.Close();
-
+            DBAdapter.SelectCommand.CommandText = "Select distinct domain.* from domain INNER JOIN dataMiningSettings ON domain_id = domain.id";
             return 0;
         }
 
-        public int LoadDomainSettings(string domain)
+        public int DomainSettings(object[] parameters)
         {
-            dataTable.Clear();
-            sqlConnection.Open();
-
             // select the eisting settings
-            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select * from dataMiningSettings INNER JOIN domain ON domain_id = domain.id where domain=@domain ", sqlConnection);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
-
-            DBAdapter.Fill(dataTable);
-            sqlConnection.Close();
-
+            DBAdapter.SelectCommand.CommandText = "Select * from dataMiningSettings INNER JOIN domain ON domain_id = domain.id where domain=@domain";
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", parameters[0]);
             return 0;
         }
 
-        public int LoadDomain(string domain)
+        public int Domain(object[] parameters)
         {
-            dataTable.Clear();
-            sqlConnection.Open();
-
             // select the eisting settings
-            SqlDataAdapter DBAdapter = new SqlDataAdapter("Select id from domain where domain=@domain", sqlConnection);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", domain);
-
-            DBAdapter.Fill(dataTable);
-            sqlConnection.Close();
+            DBAdapter.SelectCommand.CommandText = "Select id from domain where domain=@domain";
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain", parameters[0]);
             return 0;
         }
+        
+        public int RuleAppliance(object[] parameters)
+        {
+            // select the eisting settings
+            DBAdapter.SelectCommand.CommandText = "Select * from ruleAppliance";
+            return 0;
+        }
+
+        public int RulesSetOfAppliance(object[] parameters)
+        {
+            // select the eisting settings
+            DBAdapter.SelectCommand.CommandText = "SELECT rulesSet.* " +
+                                                    "FROM ruleAppliance " +
+                                                    "INNER JOIN rulesSet ON ruleAppliance.id = appliance_id " +
+                                                    "WHERE appliance = @appliance";
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@appliance", parameters[0]);
+            return 0;
+        }
+
+        public int UIComponentsOfRulesSetId(object[] parameters)
+        {
+            // select the eisting settings
+            DBAdapter.SelectCommand.CommandText =   "SELECT UIComponent.* " +
+                                                    "FROM [rule] " +
+                                                    "INNER JOIN rulesSet_to_rule ON rule_id = [rule].id " +
+                                                    "INNER JOIN rulesSet ON rulesSet_id = rulesSet.id " +
+                                                    "INNER JOIN UIComponent ON UIComponent.id = UIComponent_id " +
+                                                    "WHERE rulesSet.id = @rulesSetId";
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@rulesSetId", parameters[0]);
+            return 0;
+        }
+        
+        //
+        // DBAdapter to data strucutres
+        //
 
         public int ColToHashSet(string colName, ref HashSet<string> sHashSet)
         {
@@ -262,13 +276,15 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int ColToString(string colName1, ref string colValue1, string colName2, ref string colValue2)
+        public int ColsToStringArray(string[] colNames, ref string[] colValues)
         {
             if (dataTable.Rows.Count > 0)
             {
                 // access directly only the first row 
-                colValue1 = dataTable.Rows[0][colName1].ToString();
-                colValue2 = dataTable.Rows[0][colName2].ToString();
+                for (int i = 0; i < colNames.Length; i++)
+                {
+                    colValues[i] = dataTable.Rows[0][colNames[i]].ToString();
+                }
             }
 
             return 0;

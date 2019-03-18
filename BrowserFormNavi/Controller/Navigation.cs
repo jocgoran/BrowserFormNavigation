@@ -28,7 +28,7 @@ namespace BrowserFormNavi.Controller
             }
 
             //navigate to you destination 
-            Program.browserView.webBrowser1.Navigate(Program.formNavi.comboBox1.Text);
+            Program.browserView.webBrowser1.Navigate(Program.formNavi.navigationURL.Text);
             Program.browserView.webBrowser1.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(ExtractForm);
 
             return 0;
@@ -53,14 +53,6 @@ namespace BrowserFormNavi.Controller
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
             Program.writingBrowserForm.CopyDataToBrowser();
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.LightGray);
-            return 0;
-        }
-
-        public int InvokeAutoSubmit()
-        {
-            Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
-            Program.automation.InvoikeAutoSubmitValue();
-            Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.LightGray);
             return 0;
         }
 
@@ -140,7 +132,7 @@ namespace BrowserFormNavi.Controller
                     Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
                     Thread.Sleep(Program.rnd.Next(800, 1200));
                     if (!Program.keepTheNavigationLoopRunning) break;
-                    InvokeAutoSubmit();
+                    InvokeSubmit();
 
                     if ((bool)Program.formNavi.GetPropertyValue(Program.formNavi.performLoop, "Checked") == false)
                     {
@@ -177,7 +169,7 @@ namespace BrowserFormNavi.Controller
             string domain = (string)Program.formNavi.GetPropertyValue(Program.formNavi.domains, "SelectedItem");
 
             // get the settings from database
-            Program.dBAccess.LoadDomainSettings(domain);
+            Program.dBAccess.GetDBData("DomainSettings",new object[] {domain});
             HashSet<string> tagsAndAttributesToExport = new HashSet<string>();
             Program.dBAccess.ColToHashSet("tagAndAttribute", ref tagsAndAttributesToExport);
 
@@ -185,7 +177,7 @@ namespace BrowserFormNavi.Controller
             TreeNodeCollection nodes = (TreeNodeCollection)Program.formNavi.GetPropertyValue(Program.formNavi.treeView1, "Nodes");
             foreach (TreeNode node in nodes)
             {
-                node.Checked = false;
+
                 // check defined and uncheck not defined nodes
                 node.Checked = tagsAndAttributesToExport.Contains(node.Name) ? true : false;
 
@@ -195,6 +187,21 @@ namespace BrowserFormNavi.Controller
                     child.Checked = tagsAndAttributesToExport.Contains(child.Name) ? true : false;
                 }
                     
+            }
+
+            // Select the navigation URL 
+            ComboBox.ObjectCollection navigationURLs = (ComboBox.ObjectCollection)Program.formNavi.GetPropertyValue(Program.formNavi.navigationURL, "Items");
+
+            // loop over all entries in the combobox
+            foreach (string item in navigationURLs)
+            {
+                string ComboBoxDomain = new Uri(item).Host;
+                // compare the choosen domain with the domain in ComboBox
+                if (ComboBoxDomain == domain)
+                {
+                    // select the choose domain's url
+                    Program.formNavi.SetPropertyValue(Program.formNavi.navigationURL, "SelectedItem", item);
+                }
             }
             return 0;
         }

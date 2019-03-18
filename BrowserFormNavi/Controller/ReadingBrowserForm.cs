@@ -15,7 +15,7 @@ namespace BrowserFormNavi.Controller
             // clear DataGrid with form data 
             Program.formNavi.DataGridViewClear();
             // clear drop down menu of choosen form
-            Program.formNavi.ComboBoxClear(Program.formNavi.comboBox2);
+            Program.formNavi.ComboBoxClear(Program.formNavi.BFN_IDInvoke);
 
             //set page title
             Program.browserView.SetFormText(Program.browserView.GetHtmlDocumentName());
@@ -33,7 +33,7 @@ namespace BrowserFormNavi.Controller
             Program.webMiner.DocumentMining(htmlDocument);
 
             // set the FormNavi fields
-            Program.formNavi.SetLastComboBoxItem(Program.formNavi.comboBox2);
+            Program.formNavi.SetLastComboBoxItem(Program.formNavi.BFN_IDInvoke);
             Program.browserData.FormExtracted = true;
 
             return 0;
@@ -42,7 +42,7 @@ namespace BrowserFormNavi.Controller
         public int CopyUrlToForm()
         {
             //set page URL
-            Program.formNavi.SetPropertyValue(Program.formNavi.comboBox1, "Text", Program.browserView.GetHtmlDocumentUrl());
+            Program.formNavi.SetPropertyValue(Program.formNavi.navigationURL, "Text", Program.browserView.GetHtmlDocumentUrl());
             return 0;
         }
 
@@ -55,9 +55,9 @@ namespace BrowserFormNavi.Controller
 
         public int SaveBrowserValuesToDatabase()
         {
-            string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.comboBox1, "Text");
+            string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.navigationURL, "Text");
             // get the domainId
-            Program.dBAccess.LoadDomain(Program.browserData.domain);
+            Program.dBAccess.GetDBData("Domain", new object[] { Program.browserData.domain });
             int domainId = 0;
             Program.dBAccess.ColToInt("id", ref domainId);
 
@@ -87,7 +87,7 @@ namespace BrowserFormNavi.Controller
 
                 // get the FormPK of which to save parameters
                 int UIComponentID = 0;
-                Program.dBAccess.LoadInputPrimaryKey(url, domainId, tag, classAttribute, role, type, name, inputFieldID);
+                Program.dBAccess.GetDBData("UIComponentPrimaryKey", new object[] { url, domainId, tag, classAttribute, role, type, name, inputFieldID });
                 Program.dBAccess.ColToInt("id", ref UIComponentID);
 
                 if (input.GetAttribute("type") != "hidden")
@@ -120,7 +120,7 @@ namespace BrowserFormNavi.Controller
 
                 // get the FormPK of which to save parameters
                 int UIComponentID = 0;
-                Program.dBAccess.LoadInputPrimaryKey(url, domainId, tag, classAttribute, role, type, name, inputFieldID);
+                Program.dBAccess.GetDBData("UIComponentPrimaryKey", new object[] { url, domainId, tag, classAttribute, role, type, name, inputFieldID });
                 Program.dBAccess.ColToInt("id", ref UIComponentID);
 
                 //save value and checkbox

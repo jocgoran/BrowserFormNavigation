@@ -65,7 +65,7 @@ namespace BrowserFormNavi.Controller
 
                     // add the ID of submit input
                     if (SubmitTaxonomie(tagElement))
-                        Program.formNavi.AddItemToComboBox(Program.formNavi.comboBox2, tagId);
+                        Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, tagId.ToString());
                 }
 
             }
@@ -75,7 +75,8 @@ namespace BrowserFormNavi.Controller
         private bool TagExactMatch(HtmlElement tagElement)
         {
             //check if tag is to export
-            if (icTagsToExport.Contains(tagElement.TagName))
+            string TagElementName= tagElement.TagName;
+            if (icTagsToExport.Contains(TagElementName.ToLower()))
                 return true;
 
             return false;

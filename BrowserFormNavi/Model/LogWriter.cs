@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrowserFormNavi.Model
 {
@@ -33,9 +29,8 @@ namespace BrowserFormNavi.Model
         {
             try
             {
-                txtWriter.Write("\r\nLog Entry : ");
+                txtWriter.Write("Log Entry : ");
                 txtWriter.WriteLine("{0} {1}", DateTime.Now.ToLongTimeString(), DateTime.Now.ToLongDateString());
-                txtWriter.WriteLine("  :");
                 txtWriter.WriteLine("  :{0}", logMessage);
                 txtWriter.WriteLine("-------------------------------");
             }

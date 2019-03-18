@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -8,7 +9,7 @@ namespace BrowserFormNavi
 {
     // ComboBox
     internal delegate void ComboBoxClearDelegate(ComboBox comboBoxName);
-    internal delegate void AddItemToComboBoxDelegate(ComboBox comboBox, int formNr);
+    internal delegate void AddItemToComboBoxDelegate(ComboBox comboBox, string BHF_ID);
     internal delegate void SetLastComboBoxItemDelegate(ComboBox comboBoxName);
 
 
@@ -33,7 +34,7 @@ namespace BrowserFormNavi
             backgroundWorker1.WorkerSupportsCancellation = true; //Allow for the process to be cancelled
 
             // load all the domains that have dataMiningSettings
-            Program.dBAccess.LoadDomainsWithDataMiningSettings();
+            Program.dBAccess.GetDBData("DomainsWithDataMiningSettings", new object[] { });
             HashSet<string> domainsWithSettings = new HashSet<string>();
             Program.dBAccess.ColToHashSet("domain", ref domainsWithSettings);
 
@@ -42,7 +43,17 @@ namespace BrowserFormNavi
             {
                 domains.Items.Add(domain);
             }
-            
+
+            // load all the RulesSet
+            Program.dBAccess.GetDBData("RuleAppliance", new object[] { });
+            HashSet<string> ruleAppliances = new HashSet<string>();
+            Program.dBAccess.ColToHashSet("appliance", ref ruleAppliances);
+
+            // add all domains with settings to listbox
+            foreach (string ruleAppliance in ruleAppliances)
+            {
+                this.ruleAppliance.Items.Add(ruleAppliance);
+            }
         }
 
         private void OpenPage(object sender, System.EventArgs e)
@@ -99,7 +110,7 @@ namespace BrowserFormNavi
             SetPropertyValue(SaveBrowserValuesToDB, "Enabled", true);
             SetPropertyValue(Go, "Enabled", true);
             SetPropertyValue(Submit, "Enabled", true);
-            SetPropertyValue(comboBox2, "Enabled", true);
+            SetPropertyValue(BFN_IDInvoke, "Enabled", true);
         }
 
         private void StartTheNavigation(object sender, System.EventArgs e)
@@ -116,7 +127,7 @@ namespace BrowserFormNavi
             SetPropertyValue(SaveBrowserValuesToDB, "Enabled", false);
             SetPropertyValue(Go, "Enabled", false);
             SetPropertyValue(Submit, "Enabled", false);
-            SetPropertyValue(comboBox2, "Enabled", false);
+            SetPropertyValue(BFN_IDInvoke, "Enabled", false);
             Program.navigation.StartTheNavigationLoop();
         }
 
@@ -188,16 +199,16 @@ namespace BrowserFormNavi
             }
         }
 
-        public void AddItemToComboBox(ComboBox comboBox, int tagId)
+        public void AddItemToComboBox(ComboBox comboBox, string BHF_ID)
         {
             if (comboBox.InvokeRequired)
             {
                 AddItemToComboBoxDelegate aitcbd = new AddItemToComboBoxDelegate(AddItemToComboBox);
-                comboBox.Invoke(aitcbd, new object[] { comboBox, tagId });
+                comboBox.Invoke(aitcbd, new object[] { comboBox, BHF_ID });
             }
             else
             {
-                comboBox.Items.Add(tagId);
+                comboBox.Items.Add(BHF_ID);
             }
         }
 
@@ -222,9 +233,9 @@ namespace BrowserFormNavi
 
         private void SubmitSpecial(object sender, System.EventArgs e)
         {
-            SetPropertyValue(formRulesSet, "Enabled", false);
+            //SetPropertyValue(formRulesSet, "Enabled", false);
             Program.navigation.SubmitSpecial();
-            SetPropertyValue(formRulesSet, "Enabled", true);
+            //SetPropertyValue(formRulesSet, "Enabled", true);
             
         }
 
@@ -257,7 +268,7 @@ namespace BrowserFormNavi
             {
                 Type type = instance.GetType();
                 PropertyInfo propertyInfo = type.GetProperty(strPropertyName);
-                propertyInfo.SetValue(instance, newValue, null);
+                propertyInfo.SetValue(instance, newValue);
             }
         }
 
@@ -281,5 +292,16 @@ namespace BrowserFormNavi
             Program.navigation.LoadDomainSettings();
         }
 
+        private void AddToRegistry(object sender, EventArgs e)
+        {
+            RegistryKey key = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION\\");
+            key.SetValue("BrowserFormNavi.exe", "11000", RegistryValueKind.DWord);
+            key.Close();
+        }
+
+        private void EnableGeotagging(object sender, EventArgs e)
+        {
+
+        }
     }
 }

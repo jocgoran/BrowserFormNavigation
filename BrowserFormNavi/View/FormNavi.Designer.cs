@@ -32,27 +32,27 @@ namespace BrowserFormNavi
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("hidden");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("input", new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("submit");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("button", new System.Windows.Forms.TreeNode[] {
-            treeNode3});
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("button");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("div", new System.Windows.Forms.TreeNode[] {
-            treeNode5});
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("button");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("a", new System.Windows.Forms.TreeNode[] {
-            treeNode7});
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("hidden");
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("input", new System.Windows.Forms.TreeNode[] {
+            treeNode17});
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("submit");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("button", new System.Windows.Forms.TreeNode[] {
+            treeNode19});
+            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("button");
+            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("div", new System.Windows.Forms.TreeNode[] {
+            treeNode21});
+            System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("button");
+            System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("a", new System.Windows.Forms.TreeNode[] {
+            treeNode23});
+            this.navigationURL = new System.Windows.Forms.ComboBox();
             this.Go = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.BFN_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,19 +66,16 @@ namespace BrowserFormNavi
             this.IDAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ValueAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CheckedAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.BFN_IDInvoke = new System.Windows.Forms.ComboBox();
             this.Submit = new System.Windows.Forms.Button();
             this.CopyToBrowser = new System.Windows.Forms.Button();
             this.FillAutoGenertedData = new System.Windows.Forms.Button();
-            this.btnCheckDBConnection = new System.Windows.Forms.Button();
             this.SaveBrowserValuesToDB = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.invokeRulesSet = new System.Windows.Forms.ComboBox();
+            this.ruleAppliance = new System.Windows.Forms.CheckedListBox();
             this.label7 = new System.Windows.Forms.Label();
             this.fillPredefinedData = new System.Windows.Forms.Label();
             this.performLoop = new System.Windows.Forms.CheckBox();
-            this.formRulesSet = new System.Windows.Forms.ComboBox();
             this.autoRestart = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -96,27 +93,35 @@ namespace BrowserFormNavi
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.label2 = new System.Windows.Forms.Label();
             this.domains = new System.Windows.Forms.ListBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableGeotaggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableExplorer11ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkDBConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.infoToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyrightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // comboBox1
+            // navigationURL
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.navigationURL.FormattingEnabled = true;
+            this.navigationURL.Items.AddRange(new object[] {
             "https://badoo.com/signin",
             "https://tinder.com/app/recs",
             "http://www.facebook.com",
             "http://www.amazon.de"});
-            this.comboBox1.Location = new System.Drawing.Point(168, 12);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(838, 21);
-            this.comboBox1.TabIndex = 0;
-            this.comboBox1.Text = "Url to navigate";
+            this.navigationURL.Location = new System.Drawing.Point(168, 32);
+            this.navigationURL.Name = "navigationURL";
+            this.navigationURL.Size = new System.Drawing.Size(838, 21);
+            this.navigationURL.TabIndex = 0;
+            this.navigationURL.Text = "Url to navigate";
             // 
             // Go
             // 
-            this.Go.Location = new System.Drawing.Point(1019, 12);
+            this.Go.Location = new System.Drawing.Point(1019, 32);
             this.Go.Name = "Go";
             this.Go.Size = new System.Drawing.Size(93, 22);
             this.Go.TabIndex = 1;
@@ -141,15 +146,15 @@ namespace BrowserFormNavi
             this.IDAttribute,
             this.ValueAttribute,
             this.CheckedAttribute});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 163);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 183);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(1100, 392);
             this.dataGridView1.TabIndex = 2;
             // 
             // BFN_ID
             // 
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Gray;
-            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.Gray;
+            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle17;
             this.BFN_ID.FillWeight = 50F;
             this.BFN_ID.Frozen = true;
             this.BFN_ID.HeaderText = "BFN_ID";
@@ -159,8 +164,8 @@ namespace BrowserFormNavi
             // 
             // TagAttribute
             // 
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Gray;
-            this.TagAttribute.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle18.ForeColor = System.Drawing.Color.Gray;
+            this.TagAttribute.DefaultCellStyle = dataGridViewCellStyle18;
             this.TagAttribute.Frozen = true;
             this.TagAttribute.HeaderText = "Tag";
             this.TagAttribute.Name = "TagAttribute";
@@ -169,8 +174,8 @@ namespace BrowserFormNavi
             // 
             // ClassAttribute
             // 
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Gray;
-            this.ClassAttribute.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle19.ForeColor = System.Drawing.Color.Gray;
+            this.ClassAttribute.DefaultCellStyle = dataGridViewCellStyle19;
             this.ClassAttribute.Frozen = true;
             this.ClassAttribute.HeaderText = "Class";
             this.ClassAttribute.Name = "ClassAttribute";
@@ -178,8 +183,8 @@ namespace BrowserFormNavi
             // 
             // DataTestIdAttribute
             // 
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Gray;
-            this.DataTestIdAttribute.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle20.ForeColor = System.Drawing.Color.Gray;
+            this.DataTestIdAttribute.DefaultCellStyle = dataGridViewCellStyle20;
             this.DataTestIdAttribute.Frozen = true;
             this.DataTestIdAttribute.HeaderText = "Data-testid";
             this.DataTestIdAttribute.Name = "DataTestIdAttribute";
@@ -194,8 +199,8 @@ namespace BrowserFormNavi
             // 
             // RoleAttribute
             // 
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Gray;
-            this.RoleAttribute.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle21.ForeColor = System.Drawing.Color.Gray;
+            this.RoleAttribute.DefaultCellStyle = dataGridViewCellStyle21;
             this.RoleAttribute.Frozen = true;
             this.RoleAttribute.HeaderText = "Role";
             this.RoleAttribute.Name = "RoleAttribute";
@@ -203,8 +208,8 @@ namespace BrowserFormNavi
             // 
             // TypeAttribute
             // 
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Gray;
-            this.TypeAttribute.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle22.ForeColor = System.Drawing.Color.Gray;
+            this.TypeAttribute.DefaultCellStyle = dataGridViewCellStyle22;
             this.TypeAttribute.Frozen = true;
             this.TypeAttribute.HeaderText = "Type";
             this.TypeAttribute.Name = "TypeAttribute";
@@ -212,8 +217,8 @@ namespace BrowserFormNavi
             // 
             // NameAttribute
             // 
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Gray;
-            this.NameAttribute.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle23.ForeColor = System.Drawing.Color.Gray;
+            this.NameAttribute.DefaultCellStyle = dataGridViewCellStyle23;
             this.NameAttribute.Frozen = true;
             this.NameAttribute.HeaderText = "Name";
             this.NameAttribute.Name = "NameAttribute";
@@ -221,8 +226,8 @@ namespace BrowserFormNavi
             // 
             // IDAttribute
             // 
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Gray;
-            this.IDAttribute.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle24.ForeColor = System.Drawing.Color.Gray;
+            this.IDAttribute.DefaultCellStyle = dataGridViewCellStyle24;
             this.IDAttribute.Frozen = true;
             this.IDAttribute.HeaderText = "ID";
             this.IDAttribute.Name = "IDAttribute";
@@ -240,13 +245,13 @@ namespace BrowserFormNavi
             this.CheckedAttribute.HeaderText = "Checked";
             this.CheckedAttribute.Name = "CheckedAttribute";
             // 
-            // comboBox2
+            // BFN_IDInvoke
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(46, 155);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(62, 21);
-            this.comboBox2.TabIndex = 4;
+            this.BFN_IDInvoke.FormattingEnabled = true;
+            this.BFN_IDInvoke.Location = new System.Drawing.Point(46, 155);
+            this.BFN_IDInvoke.Name = "BFN_IDInvoke";
+            this.BFN_IDInvoke.Size = new System.Drawing.Size(62, 21);
+            this.BFN_IDInvoke.TabIndex = 4;
             // 
             // Submit
             // 
@@ -278,16 +283,6 @@ namespace BrowserFormNavi
             this.FillAutoGenertedData.UseVisualStyleBackColor = true;
             this.FillAutoGenertedData.Click += new System.EventHandler(this.FillAutoGenData);
             // 
-            // btnCheckDBConnection
-            // 
-            this.btnCheckDBConnection.Location = new System.Drawing.Point(928, 575);
-            this.btnCheckDBConnection.Name = "btnCheckDBConnection";
-            this.btnCheckDBConnection.Size = new System.Drawing.Size(123, 27);
-            this.btnCheckDBConnection.TabIndex = 8;
-            this.btnCheckDBConnection.Text = "Check DB Connection";
-            this.btnCheckDBConnection.UseVisualStyleBackColor = true;
-            this.btnCheckDBConnection.Click += new System.EventHandler(this.CheckDBConnection);
-            // 
             // SaveBrowserValuesToDB
             // 
             this.SaveBrowserValuesToDB.Location = new System.Drawing.Point(46, 121);
@@ -300,12 +295,10 @@ namespace BrowserFormNavi
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.invokeRulesSet);
+            this.groupBox1.Controls.Add(this.ruleAppliance);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.fillPredefinedData);
             this.groupBox1.Controls.Add(this.performLoop);
-            this.groupBox1.Controls.Add(this.formRulesSet);
             this.groupBox1.Controls.Add(this.autoRestart);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label5);
@@ -321,35 +314,23 @@ namespace BrowserFormNavi
             this.groupBox1.Controls.Add(this.buttonStart);
             this.groupBox1.Controls.Add(this.Submit);
             this.groupBox1.Controls.Add(this.SaveBrowserValuesToDB);
-            this.groupBox1.Controls.Add(this.comboBox2);
+            this.groupBox1.Controls.Add(this.BFN_IDInvoke);
             this.groupBox1.Controls.Add(this.CopyToBrowser);
             this.groupBox1.Controls.Add(this.FillAutoGenertedData);
-            this.groupBox1.Location = new System.Drawing.Point(12, 561);
+            this.groupBox1.Location = new System.Drawing.Point(12, 581);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(574, 197);
+            this.groupBox1.Size = new System.Drawing.Size(808, 185);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Perform recursively automated";
             // 
-            // label8
+            // ruleAppliance
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(217, 109);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(51, 13);
-            this.label8.TabIndex = 27;
-            this.label8.Text = "Rules set";
-            // 
-            // invokeRulesSet
-            // 
-            this.invokeRulesSet.FormattingEnabled = true;
-            this.invokeRulesSet.Items.AddRange(new object[] {
-            "Like everyone on badoo",
-            "Like everything on facebook"});
-            this.invokeRulesSet.Location = new System.Drawing.Point(220, 125);
-            this.invokeRulesSet.Name = "invokeRulesSet";
-            this.invokeRulesSet.Size = new System.Drawing.Size(169, 21);
-            this.invokeRulesSet.TabIndex = 26;
+            this.ruleAppliance.FormattingEnabled = true;
+            this.ruleAppliance.Location = new System.Drawing.Point(564, 19);
+            this.ruleAppliance.Name = "ruleAppliance";
+            this.ruleAppliance.Size = new System.Drawing.Size(238, 94);
+            this.ruleAppliance.TabIndex = 26;
             // 
             // label7
             // 
@@ -363,7 +344,7 @@ namespace BrowserFormNavi
             // fillPredefinedData
             // 
             this.fillPredefinedData.AutoSize = true;
-            this.fillPredefinedData.Location = new System.Drawing.Point(217, 43);
+            this.fillPredefinedData.Location = new System.Drawing.Point(439, 71);
             this.fillPredefinedData.Name = "fillPredefinedData";
             this.fillPredefinedData.Size = new System.Drawing.Size(51, 13);
             this.fillPredefinedData.TabIndex = 24;
@@ -381,21 +362,10 @@ namespace BrowserFormNavi
             this.performLoop.Text = "perform loop";
             this.performLoop.UseVisualStyleBackColor = true;
             // 
-            // formRulesSet
-            // 
-            this.formRulesSet.FormattingEnabled = true;
-            this.formRulesSet.Items.AddRange(new object[] {
-            "Like everyone on badoo",
-            "Like everything on facebook"});
-            this.formRulesSet.Location = new System.Drawing.Point(220, 59);
-            this.formRulesSet.Name = "formRulesSet";
-            this.formRulesSet.Size = new System.Drawing.Size(169, 21);
-            this.formRulesSet.TabIndex = 0;
-            // 
             // autoRestart
             // 
             this.autoRestart.AutoSize = true;
-            this.autoRestart.Location = new System.Drawing.Point(442, 65);
+            this.autoRestart.Location = new System.Drawing.Point(442, 51);
             this.autoRestart.Name = "autoRestart";
             this.autoRestart.Size = new System.Drawing.Size(108, 17);
             this.autoRestart.TabIndex = 22;
@@ -553,36 +523,36 @@ namespace BrowserFormNavi
             // treeView1
             // 
             this.treeView1.CheckBoxes = true;
-            this.treeView1.Location = new System.Drawing.Point(12, 12);
+            this.treeView1.Location = new System.Drawing.Point(12, 32);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "input-type-hidden";
-            treeNode1.Text = "hidden";
-            treeNode2.Name = "input";
-            treeNode2.Text = "input";
-            treeNode3.Name = "button-type-submit";
-            treeNode3.Text = "submit";
-            treeNode4.Name = "button";
-            treeNode4.Text = "button";
-            treeNode5.Name = "div-role-button";
-            treeNode5.Text = "button";
-            treeNode6.Name = "div";
-            treeNode6.Text = "div";
-            treeNode7.Name = "a-role-button";
-            treeNode7.Text = "button";
-            treeNode8.Name = "a";
-            treeNode8.Text = "a";
+            treeNode17.Name = "input-type-hidden";
+            treeNode17.Text = "hidden";
+            treeNode18.Name = "input";
+            treeNode18.Text = "input";
+            treeNode19.Name = "button-type-submit";
+            treeNode19.Text = "submit";
+            treeNode20.Name = "button";
+            treeNode20.Text = "button";
+            treeNode21.Name = "div-role-button";
+            treeNode21.Text = "button";
+            treeNode22.Name = "div";
+            treeNode22.Text = "div";
+            treeNode23.Name = "a-role-button";
+            treeNode23.Text = "button";
+            treeNode24.Name = "a";
+            treeNode24.Text = "a";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode4,
-            treeNode6,
-            treeNode8});
+            treeNode18,
+            treeNode20,
+            treeNode22,
+            treeNode24});
             this.treeView1.Size = new System.Drawing.Size(146, 134);
             this.treeView1.TabIndex = 14;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(166, 44);
+            this.label2.Location = new System.Drawing.Point(166, 64);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(109, 13);
             this.label2.TabIndex = 15;
@@ -591,11 +561,66 @@ namespace BrowserFormNavi
             // domains
             // 
             this.domains.FormattingEnabled = true;
-            this.domains.Location = new System.Drawing.Point(168, 64);
+            this.domains.Location = new System.Drawing.Point(168, 84);
             this.domains.Name = "domains";
             this.domains.Size = new System.Drawing.Size(125, 82);
             this.domains.TabIndex = 16;
             this.domains.Click += new System.EventHandler(this.LoadDomainSettings);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1124, 24);
+            this.menuStrip1.TabIndex = 17;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableGeotaggingToolStripMenuItem,
+            this.enableExplorer11ToolStripMenuItem,
+            this.checkDBConnectionToolStripMenuItem,
+            this.infoToolStripMenuItem1,
+            this.copyrightToolStripMenuItem});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(40, 20);
+            this.toolStripMenuItem1.Text = "Info";
+            // 
+            // enableGeotaggingToolStripMenuItem
+            // 
+            this.enableGeotaggingToolStripMenuItem.Name = "enableGeotaggingToolStripMenuItem";
+            this.enableGeotaggingToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.enableGeotaggingToolStripMenuItem.Text = "Enable Geotagging";
+            this.enableGeotaggingToolStripMenuItem.Click += new System.EventHandler(this.EnableGeotagging);
+            // 
+            // enableExplorer11ToolStripMenuItem
+            // 
+            this.enableExplorer11ToolStripMenuItem.Name = "enableExplorer11ToolStripMenuItem";
+            this.enableExplorer11ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.enableExplorer11ToolStripMenuItem.Text = "Enable Explorer 11";
+            this.enableExplorer11ToolStripMenuItem.Click += new System.EventHandler(this.AddToRegistry);
+            // 
+            // checkDBConnectionToolStripMenuItem
+            // 
+            this.checkDBConnectionToolStripMenuItem.Name = "checkDBConnectionToolStripMenuItem";
+            this.checkDBConnectionToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.checkDBConnectionToolStripMenuItem.Text = "Check DB Connection";
+            this.checkDBConnectionToolStripMenuItem.Click += new System.EventHandler(this.CheckDBConnection);
+            // 
+            // infoToolStripMenuItem1
+            // 
+            this.infoToolStripMenuItem1.Name = "infoToolStripMenuItem1";
+            this.infoToolStripMenuItem1.Size = new System.Drawing.Size(190, 22);
+            this.infoToolStripMenuItem1.Text = "Info";
+            // 
+            // copyrightToolStripMenuItem
+            // 
+            this.copyrightToolStripMenuItem.Name = "copyrightToolStripMenuItem";
+            this.copyrightToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.copyrightToolStripMenuItem.Text = "Copyright";
             // 
             // FormNavi
             // 
@@ -605,37 +630,38 @@ namespace BrowserFormNavi
             this.Controls.Add(this.domains);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.treeView1);
-            this.Controls.Add(this.btnCheckDBConnection);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.Go);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.navigationURL);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormNavi";
             this.Text = "Automated formular extractor and formular submitter";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        public ComboBox comboBox1;
+        public ComboBox navigationURL;
         public Button Go;
         public DataGridView dataGridView1;
-        public ComboBox comboBox2;
+        public ComboBox BFN_IDInvoke;
         public Button Submit;
         public Button CopyToBrowser;
         public Button FillAutoGenertedData;
-        public Button btnCheckDBConnection;
         public Button SaveBrowserValuesToDB;
         public GroupBox groupBox1;
         public Button buttonStart;
         public BackgroundWorker backgroundWorker1;
         public Button buttonStop;
         public Button ExtractFormFromBrowser;
-        public ComboBox formRulesSet;
         private DataGridViewTextBoxColumn BFN_ID;
         private DataGridViewTextBoxColumn TagAttribute;
         private DataGridViewTextBoxColumn ClassAttribute;
@@ -662,9 +688,15 @@ namespace BrowserFormNavi
         public ComboBox timerCopyToBrowser;
         public ComboBox timerFillData;
         public Label label7;
-        public Label label8;
-        public ComboBox invokeRulesSet;
         public ListBox domains;
+        public CheckedListBox ruleAppliance;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem enableGeotaggingToolStripMenuItem;
+        private ToolStripMenuItem enableExplorer11ToolStripMenuItem;
+        private ToolStripMenuItem checkDBConnectionToolStripMenuItem;
+        private ToolStripMenuItem infoToolStripMenuItem1;
+        private ToolStripMenuItem copyrightToolStripMenuItem;
     }
 }
 

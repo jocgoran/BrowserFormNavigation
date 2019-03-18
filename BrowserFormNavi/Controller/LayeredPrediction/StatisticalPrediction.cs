@@ -12,8 +12,8 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
 
         public int MatchExactInputData(DataGridViewRow row)
         {
-            string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.comboBox1, "Text");
-            Program.dBAccess.LoadDomain(Program.browserData.domain);
+            string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.navigationURL, "Text");
+            Program.dBAccess.GetDBData("Domain", new object[] { Program.browserData.domain });
             int domainId = 0;
             Program.dBAccess.ColToInt("id", ref domainId);
             string tag = Program.formNavi.GetDataGridCell(row, "TagAttribute");
@@ -24,19 +24,19 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
             string inputFieldID = Program.formNavi.GetDataGridCell(row, "IDAttribute");
 
             // search the exact match
-            string value = "", sChecked = "";
+            string[] values = new string[2];
             int success = 1;
-            Program.dBAccess.RetriveExactFormParamValue(url, domainId, tag, classAttribute, role, type, name, inputFieldID);
-            Program.dBAccess.ColToString("value", ref value, "checked", ref sChecked);
+            Program.dBAccess.GetDBData("ExactFormParamValue", new object[] { url, domainId, tag, classAttribute, role, type, name, inputFieldID });
+            Program.dBAccess.ColsToStringArray(new string[] { "value", "checked" }, ref values);
 
-            if (!string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(values[0]))
             {
-                Program.formNavi.SetDataGridCell(row, "ValueAttribute", value);
+                Program.formNavi.SetDataGridCell(row, "ValueAttribute", values[0]);
                 success = 0;
             }
-            if (!string.IsNullOrEmpty(sChecked))
+            if (!string.IsNullOrEmpty(values[1]))
             {
-                Program.formNavi.SetDataGridCell(row, "CheckedAttribute", sChecked);
+                Program.formNavi.SetDataGridCell(row, "CheckedAttribute", values[1]);
                 success = 0;
             }
 
