@@ -33,7 +33,7 @@ namespace BrowserFormNavi.Controller
             Program.webMiner.DocumentMining(htmlDocument);
 
             // set the FormNavi fields
-            Program.formNavi.SetLastComboBoxItem(Program.formNavi.BFN_IDInvoke);
+            //Program.formNavi.SetLastComboBoxItem(Program.formNavi.BFN_IDInvoke);
             Program.browserData.FormExtracted = true;
 
             return 0;

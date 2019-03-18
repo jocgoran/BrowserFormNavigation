@@ -58,7 +58,8 @@ namespace BrowserFormNavi.Controller
                                                                 tagElement.GetAttribute("name"),
                                                                 tagElement.GetAttribute("id"),
                                                                 tagElement.GetAttribute("value"),
-                                                                tagElement.GetAttribute("checked")=="False"?"":"checked" });
+                                                                tagElement.GetAttribute("checked")=="False"?"":"checked",
+                                                                "0"});
 
                     // set the BrowserFormNavi specific ID of the tag
                     tagElement.SetAttribute("BFN_ID", tagId.ToString());

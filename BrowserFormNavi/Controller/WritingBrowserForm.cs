@@ -49,6 +49,32 @@ namespace BrowserFormNavi.Controller
             return 0;
         }
 
+        public int CopyDataToInvokeComboBox()
+        {
+            int maxAlgoInvoke = 0;
+            string BFNIDToInvoke = "";
+            // loop over all the rows of data grid and apply the find the matching submit button
+            foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
+            {
+                int AlgoInvoke = Convert.ToInt32(row.Cells["AlgoInvoke"].Value);
+                if (maxAlgoInvoke < AlgoInvoke)
+                { 
+                    maxAlgoInvoke = AlgoInvoke;
+                    BFNIDToInvoke = row.Cells["BFN_ID"].Value.ToString();
+                }
+            }
+            Program.formNavi.SetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem", BFNIDToInvoke);
+
+            // reload if nothing to invoke
+            if (maxAlgoInvoke == 0)
+            {
+                if ((bool)Program.formNavi.GetPropertyValue(Program.formNavi.relaodIFNoInvoke, "Checked") == true)
+                    Program.browserView.RefreshBrowserView();
+            }
+
+            return 0;
+        }
+
 
         public int InvoikeSubmitValue()
         {

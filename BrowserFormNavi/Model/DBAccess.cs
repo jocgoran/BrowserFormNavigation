@@ -236,19 +236,41 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
-        public int UIComponentsOfRulesSetId(object[] parameters)
+        public int RulesOfRulesSetId(object[] parameters)
         {
             // select the eisting settings
-            DBAdapter.SelectCommand.CommandText =   "SELECT UIComponent.* " +
-                                                    "FROM [rule] " +
-                                                    "INNER JOIN rulesSet_to_rule ON rule_id = [rule].id " +
-                                                    "INNER JOIN rulesSet ON rulesSet_id = rulesSet.id " +
-                                                    "INNER JOIN UIComponent ON UIComponent.id = UIComponent_id " +
-                                                    "WHERE rulesSet.id = @rulesSetId";
+            DBAdapter.SelectCommand.CommandText = "SELECT * " +
+                                                    "FROM rulesSet_to_rule " +
+                                                    "WHERE rulesSet_id = @rulesSetId";
             DBAdapter.SelectCommand.Parameters.AddWithValue("@rulesSetId", parameters[0]);
             return 0;
         }
         
+        public int UIComponentsOfRuleId(object[] parameters)
+        {
+            // select the eisting settings
+            DBAdapter.SelectCommand.CommandText =   "SELECT UIComponent.* " +
+                                                    "FROM [rule] " +
+                                                    "INNER JOIN UIComponent ON UIComponent.id = UIComponent_id " +
+                                                    "WHERE [rule].id = @ruleId";
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@ruleId", parameters[0]);
+            return 0;
+        }
+
+
+        public int ActionOfRuleSetId(object[] parameters)
+        {
+            // select the eisting settings
+            DBAdapter.SelectCommand.CommandText =   "SELECT ruleAction.* " +
+                                                    "FROM ruleAction " +
+                                                    "INNER JOIN rulesSet ON ruleAction_id = ruleAction.id " +
+                                                    "WHERE rulesSet.id = @rulesSetId";
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@rulesSetId", parameters[0]);
+            return 0;
+        }
+
+        
+
         //
         // DBAdapter to data strucutres
         //

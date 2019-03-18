@@ -17,32 +17,67 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                 Program.dBAccess.GetDBData("RulesSetOfAppliance", new object[] { checkedRuleAppliance });
 
                 // put RulesSetID
-                HashSet<string> rulesSetIdAppliances = new HashSet<string>();
-                Program.dBAccess.ColToHashSet("id", ref rulesSetIdAppliances);
+                HashSet<string> rulesSetIds = new HashSet<string>();
+                Program.dBAccess.ColToHashSet("id", ref rulesSetIds);
 
                 //loop over each RulesSet
-                foreach (string rulesSetId in rulesSetIdAppliances)
+                foreach (string rulesSetId in rulesSetIds)
                 {
-                    // get all the rules
-                    // select the selected RulesSet
-                    Program.dBAccess.GetDBData("UIComponentsOfRulesSetId", new object[] { rulesSetId });
+                    // select the selected rules and its UIComponents
+                    Program.dBAccess.GetDBData("RulesOfRulesSetId", new object[] { rulesSetId });
 
-                    // copy dataTable to array
-                    string[] values = new string[3];
-                    Program.dBAccess.ColsToStringArray(new string[] { "tag", "class", "role" }, ref values);
+                    // put RulesSetID
+                    HashSet<string> ruleIds = new HashSet<string>();
+                    Program.dBAccess.ColToHashSet("rule_id", ref ruleIds);
 
-                    // loop over all the rows of data grid and apply the find the matching submit button
-                    foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
+                    //loop over each RulesSet
+                    foreach (string ruleId in ruleIds)
                     {
-                        
-                        if (string.Equals(row.Cells["TagAttribute"].Value.ToString(), values[0], StringComparison.OrdinalIgnoreCase)
-                            &&
-                            string.Equals(row.Cells["ClassAttribute"].Value.ToString(), values[1], StringComparison.OrdinalIgnoreCase)
-                            &&
-                            string.Equals(row.Cells["RoleAttribute"].Value.ToString(), values[2], StringComparison.OrdinalIgnoreCase))
+                        // select the selected rules and its UIComponents
+                        Program.dBAccess.GetDBData("UIComponentsOfRuleId", new object[] { ruleId });
+
+                        // copy dataTable to array
+                        string[] values = new string[8];
+                        Program.dBAccess.ColsToStringArray(new string[] { "tag", "class", "dataTestid", "ariaPressed", "role", "type", "name", "inputFieldID"}, ref values);
+
+                        // loop over all the rows of data grid and apply the find the matching submit button
+                        foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
                         {
-                            string MatchingBFNID = Program.formNavi.GetDataGridCell(row, "BFN_ID");
-                            Program.formNavi.SetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem", MatchingBFNID);
+
+                            if (string.Equals(row.Cells["TagAttribute"].Value.ToString(), values[0], StringComparison.OrdinalIgnoreCase)
+                                &&
+                                string.Equals(row.Cells["ClassAttribute"].Value.ToString(), values[1], StringComparison.OrdinalIgnoreCase)
+                                &&
+                                string.Equals(row.Cells["DataTestIdAttribute"].Value.ToString(), values[2], StringComparison.OrdinalIgnoreCase)
+                                &&
+                                string.Equals(row.Cells["AriaPressed"].Value.ToString(), values[3], StringComparison.OrdinalIgnoreCase)
+                                &&
+                                string.Equals(row.Cells["RoleAttribute"].Value.ToString(), values[4], StringComparison.OrdinalIgnoreCase)
+                                &&
+                                string.Equals(row.Cells["TypeAttribute"].Value.ToString(), values[5], StringComparison.OrdinalIgnoreCase)
+                                &&
+                                string.Equals(row.Cells["NameAttribute"].Value.ToString(), values[6], StringComparison.OrdinalIgnoreCase)
+                                &&
+                                string.Equals(row.Cells["IDAttribute"].Value.ToString(), values[7], StringComparison.OrdinalIgnoreCase))
+                            {
+                                // the rule match and check which algo to increment
+                                Program.dBAccess.GetDBData("ActionOfRuleSetId", new object[] { rulesSetId });
+                                int actionId = 0;
+                                Program.dBAccess.ColToInt("id", ref actionId);
+
+                                switch (actionId)
+                                {
+                                    // calculate the invoke
+                                    case 3:
+                                        {
+                                            string MatchingBFNID = Program.formNavi.GetDataGridCell(row, "BFN_ID");
+                                            string AlgoInvoke = Program.formNavi.GetDataGridCell(row, "AlgoInvoke");
+                                            int newValue = (Convert.ToInt32(AlgoInvoke) + 100) / 2;
+                                            Program.formNavi.SetDataGridCell(row, "AlgoInvoke", newValue.ToString());
+                                            break;
+                                        }
+                                }
+                            }
                         }
                     }
 

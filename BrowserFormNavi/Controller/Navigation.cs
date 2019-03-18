@@ -52,6 +52,7 @@ namespace BrowserFormNavi.Controller
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
             Program.writingBrowserForm.CopyDataToBrowser();
+            Program.writingBrowserForm.CopyDataToInvokeComboBox();
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.LightGray);
             return 0;
         }
@@ -120,7 +121,7 @@ namespace BrowserFormNavi.Controller
                     Thread.Sleep(Program.rnd.Next(800 * waitCfb, 1200 * waitCfb));
                     if (!Program.keepTheNavigationLoopRunning) break;
                     CopyFromGridToBrowser();
-
+                    
                     // save historical data
                     Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.Green);
                     int waitSd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerSaveData, "SelectedItem"));
@@ -177,7 +178,6 @@ namespace BrowserFormNavi.Controller
             TreeNodeCollection nodes = (TreeNodeCollection)Program.formNavi.GetPropertyValue(Program.formNavi.treeView1, "Nodes");
             foreach (TreeNode node in nodes)
             {
-
                 // check defined and uncheck not defined nodes
                 node.Checked = tagsAndAttributesToExport.Contains(node.Name) ? true : false;
 
@@ -186,7 +186,6 @@ namespace BrowserFormNavi.Controller
                     // check defined and uncheck not defined nodes
                     child.Checked = tagsAndAttributesToExport.Contains(child.Name) ? true : false;
                 }
-                    
             }
 
             // Select the navigation URL 
@@ -201,6 +200,7 @@ namespace BrowserFormNavi.Controller
                 {
                     // select the choose domain's url
                     Program.formNavi.SetPropertyValue(Program.formNavi.navigationURL, "SelectedItem", item);
+                    break;
                 }
             }
             return 0;
