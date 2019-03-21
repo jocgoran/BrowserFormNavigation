@@ -52,7 +52,6 @@ namespace BrowserFormNavi.Controller
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
             Program.writingBrowserForm.CopyDataToBrowser();
-            Program.writingBrowserForm.CopyDataToInvokeComboBox();
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.LightGray);
             return 0;
         }
@@ -155,12 +154,6 @@ namespace BrowserFormNavi.Controller
                     throw;
                 }
             }
-            return 0;
-        }
-
-        public int SubmitSpecial()
-        {
-            Program.specialSubmitter.LikeEverytingOnFacebook(); 
             return 0;
         }
 

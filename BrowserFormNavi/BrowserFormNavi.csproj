@@ -70,10 +70,9 @@
     <Compile Include="Controller\LayeredPrediction\UIContexter.cs" />
     <Compile Include="Controller\LayeredPrediction\UserRule.cs" />
     <Compile Include="Controller\Navigation.cs" />
-    <Compile Include="Controller\ReadingBrowserForm.cs" />
-    <Compile Include="Controller\SpecialSubmitter.cs" />
+    <Compile Include="Controller\ReadingDataGridForm.cs" />
     <Compile Include="Controller\WebMiner.cs" />
-    <Compile Include="Controller\WritingBrowserForm.cs" />
+    <Compile Include="Controller\WritingDataGridForm.cs" />
     <Compile Include="Model\DBAccess.cs" />
     <Compile Include="Model\LogWriter.cs" />
     <Compile Include="View\FormNavi.cs">

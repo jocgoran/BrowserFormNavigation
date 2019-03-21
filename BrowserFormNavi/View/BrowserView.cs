@@ -85,14 +85,14 @@ namespace BrowserFormNavi.View
 
         public void RefreshBrowserView()
         {
-            if (InvokeRequired)
+            if (webBrowser1.InvokeRequired)
             {
                 RefreshBrowserViewDelegate rbwd = new RefreshBrowserViewDelegate(RefreshBrowserView);
                 Invoke(rbwd, new object[] { });
             }
             else
             {
-                this.Refresh();
+                webBrowser1.Refresh();
             }
         }
     }

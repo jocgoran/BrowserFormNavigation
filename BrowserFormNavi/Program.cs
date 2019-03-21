@@ -15,9 +15,8 @@ namespace BrowserFormNavi
         // Controller objects
         public static Automation automation;
         public static Navigation navigation;
-        public static ReadingBrowserForm readingBrowserForm;
-        public static WritingBrowserForm writingBrowserForm;
-        public static SpecialSubmitter specialSubmitter;
+        public static ReadingDataGridForm readingBrowserForm;
+        public static WritingDataGridForm writingBrowserForm;
         public static WebMiner webMiner;
         public static Random rnd;
 
@@ -50,9 +49,8 @@ namespace BrowserFormNavi
             // Controller objects
             automation = new Automation();
             navigation = new Navigation();
-            readingBrowserForm = new ReadingBrowserForm();
-            writingBrowserForm = new WritingBrowserForm();
-            specialSubmitter = new SpecialSubmitter();
+            readingBrowserForm = new ReadingDataGridForm();
+            writingBrowserForm = new WritingDataGridForm();
             webMiner = new WebMiner();
             rnd = new Random();
 

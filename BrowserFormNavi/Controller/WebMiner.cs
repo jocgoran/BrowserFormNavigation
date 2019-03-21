@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi.Controller
@@ -39,35 +40,39 @@ namespace BrowserFormNavi.Controller
                 icAttributesToExport = new HashSet<string>(attributesToExport, StringComparer.InvariantCultureIgnoreCase);
 
                 // set the tagId
-                int tagId = 0;
+             //   int tagId = 0;
 
-                foreach (HtmlElement tagElement in htmlDocument.All)
+                HtmlElementCollection tagElements = htmlDocument.All;
+                //foreach (HtmlElement tagElement in tagElements)
+                Parallel.For(0, tagElements.Count, i =>
                 {
-                    if (!TagExactMatch(tagElement)) continue;
 
-                    if (!AttributesExactMatch(tagElement)) continue;
+                    //int SouceINdex=((mshtml.HTMLLinkElementClass)tagElement.htmlElement).IHTMLElement_sourceIndex;
+                    if (!TagExactMatch(tagElements[i])) return;
 
-                     // copy browser form data to Form
-                    Program.formNavi.AddRowToDataGrid(new object[] {++tagId,
-                                                                tagElement.TagName,
-                                                                tagElement.GetAttribute("className"),
-                                                                tagElement.GetAttribute("data-testid"),
-                                                                tagElement.GetAttribute("aria-pressed"),
-                                                                tagElement.GetAttribute("role"),
-                                                                tagElement.GetAttribute("type"),
-                                                                tagElement.GetAttribute("name"),
-                                                                tagElement.GetAttribute("id"),
-                                                                tagElement.GetAttribute("value"),
-                                                                tagElement.GetAttribute("checked")=="False"?"":"checked",
+                    if (!AttributesExactMatch(tagElements[i])) return;
+
+                    // copy browser form data to Form
+                    Program.formNavi.AddRowToDataGrid(new object[] {i,
+                                                                tagElements[i].TagName,
+                                                                tagElements[i].GetAttribute("className"),
+                                                                tagElements[i].GetAttribute("data-testid"),
+                                                                tagElements[i].GetAttribute("aria-pressed"),
+                                                                tagElements[i].GetAttribute("role"),
+                                                                tagElements[i].GetAttribute("type"),
+                                                                tagElements[i].GetAttribute("name"),
+                                                                tagElements[i].GetAttribute("id"),
+                                                                tagElements[i].GetAttribute("value"),
+                                                                tagElements[i].GetAttribute("checked")=="False"?"":"checked",
                                                                 "0"});
 
                     // set the BrowserFormNavi specific ID of the tag
-                    tagElement.SetAttribute("BFN_ID", tagId.ToString());
+                    tagElements[i].SetAttribute("BFN_ID", i.ToString());
 
                     // add the ID of submit input
-                    if (SubmitTaxonomie(tagElement))
-                        Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, tagId.ToString());
-                }
+                    if (SubmitTaxonomie(tagElements[i]))
+                        Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, i.ToString());
+                });
 
             }
             return 0;
@@ -76,7 +81,7 @@ namespace BrowserFormNavi.Controller
         private bool TagExactMatch(HtmlElement tagElement)
         {
             //check if tag is to export
-            string TagElementName= tagElement.TagName;
+            string TagElementName = tagElement.TagName;
             if (icTagsToExport.Contains(TagElementName.ToLower()))
                 return true;
 
@@ -90,9 +95,14 @@ namespace BrowserFormNavi.Controller
             string attributeNameValue = tagElement.TagName + "-type-" + typeAttribute;
             if (icAttributesToExport.Contains(attributeNameValue))
                 return true;
-
+           
             string roleAttribute = tagElement.GetAttribute("role");
             attributeNameValue = tagElement.TagName + "-role-" + roleAttribute;
+            if (icAttributesToExport.Contains(attributeNameValue))
+                return true;
+
+            string dataTestIdAttribute = tagElement.GetAttribute("data-testid");
+            attributeNameValue = tagElement.TagName + "-data-testid-" + dataTestIdAttribute;
             if (icAttributesToExport.Contains(attributeNameValue))
                 return true;
 

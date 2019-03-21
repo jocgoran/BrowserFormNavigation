@@ -22,6 +22,9 @@ namespace BrowserFormNavi.Controller
 
             } // end DataGrid loop
 
+
+            // at the end, write data to invoke
+            Program.writingBrowserForm.CopyDataToInvokeComboBox();
             return 0;
         }
 

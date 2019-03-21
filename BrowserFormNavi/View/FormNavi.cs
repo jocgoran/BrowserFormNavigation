@@ -12,7 +12,6 @@ namespace BrowserFormNavi
     internal delegate void AddItemToComboBoxDelegate(ComboBox comboBox, string BHF_ID);
     internal delegate void SetLastComboBoxItemDelegate(ComboBox comboBoxName);
 
-
     // DataGrid
     internal delegate string GetDataGridCellDelegate(DataGridViewRow row, string colName);
     internal delegate void SetDataGridCellDelegate(DataGridViewRow row, string colName, string value);
@@ -229,14 +228,6 @@ namespace BrowserFormNavi
         private void ExtractFromBrowser(object sender, System.EventArgs e)
         {
             Program.navigation.WriteBrowserFormToGrid();
-        }
-
-        private void SubmitSpecial(object sender, System.EventArgs e)
-        {
-            //SetPropertyValue(formRulesSet, "Enabled", false);
-            Program.navigation.SubmitSpecial();
-            //SetPropertyValue(formRulesSet, "Enabled", true);
-            
         }
 
         public object GetPropertyValue(dynamic instance, string strPropertyName)

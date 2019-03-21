@@ -32,18 +32,20 @@ namespace BrowserFormNavi
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("hidden");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("type=hidden");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("input", new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("submit");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("type=submit");
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("button", new System.Windows.Forms.TreeNode[] {
             treeNode3});
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("button");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("role=button");
             System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("div", new System.Windows.Forms.TreeNode[] {
             treeNode5});
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("button");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("a", new System.Windows.Forms.TreeNode[] {
-            treeNode7});
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("role=button");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("data-testid=UFI2ReactionLink");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("a", new System.Windows.Forms.TreeNode[] {
+            treeNode7,
+            treeNode8});
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -114,7 +116,8 @@ namespace BrowserFormNavi
             "https://badoo.com/signin",
             "https://tinder.com/app/recs",
             "http://www.facebook.com",
-            "http://www.amazon.de"});
+            "http://www.amazon.de",
+            "https://www.aliexpress.com"});
             this.navigationURL.Location = new System.Drawing.Point(168, 32);
             this.navigationURL.Name = "navigationURL";
             this.navigationURL.Size = new System.Drawing.Size(838, 21);
@@ -436,26 +439,28 @@ namespace BrowserFormNavi
             this.treeView1.Location = new System.Drawing.Point(12, 32);
             this.treeView1.Name = "treeView1";
             treeNode1.Name = "input-type-hidden";
-            treeNode1.Text = "hidden";
+            treeNode1.Text = "type=hidden";
             treeNode2.Name = "input";
             treeNode2.Text = "input";
             treeNode3.Name = "button-type-submit";
-            treeNode3.Text = "submit";
+            treeNode3.Text = "type=submit";
             treeNode4.Name = "button";
             treeNode4.Text = "button";
             treeNode5.Name = "div-role-button";
-            treeNode5.Text = "button";
+            treeNode5.Text = "role=button";
             treeNode6.Name = "div";
             treeNode6.Text = "div";
             treeNode7.Name = "a-role-button";
-            treeNode7.Text = "button";
-            treeNode8.Name = "a";
-            treeNode8.Text = "a";
+            treeNode7.Text = "role=button";
+            treeNode8.Name = "a-data-testId-UFI2ReactionLink";
+            treeNode8.Text = "data-testid=UFI2ReactionLink";
+            treeNode9.Name = "a";
+            treeNode9.Text = "a";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode2,
             treeNode4,
             treeNode6,
-            treeNode8});
+            treeNode9});
             this.treeView1.Size = new System.Drawing.Size(146, 134);
             this.treeView1.TabIndex = 14;
             // 
