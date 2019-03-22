@@ -79,7 +79,7 @@ namespace BrowserFormNavi.View
             }
             else
             {
-                this.Show();
+                Show();
             }
         }
 

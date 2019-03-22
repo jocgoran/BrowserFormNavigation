@@ -29,10 +29,8 @@ namespace BrowserFormNavi.Model
         {
             try
             {
-                txtWriter.Write("Log Entry : ");
                 txtWriter.WriteLine("{0} {1}", DateTime.Now.ToLongTimeString(), DateTime.Now.ToLongDateString());
-                txtWriter.WriteLine("  :{0}", logMessage);
-                txtWriter.WriteLine("-------------------------------");
+                txtWriter.WriteLine(" " + logMessage);
             }
             catch (Exception ex)
             {

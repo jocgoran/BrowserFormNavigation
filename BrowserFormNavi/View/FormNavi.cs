@@ -17,6 +17,7 @@ namespace BrowserFormNavi
     internal delegate void SetDataGridCellDelegate(DataGridViewRow row, string colName, string value);
     internal delegate void DataGridViewClearDelegate();
     internal delegate void AddRowToDataGridDelegate(object[] rowData);
+    internal delegate void SortDataGridDelegate(DataGridViewColumn col, ListSortDirection sortOrder);
 
     internal delegate object GetPropertyValueDelegate(object instance, string strPropertyName);
     internal delegate void   SetPropertyValueDelegate(dynamic instance, string strPropertyName, object newValue);
@@ -169,6 +170,19 @@ namespace BrowserFormNavi
             else
             {
                 dataGridView1.Rows.Clear();
+            }
+        }
+
+        public void SortDataGrid(DataGridViewColumn col, ListSortDirection sortOrder)
+        {
+            if (dataGridView1.InvokeRequired)
+            {
+                SortDataGridDelegate sdgd = new SortDataGridDelegate(SortDataGrid);
+                Invoke(sdgd, new object[] { col, sortOrder});
+            }
+            else
+            {
+                dataGridView1.Sort(col, sortOrder);
             }
         }
 

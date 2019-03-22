@@ -63,6 +63,7 @@ namespace BrowserFormNavi
             this.FillAutoGenertedData = new System.Windows.Forms.Button();
             this.SaveBrowserValuesToDB = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.relaodIFNoInvoke = new System.Windows.Forms.CheckBox();
             this.ruleAppliance = new System.Windows.Forms.CheckedListBox();
             this.label7 = new System.Windows.Forms.Label();
             this.fillPredefinedData = new System.Windows.Forms.Label();
@@ -103,7 +104,6 @@ namespace BrowserFormNavi
             this.ValueAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CheckedAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AlgoInvoke = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.relaodIFNoInvoke = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -236,6 +236,16 @@ namespace BrowserFormNavi
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Perform recursively automated";
+            // 
+            // relaodIFNoInvoke
+            // 
+            this.relaodIFNoInvoke.AutoSize = true;
+            this.relaodIFNoInvoke.Location = new System.Drawing.Point(442, 74);
+            this.relaodIFNoInvoke.Name = "relaodIFNoInvoke";
+            this.relaodIFNoInvoke.Size = new System.Drawing.Size(114, 17);
+            this.relaodIFNoInvoke.TabIndex = 27;
+            this.relaodIFNoInvoke.Text = "reload if no Invoke";
+            this.relaodIFNoInvoke.UseVisualStyleBackColor = true;
             // 
             // ruleAppliance
             // 
@@ -638,16 +648,6 @@ namespace BrowserFormNavi
             this.AlgoInvoke.Name = "AlgoInvoke";
             this.AlgoInvoke.ReadOnly = true;
             // 
-            // relaodIFNoInvoke
-            // 
-            this.relaodIFNoInvoke.AutoSize = true;
-            this.relaodIFNoInvoke.Location = new System.Drawing.Point(442, 74);
-            this.relaodIFNoInvoke.Name = "relaodIFNoInvoke";
-            this.relaodIFNoInvoke.Size = new System.Drawing.Size(114, 17);
-            this.relaodIFNoInvoke.TabIndex = 27;
-            this.relaodIFNoInvoke.Text = "reload if no Invoke";
-            this.relaodIFNoInvoke.UseVisualStyleBackColor = true;
-            // 
             // FormNavi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -712,6 +712,7 @@ namespace BrowserFormNavi
         private ToolStripMenuItem checkDBConnectionToolStripMenuItem;
         private ToolStripMenuItem infoToolStripMenuItem1;
         private ToolStripMenuItem copyrightToolStripMenuItem;
+        public CheckBox relaodIFNoInvoke;
         private DataGridViewTextBoxColumn BFN_ID;
         private DataGridViewTextBoxColumn TagAttribute;
         private DataGridViewTextBoxColumn ClassAttribute;
@@ -724,7 +725,6 @@ namespace BrowserFormNavi
         private DataGridViewTextBoxColumn ValueAttribute;
         private DataGridViewTextBoxColumn CheckedAttribute;
         private DataGridViewTextBoxColumn AlgoInvoke;
-        public CheckBox relaodIFNoInvoke;
     }
 }
 

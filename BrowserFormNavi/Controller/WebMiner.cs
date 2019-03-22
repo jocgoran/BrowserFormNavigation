@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -74,6 +75,8 @@ namespace BrowserFormNavi.Controller
                         Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, i.ToString());
                 });
 
+                // sort the BFN_ID ascending
+                Program.formNavi.SortDataGrid(Program.formNavi.dataGridView1.Columns[0], ListSortDirection.Ascending);
             }
             return 0;
         }

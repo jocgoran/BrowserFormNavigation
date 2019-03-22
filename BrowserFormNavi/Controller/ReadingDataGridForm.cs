@@ -86,7 +86,7 @@ namespace BrowserFormNavi.Controller
                 string inputFieldID = tagElements[i].GetAttribute("id");
 
                 // insert IF NOT EXISTS description of User Interface Component
-                //int error = Program.dBAccess.InsertInputFormData(url, domainId, tag, classAttribute, dataTestId, ariaPressed, role, type, name, inputFieldID);
+                int error = Program.dBAccess.InsertDBData("InsertInputFormData", new object[] { url, domainId, tag, classAttribute, dataTestId, ariaPressed, role, type, name, inputFieldID });
 
                 // get the FormPK of which to save parameters
                 int UIComponentID = 0;
@@ -100,7 +100,7 @@ namespace BrowserFormNavi.Controller
                 if (tagElements[i].GetAttribute("type") != "hidden")
                 {
                     //save value and checkbox
-                    //Program.dBAccess.SaveHistorcalInputParam(UIComponentID, value, sChecked);
+                    Program.dBAccess.UpdateDBData("SaveHistorcalInputParam", new object[] { UIComponentID, value, sChecked });
                 }
             });
 

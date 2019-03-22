@@ -143,7 +143,7 @@ namespace BrowserFormNavi.Controller
                 {
                     // Extract some information from this exception, and then 
                     if (ex.Source != null)
-                        LogWriter.LogWrite("IOException source: " + ex.Source);
+                        LogWriter.LogWrite("Catch Exception source: " + ex.InnerException);
 
                     // if loop stop without user decision, restart the program
                     if (Program.keepTheNavigationLoopRunning && (bool)Program.formNavi.GetPropertyValue(Program.formNavi.autoRestart, "Checked"))
