@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace BrowserFormNavi.Controller
 {
     public class ReadingDataGridForm
     {
-
         public int ExtractBrowserForm()
         {
-            // reset the Browser loading var
-            Program.browserData.FormExtracted = false;
             // clear DataGrid with form data 
             Program.formNavi.DataGridViewClear();
             // clear drop down menu of choosen form
             Program.formNavi.ComboBoxClear(Program.formNavi.BFN_IDInvoke);
 
             //set page title
-            Program.browserView.SetFormText(Program.browserView.GetHtmlDocumentName());
+            string BrowserTitel= (string)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "DocumentTitle");
+            Program.browserView.SetPropertyValue(Program.browserView, "Text", BrowserTitel);
 
             //copy URl To Form
             CopyUrlToForm();
@@ -27,15 +25,8 @@ namespace BrowserFormNavi.Controller
             //update domainId
             UpdateDomain();
 
-            // get the Browser document thread safe
-            HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
-
             // passing the document for elaboration
-            Program.webMiner.DocumentMining(htmlDocument);
-
-            // set the FormNavi fields
-            //Program.formNavi.SetLastComboBoxItem(Program.formNavi.BFN_IDInvoke);
-            Program.browserData.FormExtracted = true;
+            Program.webMiner.DocumentMining();
 
             return 0;
         }
@@ -43,14 +34,16 @@ namespace BrowserFormNavi.Controller
         public int CopyUrlToForm()
         {
             //set page URL
-            Program.formNavi.SetPropertyValue(Program.formNavi.navigationURL, "Text", Program.browserView.GetHtmlDocumentUrl());
+            Uri url = (Uri)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Url");
+            Program.formNavi.SetPropertyValue(Program.formNavi.navigationURL, "Text", url.ToString());
             return 0;
         }
 
         public int UpdateDomain()
         {
             //set page URL
-            Program.browserData.domain = new Uri(Program.browserView.GetHtmlDocumentUrl()).Host;
+            Uri url = (Uri)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Url");
+            Program.browserData.domain = new Uri(url.ToString()).Host;
             return 0;
         }
 
@@ -58,51 +51,54 @@ namespace BrowserFormNavi.Controller
         {
             string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.navigationURL, "Text");
             // get the domainId
-            Program.dBAccess.GetDBData("Domain", new object[] { Program.browserData.domain });
-            int domainId = 0;
-            Program.dBAccess.ColToInt("id", ref domainId);
+            DataTable domain = new DataTable();
+            Program.dBAccess.GetDBData("Domain", new object[] { Program.browserData.domain }, ref domain);
 
             // get the Browser document thread safe
-            HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
+            HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
 
             // get over the whole doc
             HtmlElementCollection tagElements = htmlDocument.All;
-            //foreach (HtmlElement tagElement in tagElements)
-            Parallel.For(0, tagElements.Count, i =>
-            {
-                string BFN_ID = tagElements[i].GetAttribute("BFN_ID");
 
-                // elaborate onyl Tags with BFN_ID
-                if (string.IsNullOrEmpty(BFN_ID)) return;
+            // loop over all the rows of data grid
+            foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
+            {
+                // Get the index of DOM element
+                int indexOfTagElement = Convert.ToInt32(Program.formNavi.GetDataGridCell(row, "BFN_ID"));
 
                 // extract the input values
-                string tag = tagElements[i].TagName;
-                string classAttribute = tagElements[i].GetAttribute("className");
-                string dataTestId = tagElements[i].GetAttribute("data-testid");
-                string ariaPressed = tagElements[i].GetAttribute("aria-pressed");
-                string role = tagElements[i].GetAttribute("role");
-                string type = tagElements[i].GetAttribute("type");
-                string name = tagElements[i].GetAttribute("name");
-                string inputFieldID = tagElements[i].GetAttribute("id");
+                string tag = tagElements[indexOfTagElement].TagName;
+                string classAttribute = tagElements[indexOfTagElement].GetAttribute("className");
+                string dataTestId = tagElements[indexOfTagElement].GetAttribute("data-testid");
+                string ariaPressed = tagElements[indexOfTagElement].GetAttribute("aria-pressed");
+                string role = tagElements[indexOfTagElement].GetAttribute("role");
+                string type = tagElements[indexOfTagElement].GetAttribute("type");
+                string name = tagElements[indexOfTagElement].GetAttribute("name");
+                string inputFieldID = tagElements[indexOfTagElement].GetAttribute("id");
 
                 // insert IF NOT EXISTS description of User Interface Component
-                int error = Program.dBAccess.InsertDBData("InsertInputFormData", new object[] { url, domainId, tag, classAttribute, dataTestId, ariaPressed, role, type, name, inputFieldID });
+                int error = Program.dBAccess.InsertDBData("InsertInputFormData", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, dataTestId, ariaPressed, role, type, name, inputFieldID });
 
                 // get the FormPK of which to save parameters
-                int UIComponentID = 0;
-                Program.dBAccess.GetDBData("UIComponentPrimaryKey", new object[] { url, domainId, tag, classAttribute, dataTestId, ariaPressed, role, type, name, inputFieldID });
-                Program.dBAccess.ColToInt("id", ref UIComponentID);
+                DataTable UIComponentPrimaryKey = new DataTable();
+                Program.dBAccess.GetDBData("UIComponentPrimaryKey", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, dataTestId, ariaPressed, role, type, name, inputFieldID },ref UIComponentPrimaryKey);
 
-                string value = tagElements[i].GetAttribute("value");
-                string sChecked = tagElements[i].GetAttribute("checked") == "checked" ? "checked" : "";
+                string value = tagElements[indexOfTagElement].GetAttribute("value");
+                string sChecked = tagElements[indexOfTagElement].GetAttribute("checked") == "checked" ? "checked" : "";
                 //string AlgoInvoke = tagElement.GetAttribute("AlgoInvoke");
 
-                if (tagElements[i].GetAttribute("type") != "hidden")
+                if (tagElements[indexOfTagElement].GetAttribute("type") != "hidden")
                 {
                     //save value and checkbox
-                    Program.dBAccess.UpdateDBData("SaveHistorcalInputParam", new object[] { UIComponentID, value, sChecked });
+                    Program.dBAccess.UpdateDBData("SaveHistorcalInputParam", new object[] { UIComponentPrimaryKey.Rows[0]["id"], value, sChecked });
                 }
-            });
+
+                // dispose the DataTable
+                UIComponentPrimaryKey.Dispose();
+            }
+
+            // dispose the DataTable
+            domain.Dispose();
 
             return 0;
         }

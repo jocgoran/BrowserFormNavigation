@@ -1,49 +1,49 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi.Controller
 {
     public class WritingDataGridForm
     {
+        //this is to reduce the memory leak in the WebBrowser
+        [DllImport("KERNEL32.DLL", EntryPoint = "SetProcessWorkingSetSize", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        internal static extern bool SetProcessWorkingSetSize(IntPtr pProcess, int dwMinimumWorkingSetSize, int dwMaximumWorkingSetSize);
+
+        [DllImport("KERNEL32.DLL", EntryPoint = "GetCurrentProcess", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        internal static extern IntPtr GetCurrentProcess();
 
         public int CopyDataToBrowser()
         {
+            // get the Browser document thread safe
+            HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
+
+            // get over the whole doc
+            HtmlElementCollection tagElements = htmlDocument.All;
 
             // loop over all the rows of data grid
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
-                // read if the submit is an input or a button
-                String tagName = Program.formNavi.GetDataGridCell(row, "TagAttribute");
+                // Get the index of DOM element
+                int indexOfTagElement = Convert.ToInt32(Program.formNavi.GetDataGridCell(row, "BFN_ID"));
 
-                // get the Browser document thread safe
-                HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
-
-                // loop over all the ag elements to find where to copy the value
-                HtmlElementCollection tagNameCollection = htmlDocument.GetElementsByTagName(tagName);
-                foreach (HtmlElement tagNameElement in tagNameCollection)
+                string cellValue = "";
+                if (string.IsNullOrEmpty(Program.formNavi.GetDataGridCell(row, "valueAttribute")) == false)
                 {
-                    // if the input match the entry in the DataGrid 
-                    if (tagNameElement.GetAttribute("BFN_ID") == Program.formNavi.GetDataGridCell(row, "BFN_ID"))
-                    {
-                        string cellValue = "";
-                        if (string.IsNullOrEmpty(Program.formNavi.GetDataGridCell(row, "valueAttribute")) == false)
-                        {
-                            cellValue = Program.formNavi.GetDataGridCell(row, "valueAttribute");
-                        }
-                        string cellChecked = "";
-                        if (string.IsNullOrEmpty(Program.formNavi.GetDataGridCell(row, "checkedAttribute")) == false)
-                        {
-                            cellChecked = Program.formNavi.GetDataGridCell(row, "checkedAttribute");
-                        }
+                    cellValue = Program.formNavi.GetDataGridCell(row, "valueAttribute");
+                }
+                string cellChecked = "";
+                if (string.IsNullOrEmpty(Program.formNavi.GetDataGridCell(row, "checkedAttribute")) == false)
+                {
+                    cellChecked = Program.formNavi.GetDataGridCell(row, "checkedAttribute");
+                }
 
-                        // set value to the browser
-                        tagNameElement.SetAttribute("value", cellValue);
+                // set value to the browser
+                tagElements[indexOfTagElement].SetAttribute("value", cellValue);
 
-                        // set checked to the browser
-                        tagNameElement.SetAttribute("checked", cellChecked);
-
-                    } // end if BFN_ID
-                } // end loop of tagName
+                // set checked to the browser
+                tagElements[indexOfTagElement].SetAttribute("checked", cellChecked);
 
             } // end DataGrid loop
 
@@ -58,63 +58,70 @@ namespace BrowserFormNavi.Controller
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
                 int AlgoInvoke = Convert.ToInt32(row.Cells["AlgoInvoke"].Value);
-                if (maxAlgoInvoke < AlgoInvoke)
+                if (AlgoInvoke == 1)
+                {
+                    BFNIDToInvoke = row.Cells["BFN_ID"].Value.ToString();
+                    break;
+                }
+                else if (AlgoInvoke > maxAlgoInvoke)
                 { 
                     maxAlgoInvoke = AlgoInvoke;
                     BFNIDToInvoke = row.Cells["BFN_ID"].Value.ToString();
                 }
             }
-            Program.formNavi.SetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem", BFNIDToInvoke);
 
-            // reload if nothing to invoke
-            if (maxAlgoInvoke == 0)
-            {
-                if ((bool)Program.formNavi.GetPropertyValue(Program.formNavi.relaodIFNoInvoke, "Checked") == true)
-                    Program.browserView.RefreshBrowserView();
-            }
+            //set if there is at least one value that return a small probability to be correct
+          //  if (maxAlgoInvoke>0)
+                Program.formNavi.SetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem", BFNIDToInvoke);
 
             return 0;
         }
 
-
         public int InvoikeSubmitValue()
         {
-            // reset the Browser loading var
-            Program.browserData.FormExtracted = false;
-
             // read the form that have to be submitted  
             object SelectedItem = Program.formNavi.GetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem");
-            string ChoosenBFNID = String.Concat(SelectedItem);
 
-            // loop over all the rows of data grid to find submit button
-            foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
-            {
-                // check the row BNF_ID
-                if (Program.formNavi.GetDataGridCell(row, "BFN_ID") == ChoosenBFNID)
+            //handle the nothing to submit
+            if (SelectedItem == null)
+            {   // reload if nothing to invoke
+                if ((bool)Program.formNavi.GetPropertyValue(Program.formNavi.relaodIFNoInvoke, "Checked") == true)
                 {
-                    // read the tagName of submit
-                    String submitTagName = Program.formNavi.GetDataGridCell(row, "TagAttribute");
+                    // collect object garbage
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
 
-                    // get the Browser document thread safe
-                    HtmlDocument htmlDocument = Program.browserView.GetHtmlDocument();
+                    Program.browserView.webBrowser1.Refresh(WebBrowserRefreshOption.Completely);
+                    //Program.browserView.GetMethod(Program.browserView.webBrowser1, "Refresh", new object[] { });
+                }
+                return 0;
+            }
+            
+            // convert to indexID
+            int ChoosenBFNID = Convert.ToInt32(SelectedItem);
 
-                    // get all the forms from browser
-                    HtmlElementCollection submitTagNameCollection = htmlDocument.GetElementsByTagName(submitTagName);
+            // get the Browser document thread safe
+            HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
 
-                    // loop over all the tags that are same as submit 
-                    foreach (HtmlElement submitElement in submitTagNameCollection)
-                    {
-                        // match the broser tagElement corresponding to DataGrid 
-                        if (submitElement.GetAttribute("BFN_ID") == ChoosenBFNID)
-                        {
-                            // invoke the Submit
-                            submitElement.InvokeMember("click");
+            // extract all the tag elements
+            HtmlElementCollection tagElements = htmlDocument.All;
 
-                        } // end if BFN_ID
-                    } // end loop submitElement
+            //start the navigation in a new thread 
+            Thread thread = new Thread(() => tagElements[ChoosenBFNID].InvokeMember("click"));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
 
-                } // end if choosen FormID
-            } // end DataGrid loop
+            // Count the invokations 
+            object invokationsCount = Program.formNavi.GetPropertyValue(Program.formNavi.InvokationDone, "Text");
+            int iInvokationsCount = 0;
+            if(!string.IsNullOrEmpty(invokationsCount.ToString())) iInvokationsCount=Convert.ToInt32(invokationsCount);
+            ++iInvokationsCount;
+            Program.formNavi.SetPropertyValue(Program.formNavi.InvokationDone, "Text", iInvokationsCount.ToString());
+
+            // reduce the memory of WebBrowser
+            IntPtr pHandle = GetCurrentProcess();
+            SetProcessWorkingSetSize(pHandle, -1, -1);
 
             return 0;
         }

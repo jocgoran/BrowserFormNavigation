@@ -1,6 +1,9 @@
-﻿using System;
+﻿using BrowserFormNavi.Model;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,72 +15,86 @@ namespace BrowserFormNavi.Controller
         private HashSet<string> icTagsToExport;
         HashSet<string> icAttributesToExport;
 
-        public int DocumentMining(HtmlDocument htmlDocument)
+        public int DocumentMining()
         {
-            // looop over all tags 
-            if (htmlDocument != null)
+            // create the structures of the tags and attributes to export
+            HashSet<string> tagsToExport = new HashSet<string>();
+            HashSet<string> attributesToExport = new HashSet<string>();
+
+            // loop and fill the TreeView
+            TreeNodeCollection nodes = (TreeNodeCollection)Program.formNavi.GetPropertyValue(Program.formNavi.treeView1, "Nodes");
+            foreach (TreeNode node in nodes)
             {
-                // create the structures of the tags and attributes to export
-                HashSet<string> tagsToExport = new HashSet<string>();
-                HashSet<string> attributesToExport = new HashSet<string>();
+                //add the checked node in the list
+                if (node.Checked)
+                    tagsToExport.Add(node.Name);
 
-                // loop and fill the TreeView
-                TreeNodeCollection nodes = (TreeNodeCollection)Program.formNavi.GetPropertyValue(Program.formNavi.treeView1, "Nodes");
-                foreach (TreeNode node in nodes)
+                foreach (TreeNode child in node.Nodes)
                 {
-                    //add the checked node in the list
-                    if (node.Checked)
-                        tagsToExport.Add(node.Name);
+                    //add the checked child in the list
+                    if (child.Checked)
+                        attributesToExport.Add(child.Name);
+                }
+            }
 
-                    foreach (TreeNode child in node.Nodes)
-                    {
-                        //add the checked child in the list
-                        if (child.Checked)
-                            attributesToExport.Add(child.Name);
-                    }
+            icTagsToExport = new HashSet<string>(tagsToExport, StringComparer.InvariantCultureIgnoreCase);
+            icAttributesToExport = new HashSet<string>(attributesToExport, StringComparer.InvariantCultureIgnoreCase);
+
+            // waith until page is completly loaded
+            while ((WebBrowserReadyState)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "ReadyState") != WebBrowserReadyState.Complete)
+                Thread.Sleep(500);
+
+            // check that the document has the ending tag
+            string htmlDocumentText = (string)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "DocumentText");
+            while (htmlDocumentText.IndexOf("</html>", htmlDocumentText.Length - 100, StringComparison.OrdinalIgnoreCase) < 0)
+                Thread.Sleep(2000);
+
+            // get the Browser document thread safe
+            HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
+            HtmlElementCollection htmlElements = htmlDocument.All;
+            Parallel.For(0, htmlDocument.All.Count, i =>
+            {
+                try
+                {
+                    HtmlElement htmlElement=htmlElements[i];
+                }
+                catch(Exception)
+                {
+                    LogWriter.LogWrite("Not found element: " + i.ToString());
+                    return;
                 }
 
-                icTagsToExport = new HashSet<string>(tagsToExport, StringComparer.InvariantCultureIgnoreCase);
-                icAttributesToExport = new HashSet<string>(attributesToExport, StringComparer.InvariantCultureIgnoreCase);
+                //check if the TagName match with what to extract    
+                if (!TagExactMatch(htmlElements[i])) return;
 
-                // set the tagId
-             //   int tagId = 0;
+                //check if the Attribute Value match with what to extract
+                if (!AttributesExactMatch(htmlElements[i])) return;
 
-                HtmlElementCollection tagElements = htmlDocument.All;
-                //foreach (HtmlElement tagElement in tagElements)
-                Parallel.For(0, tagElements.Count, i =>
-                {
+                // copy browser form data to Form
+                Program.formNavi.AddRowToDataGrid(new object[] {i,
+                                                            htmlElements[i].TagName,
+                                                            htmlElements[i].GetAttribute("className"),
+                                                            htmlElements[i].GetAttribute("data-testid"),
+                                                            htmlElements[i].GetAttribute("aria-pressed"),
+                                                            htmlElements[i].GetAttribute("role"),
+                                                            htmlElements[i].GetAttribute("type"),
+                                                            htmlElements[i].GetAttribute("name"),
+                                                            htmlElements[i].GetAttribute("id"),
+                                                            htmlElements[i].GetAttribute("value"),
+                                                            htmlElements[i].GetAttribute("checked")=="False"?"":"checked",
+                                                            "0"});
 
-                    //int SouceINdex=((mshtml.HTMLLinkElementClass)tagElement.htmlElement).IHTMLElement_sourceIndex;
-                    if (!TagExactMatch(tagElements[i])) return;
+                // set the BrowserFormNavi specific ID of the tag
+                htmlElements[i].SetAttribute("BFN_ID", i.ToString());
 
-                    if (!AttributesExactMatch(tagElements[i])) return;
+                // add the ID of submit input
+                if (SubmitTaxonomie(htmlElements[i]))
+                    Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, i.ToString());
+            });
 
-                    // copy browser form data to Form
-                    Program.formNavi.AddRowToDataGrid(new object[] {i,
-                                                                tagElements[i].TagName,
-                                                                tagElements[i].GetAttribute("className"),
-                                                                tagElements[i].GetAttribute("data-testid"),
-                                                                tagElements[i].GetAttribute("aria-pressed"),
-                                                                tagElements[i].GetAttribute("role"),
-                                                                tagElements[i].GetAttribute("type"),
-                                                                tagElements[i].GetAttribute("name"),
-                                                                tagElements[i].GetAttribute("id"),
-                                                                tagElements[i].GetAttribute("value"),
-                                                                tagElements[i].GetAttribute("checked")=="False"?"":"checked",
-                                                                "0"});
+            // sort the BFN_ID ascending
+            Program.formNavi.SortDataGrid(Program.formNavi.dataGridView1.Columns[0], ListSortDirection.Ascending);
 
-                    // set the BrowserFormNavi specific ID of the tag
-                    tagElements[i].SetAttribute("BFN_ID", i.ToString());
-
-                    // add the ID of submit input
-                    if (SubmitTaxonomie(tagElements[i]))
-                        Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, i.ToString());
-                });
-
-                // sort the BFN_ID ascending
-                Program.formNavi.SortDataGrid(Program.formNavi.dataGridView1.Columns[0], ListSortDirection.Ascending);
-            }
             return 0;
         }
 

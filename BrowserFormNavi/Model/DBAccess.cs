@@ -14,7 +14,6 @@ namespace BrowserFormNavi.Model
     {
         private static string connectionString;
         private static SqlConnection sqlConnection;
-        private static DataTable dataTable = new DataTable();
         private static SqlDataAdapter DBAdapter;
         private static SqlCommandBuilder builder;
 
@@ -26,7 +25,7 @@ namespace BrowserFormNavi.Model
         {
             connectionString = @"Data Source=localhost;Initial Catalog=Browserformnavi;User ID=sa;Password=sa;";
             // Set the connection string with pooling option
-            connectionString += "Connection Timeout = 30; Connection Lifetime = 0; Min Pool Size = 0; Max Pool Size = 100; Pooling = true; ";
+            connectionString += "Connection Timeout = 30; Connection Lifetime = 0; Min Pool Size = 0; Max Pool Size = 100; pooling = true; ";
 
             // create connection
             sqlConnection = new SqlConnection(connectionString);
@@ -48,11 +47,11 @@ namespace BrowserFormNavi.Model
         {
             // Wait until it is safe to enter.
             mutex.WaitOne();
-            LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " has entered the protected area for Query: " + methodName);
+            //LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " has entered the protected area for Query: " + methodName);
 
             // reset instance var
-            dataTable.Clear();
-            DBAdapter.InsertCommand = builder.GetInsertCommand(true);
+            builder.RefreshSchema();
+            DBAdapter.InsertCommand = builder.GetInsertCommand();
             DBAdapter.InsertCommand.Cancel();
             DBAdapter.InsertCommand.Parameters.Clear();
             //openconnection
@@ -63,27 +62,26 @@ namespace BrowserFormNavi.Model
             method.Invoke(this, new object[] { parameters });
 
             // execute the insert
-            builder.RefreshSchema();
-            DBAdapter.Fill(dataTable);
+            DBAdapter.InsertCommand.ExecuteNonQuery();
 
-           // DBAdapter.InsertCommand.ExecuteNonQuery();
+            // DBAdapter.InsertCommand.ExecuteNonQuery();
             sqlConnection.Close();
 
             // release mutual exclusion code
             mutex.ReleaseMutex();
-            LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " is leaving the protected area for Query: " + methodName);
-            return 1;
+            //LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " is leaving the protected area for Query: " + methodName);
+            return 0;
         }
 
         public int UpdateDBData(string methodName, object[] parameters)
         {
             // Wait until it is safe to enter.
             mutex.WaitOne();
-            LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " has entered the protected area for Query: " + methodName);
+            //LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " has entered the protected area for Query: " + methodName);
 
             // reset instance var
-            dataTable.Clear();
-            DBAdapter.UpdateCommand = builder.GetUpdateCommand(true);
+            builder.RefreshSchema();
+            DBAdapter.UpdateCommand = builder.GetUpdateCommand();
             DBAdapter.UpdateCommand.Cancel();
             DBAdapter.UpdateCommand.Parameters.Clear();
 
@@ -95,25 +93,23 @@ namespace BrowserFormNavi.Model
             method.Invoke(this, new object[] { parameters });
 
             // execute the insert
-            builder.RefreshSchema();
-            DBAdapter.Fill(dataTable);
+            DBAdapter.UpdateCommand.ExecuteNonQuery();
 
             sqlConnection.Close();
 
             // release mutual exclusion code
             mutex.ReleaseMutex();
-            LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " is leaving the protected area for Query: " + methodName);
-            return 1;
+            //LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " is leaving the protected area for Query: " + methodName);
+            return 0;
         }
 
-        public int GetDBData(string methodName, object[] parameters)
+        public int GetDBData(string methodName, object[] parameters, ref DataTable contextualDataTable)
         {
             // Wait until it is safe to enter.
             mutex.WaitOne();
-            LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " has entered the protected area for Query: " + methodName);
+            //LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " has entered the protected area for Query: " + methodName);
 
-            // reset instance var
-            dataTable.Clear();
+            builder.RefreshSchema();
             DBAdapter.SelectCommand.Cancel();
             DBAdapter.SelectCommand.Parameters.Clear();
             //openconnection
@@ -124,13 +120,12 @@ namespace BrowserFormNavi.Model
             method.Invoke(this, new object[] { parameters });
 
             // fill values and close connection
-            builder.RefreshSchema();
-            DBAdapter.Fill(dataTable);
+            DBAdapter.Fill(contextualDataTable);
             sqlConnection.Close();
 
             // release mutual exclusion code
             mutex.ReleaseMutex();
-            LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " is leaving the protected area for Query: " + methodName);
+            //LogWriter.LogWrite("Thread Nr: " + Thread.CurrentThread.ManagedThreadId + " is leaving the protected area for Query: " + methodName);
             return 0;
         }
 
@@ -141,16 +136,17 @@ namespace BrowserFormNavi.Model
                                                 "WHERE NOT EXISTS " +
                                                 "(SELECT * FROM UIComponent WHERE url=@url AND domain_id=@domain_id AND tag=@tag AND class=@class AND dataTestId=@dataTestId AND ariaPressed=@ariaPressed AND role=@role AND type=@type AND name=@name AND inputFieldID=@inputFieldID) ";
 
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@url", parameters[0]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@domain_id", parameters[1]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@tag", parameters[2]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@class", parameters[3]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@dataTestId", parameters[4]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@ariaPressed", parameters[5]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@role", parameters[6]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@type", parameters[7]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@name", parameters[8]);
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@inputFieldID", parameters[9]);
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@url", parameters[0].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@domain_id", Convert.ToInt32(parameters[1]));
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@tag", parameters[2].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@class", parameters[3].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@dataTestId", parameters[4].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@ariaPressed", parameters[5].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@role", parameters[6].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@type", parameters[7].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@name", parameters[8].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@inputFieldID", parameters[9].ToString());
+
             return 0;
         }
 
@@ -172,7 +168,7 @@ namespace BrowserFormNavi.Model
                                                     "AND inputFieldID=@inputFieldID ";
 
             DBAdapter.SelectCommand.Parameters.AddWithValue("@url", parameters[0]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", parameters[1]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", Convert.ToInt32(parameters[1]));
             DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", parameters[2]);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@class", parameters[3]);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@dataTestId", parameters[4]);
@@ -301,67 +297,5 @@ namespace BrowserFormNavi.Model
             DBAdapter.SelectCommand.Parameters.AddWithValue("@ruleId", parameters[0]);
             return 0;
         }
-
-        
-
-        //
-        // DBAdapter to data strucutres
-        //
-
-        public int ColToHashSet(string colName, ref HashSet<string> sHashSet)
-        {
-            for (int i = 0; i < dataTable.Rows.Count; ++i)
-            {
-                sHashSet.Add(dataTable.Rows[i][colName].ToString());
-            }
-
-            return 0;
-        }
-
-        public int ColToInt(string colName, ref int intValue)
-        {
-            if (dataTable.Rows.Count > 0)
-            {
-                foreach (DataRow dataRow in dataTable.Rows)
-                {
-                    intValue = Convert.ToInt32(dataRow[colName]);
-                }
-            }
-
-            return 0;
-        }
-
-        public int ColsToStringArray(string[] colNames, ref string[] colValues)
-        {
-            if (dataTable.Rows.Count > 0)
-            {
-                // access directly only the first row 
-                for (int i = 0; i < colNames.Length; i++)
-                {
-                    colValues[i] = dataTable.Rows[0][colNames[i]].ToString();
-                }
-            }
-
-            return 0;
-        }
-
-        public int TableToStringArray(string[] colNames, ref string[,] tableArray)
-        {
-            // resize array to contain all the rows
-            tableArray = new string[dataTable.Rows.Count, colNames.Length];
-
-            // loop over all the rows 
-            for (int rowNr = 0; rowNr < dataTable.Rows.Count; rowNr++)
-            {
-                // access directly only the first row 
-                for (int i = 0; i < colNames.Length; i++)
-                {
-                    tableArray[rowNr,i] += dataTable.Rows[rowNr][colNames[i]].ToString();
-                }
-            }
-
-            return 0;
-        }
-
     }
 }

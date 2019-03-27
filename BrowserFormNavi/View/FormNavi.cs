@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi
@@ -10,7 +12,6 @@ namespace BrowserFormNavi
     // ComboBox
     internal delegate void ComboBoxClearDelegate(ComboBox comboBoxName);
     internal delegate void AddItemToComboBoxDelegate(ComboBox comboBox, string BHF_ID);
-    internal delegate void SetLastComboBoxItemDelegate(ComboBox comboBoxName);
 
     // DataGrid
     internal delegate string GetDataGridCellDelegate(DataGridViewRow row, string colName);
@@ -29,37 +30,47 @@ namespace BrowserFormNavi
         {
             InitializeComponent();
 
+            // this is used to start the automated loop in a separate thread
             backgroundWorker1.DoWork += BackgroundWorker1_DoWork;
             backgroundWorker1.RunWorkerCompleted += BackgroundWorker1_RunWorkerCompleted;  //Tell the user how the process went
             backgroundWorker1.WorkerSupportsCancellation = true; //Allow for the process to be cancelled
 
-            // load all the domains that have dataMiningSettings
-            Program.dBAccess.GetDBData("DomainsWithDataMiningSettings", new object[] { });
-            HashSet<string> domainsWithSettings = new HashSet<string>();
-            Program.dBAccess.ColToHashSet("domain", ref domainsWithSettings);
+            // this is used to open a Browser view in a separate thread
+            //backgroundWorker2.DoWork += BackgroundWorker2_DoWork;
+            // backgroundWorker2.RunWorkerCompleted += BackgroundWorker2_RunWorkerCompleted;  //Tell the user how the process went
+            //backgroundWorker2.WorkerSupportsCancellation = true; //Allow for the process to be cancelled
 
-            // add all domains with settings to listbox
-            foreach (string domain in domainsWithSettings)
+            // load all the domains that have dataMiningSettings
+            DataTable domainsWithDataMiningSettings = new DataTable();
+            Program.dBAccess.GetDBData("DomainsWithDataMiningSettings", new object[] { }, ref domainsWithDataMiningSettings);
+            foreach (DataRow dwdms in domainsWithDataMiningSettings.Rows)
             {
-                domains.Items.Add(domain);
+                domains.Items.Add(dwdms["domain"].ToString());
             }
 
             // load all the RulesSet
-            Program.dBAccess.GetDBData("RuleAppliance", new object[] { });
-            HashSet<string> ruleAppliances = new HashSet<string>();
-            Program.dBAccess.ColToHashSet("appliance", ref ruleAppliances);
-
-            // add all domains with settings to listbox
-            foreach (string ruleAppliance in ruleAppliances)
+            DataTable ruleAppliances = new DataTable();
+            Program.dBAccess.GetDBData("RuleAppliance", new object[] { }, ref ruleAppliances);
+            foreach (DataRow ruleAppliance in ruleAppliances.Rows)
             {
-                this.ruleAppliance.Items.Add(ruleAppliance);
+                this.ruleAppliance.Items.Add(ruleAppliance["appliance"].ToString());
             }
+
+            // dispose the DataTable
+            domainsWithDataMiningSettings.Dispose();
+            ruleAppliances.Dispose();
         }
 
         private void OpenPage(object sender, System.EventArgs e)
         {
             Program.navigation.OpenPage();
+            //backgroundWorker2.RunWorkerAsync();
         }
+
+        //private void BackgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        //{
+        //    Program.navigation.OpenPage();
+        //}
 
         private void CopyDataToBrowser(object sender, System.EventArgs e)
         {
@@ -86,11 +97,29 @@ namespace BrowserFormNavi
             Program.navigation.SaveBrowserFilledValuesToDatabase();
         }
 
+        private void StartTheNavigation(object sender, System.EventArgs e)
+        {
+            backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            SetPropertyValue(buttonStart, "Enabled", false);
+            SetPropertyValue(buttonStop, "Enabled", true);
+            SetPropertyValue(FillAutoGenertedData, "Enabled", false);
+            SetPropertyValue(CopyToBrowser, "Enabled", false);
+            SetPropertyValue(SaveBrowserValuesToDB, "Enabled", false);
+            SetPropertyValue(Go, "Enabled", false);
+            SetPropertyValue(Submit, "Enabled", false);
+            SetPropertyValue(BFN_IDInvoke, "Enabled", false);
+            Program.navigation.StartTheNavigationLoop();
+        }
+
         public void StopTheNavigation(object sender, System.EventArgs e)
         {
-            int error=Program.navigation.StopTheNavigationLoop();
-            if(error==0)
-            { 
+            int error = Program.navigation.StopTheNavigationLoop();
+            if (error == 0)
+            {
                 //Check if background worker is doing anything and send a cancellation if it is
                 if (backgroundWorker1.IsBusy)
                 {
@@ -112,25 +141,6 @@ namespace BrowserFormNavi
             SetPropertyValue(Submit, "Enabled", true);
             SetPropertyValue(BFN_IDInvoke, "Enabled", true);
         }
-
-        private void StartTheNavigation(object sender, System.EventArgs e)
-        {
-            backgroundWorker1.RunWorkerAsync();
-        }
-
-        private void BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            SetPropertyValue(buttonStart, "Enabled", false);
-            SetPropertyValue(buttonStop, "Enabled", true);
-            SetPropertyValue(FillAutoGenertedData, "Enabled", false);
-            SetPropertyValue(CopyToBrowser, "Enabled", false);
-            SetPropertyValue(SaveBrowserValuesToDB, "Enabled", false);
-            SetPropertyValue(Go, "Enabled", false);
-            SetPropertyValue(Submit, "Enabled", false);
-            SetPropertyValue(BFN_IDInvoke, "Enabled", false);
-            Program.navigation.StartTheNavigationLoop();
-        }
-
 
         public void SetDataGridCell(DataGridViewRow row, string colName, string value)
         {
@@ -224,20 +234,6 @@ namespace BrowserFormNavi
                 comboBox.Items.Add(BHF_ID);
             }
         }
-
-        public void SetLastComboBoxItem(ComboBox comboBox)
-        {
-            if (comboBox.InvokeRequired)
-            {
-                SetLastComboBoxItemDelegate slcbid = new SetLastComboBoxItemDelegate(SetLastComboBoxItem);
-                comboBox.Invoke(slcbid, new object[] { comboBox });
-            }
-            else
-            {
-                if (comboBox.Items.Count > 0)
-                    comboBox.SelectedIndex = comboBox.Items.Count-1;
-            }
-        }
         
         private void ExtractFromBrowser(object sender, System.EventArgs e)
         {
@@ -302,11 +298,6 @@ namespace BrowserFormNavi
             RegistryKey key = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION\\");
             key.SetValue("BrowserFormNavi.exe", "11000", RegistryValueKind.DWord);
             key.Close();
-        }
-
-        private void EnableGeotagging(object sender, EventArgs e)
-        {
-
         }
     }
 }

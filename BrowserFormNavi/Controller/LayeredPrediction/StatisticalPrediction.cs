@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +14,8 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
         public int MatchExactInputData(DataGridViewRow row)
         {
             string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.navigationURL, "Text");
-            Program.dBAccess.GetDBData("Domain", new object[] { Program.browserData.domain });
-            int domainId = 0;
-            Program.dBAccess.ColToInt("id", ref domainId);
+            DataTable domain = new DataTable();
+            Program.dBAccess.GetDBData("Domain", new object[] { Program.browserData.domain }, ref domain);
             string tag = Program.formNavi.GetDataGridCell(row, "TagAttribute");
             string classAttribute = Program.formNavi.GetDataGridCell(row, "ClassAttribute");
             string role = Program.formNavi.GetDataGridCell(row, "RoleAttribute");
@@ -24,23 +24,27 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
             string inputFieldID = Program.formNavi.GetDataGridCell(row, "IDAttribute");
 
             // search the exact match
-            string[] values = new string[2];
-            int success = 1;
-            Program.dBAccess.GetDBData("ExactFormParamValue", new object[] { url, domainId, tag, classAttribute, role, type, name, inputFieldID });
-            Program.dBAccess.ColsToStringArray(new string[] { "value", "checked" }, ref values);
+            DataTable exactFormParamValues = new DataTable();
+            Program.dBAccess.GetDBData("ExactFormParamValue", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, role, type, name, inputFieldID }, ref exactFormParamValues);
 
-            if (!string.IsNullOrEmpty(values[0]))
+            foreach (DataRow exactFormParamValue in exactFormParamValues.Rows)
             {
-                Program.formNavi.SetDataGridCell(row, "ValueAttribute", values[0]);
-                success = 0;
-            }
-            if (!string.IsNullOrEmpty(values[1]))
-            {
-                Program.formNavi.SetDataGridCell(row, "CheckedAttribute", values[1]);
-                success = 0;
+                if (!string.IsNullOrEmpty(exactFormParamValue["value"].ToString()))
+                {
+                    Program.formNavi.SetDataGridCell(row, "ValueAttribute", exactFormParamValue["value"].ToString());
+                }
+                if (!string.IsNullOrEmpty(exactFormParamValue["checked"].ToString()))
+                {
+                    Program.formNavi.SetDataGridCell(row, "CheckedAttribute", exactFormParamValue["checked"].ToString());
+                }
+
             }
 
-            return success;
+            // dispose the DataTable
+            domain.Dispose();
+            exactFormParamValues.Dispose();
+
+            return 0;
 
         }
 

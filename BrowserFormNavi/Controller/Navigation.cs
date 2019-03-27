@@ -2,6 +2,7 @@
 using BrowserFormNavi.View;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -12,9 +13,6 @@ namespace BrowserFormNavi.Controller
     {
         public int OpenPage()
         {
-            // reset the page var
-            Program.browserData.FormExtracted = false;
-
             // recreate if the form was closed by user
             if (Program.browserView.IsDisposed)
             {
@@ -28,16 +26,14 @@ namespace BrowserFormNavi.Controller
             }
 
             //navigate to you destination 
-            Program.browserView.webBrowser1.Navigate(Program.formNavi.navigationURL.Text);
-            Program.browserView.webBrowser1.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(ExtractForm);
+            string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.navigationURL, "Text");
+
+            //start the navigation in a new thread 
+            Thread thread = new Thread(() => Program.browserView.webBrowser1.Navigate(url));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
 
             return 0;
-        }
-
-        public void ExtractForm(object sender, EventArgs e)
-        {
-            if (!Program.browserData.FormExtracted)
-                WriteBrowserFormToGrid();
         }
 
         public int WriteBrowserFormToGrid()
@@ -102,35 +98,34 @@ namespace BrowserFormNavi.Controller
                 {
                     // Start the Data Mining
                     Program.formNavi.SetPropertyValue(Program.formNavi.ExtractFormFromBrowser, "BackColor", Color.Green);
-                    int waitEfb = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerExtractFromBrowser, "SelectedItem"));
-                    Thread.Sleep(Program.rnd.Next(800 * waitEfb, 1200 * waitEfb));
                     if (!Program.keepTheNavigationLoopRunning) break;
+                    int waitEfb = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerExtractFromBrowser, "SelectedItem"));
+                    Thread.Sleep(Program.rnd.Next((1000 * waitEfb), (1000 * waitEfb)+500));
                     WriteBrowserFormToGrid();
 
                     // Start the automated Form filler
                     Program.formNavi.SetPropertyValue(Program.formNavi.FillAutoGenertedData, "BackColor", Color.Green);
-                    int waitFd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerFillData, "SelectedItem"));
-                    Thread.Sleep(Program.rnd.Next(800 * waitFd, 1200 * waitFd));
                     if (!Program.keepTheNavigationLoopRunning) break;
+                    int waitFd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerFillData, "SelectedItem"));
+                    Thread.Sleep(Program.rnd.Next((1000 * waitFd), (1000 * waitFd) + 500));
                     AutoFillInputValue();
 
                     // Copy from Grid to Browser
                     Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
-                    int waitCfb = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerCopyToBrowser, "SelectedItem"));
-                    Thread.Sleep(Program.rnd.Next(800 * waitCfb, 1200 * waitCfb));
                     if (!Program.keepTheNavigationLoopRunning) break;
+                    int waitCfb = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerCopyToBrowser, "SelectedItem"));
+                    Thread.Sleep(Program.rnd.Next((1000 * waitCfb), (1000 * waitCfb) + 500));
                     CopyFromGridToBrowser();
-                    
+
                     // save historical data
                     Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.Green);
-                    int waitSd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerSaveData, "SelectedItem"));
-                    Thread.Sleep(Program.rnd.Next(800 * waitSd, 1200 * waitSd));
                     if (!Program.keepTheNavigationLoopRunning) break;
+                    int waitSd = Convert.ToInt32(Program.formNavi.GetPropertyValue(Program.formNavi.timerSaveData, "SelectedItem"));
+                    Thread.Sleep(Program.rnd.Next((1000 * waitSd), (1000 * waitSd) + 500));
                     SaveBrowserFilledValuesToDatabase();
 
                     // Invoke the correct submit
                     Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
-                    Thread.Sleep(Program.rnd.Next(800, 1200));
                     if (!Program.keepTheNavigationLoopRunning) break;
                     InvokeSubmit();
 
@@ -142,8 +137,8 @@ namespace BrowserFormNavi.Controller
                 catch (Exception ex)
                 {
                     // Extract some information from this exception, and then 
-                    if (ex.Source != null)
-                        LogWriter.LogWrite("Catch Exception source: " + ex.InnerException);
+                    LogWriter.LogWrite("Catch Exception source: " + ex.InnerException);
+                    LogWriter.LogWrite("Catch Exception source: " + ex.Message);
 
                     // if loop stop without user decision, restart the program
                     if (Program.keepTheNavigationLoopRunning && (bool)Program.formNavi.GetPropertyValue(Program.formNavi.autoRestart, "Checked"))
@@ -163,9 +158,15 @@ namespace BrowserFormNavi.Controller
             string domain = (string)Program.formNavi.GetPropertyValue(Program.formNavi.domains, "SelectedItem");
 
             // get the settings from database
-            Program.dBAccess.GetDBData("DomainSettings",new object[] {domain});
+            DataTable domainSettings = new DataTable();
+            Program.dBAccess.GetDBData("DomainSettings",new object[] {domain}, ref domainSettings);
+            //create HashSet
             HashSet<string> tagsAndAttributesToExport = new HashSet<string>();
-            Program.dBAccess.ColToHashSet("tagAndAttribute", ref tagsAndAttributesToExport);
+            foreach (DataRow domainSetting in domainSettings.Rows)
+            {
+                // fill data into HashSet
+                tagsAndAttributesToExport.Add(domainSetting["tagAndAttribute"].ToString());
+            }
 
             // loop and fill the TreeView
             TreeNodeCollection nodes = (TreeNodeCollection)Program.formNavi.GetPropertyValue(Program.formNavi.treeView1, "Nodes");
@@ -196,6 +197,9 @@ namespace BrowserFormNavi.Controller
                     break;
                 }
             }
+
+            // dispose the DataTable
+            domainSettings.Dispose();
             return 0;
         }
     }

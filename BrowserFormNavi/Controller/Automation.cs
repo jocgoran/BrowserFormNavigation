@@ -14,7 +14,7 @@ namespace BrowserFormNavi.Controller
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
                 // add input and try to retrieve exact match
-                int success = Program.statisticalPrediction.MatchExactInputData(row);
+                Program.statisticalPrediction.MatchExactInputData(row);
 
                 // if exact match not works, use most reliable data
                 //if(success>0)
