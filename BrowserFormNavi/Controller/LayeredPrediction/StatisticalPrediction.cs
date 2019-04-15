@@ -18,6 +18,9 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
             Program.dBAccess.GetDBData("Domain", new object[] { Program.browserData.domain }, ref domain);
             string tag = Program.formNavi.GetDataGridCell(row, "TagAttribute");
             string classAttribute = Program.formNavi.GetDataGridCell(row, "ClassAttribute");
+            string dataTestId = Program.formNavi.GetDataGridCell(row, "dataTestidAttribute");
+            string ariaPressed = Program.formNavi.GetDataGridCell(row, "ariaPressedAttribute");
+            string dataInterestId = Program.formNavi.GetDataGridCell(row, "DataInterestIdAttribute");
             string role = Program.formNavi.GetDataGridCell(row, "RoleAttribute");
             string type = Program.formNavi.GetDataGridCell(row, "TypeAttribute");
             string name = Program.formNavi.GetDataGridCell(row, "NameAttribute");
@@ -25,7 +28,7 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
 
             // search the exact match
             DataTable exactFormParamValues = new DataTable();
-            Program.dBAccess.GetDBData("ExactFormParamValue", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, role, type, name, inputFieldID }, ref exactFormParamValues);
+            Program.dBAccess.GetDBData("ExactFormParamValue", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, dataTestId, ariaPressed, dataInterestId, role, type, name, inputFieldID }, ref exactFormParamValues);
 
             foreach (DataRow exactFormParamValue in exactFormParamValues.Rows)
             {

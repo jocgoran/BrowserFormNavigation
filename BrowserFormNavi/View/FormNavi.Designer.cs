@@ -32,14 +32,6 @@ namespace BrowserFormNavi
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("type=hidden");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("input", new System.Windows.Forms.TreeNode[] {
             treeNode1});
@@ -54,34 +46,40 @@ namespace BrowserFormNavi
             System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("a", new System.Windows.Forms.TreeNode[] {
             treeNode7,
             treeNode8});
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("class=interests-add");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("class=interests-catalog");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("li", new System.Windows.Forms.TreeNode[] {
+            treeNode10,
+            treeNode11});
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             this.navigationURL = new System.Windows.Forms.ComboBox();
             this.Go = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.BFN_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TagAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClassAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DataTestIdAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AriaPressed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RoleAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TypeAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NameAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IDAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CheckedAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AlgoInvoke = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BFN_IDInvoke = new System.Windows.Forms.ComboBox();
             this.Submit = new System.Windows.Forms.Button();
             this.CopyToBrowser = new System.Windows.Forms.Button();
             this.FillAutoGenertedData = new System.Windows.Forms.Button();
             this.SaveBrowserValuesToDB = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.stoppable = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.refreshable = new System.Windows.Forms.TextBox();
             this.InvokationDone = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.relaodIFNoInvoke = new System.Windows.Forms.CheckBox();
             this.ruleAppliance = new System.Windows.Forms.CheckedListBox();
             this.label7 = new System.Windows.Forms.Label();
             this.fillPredefinedData = new System.Windows.Forms.Label();
-            this.performLoop = new System.Windows.Forms.CheckBox();
             this.autoRestart = new System.Windows.Forms.CheckBox();
             this.timerSaveData = new System.Windows.Forms.ComboBox();
             this.timerCopyToBrowser = new System.Windows.Forms.ComboBox();
@@ -101,6 +99,19 @@ namespace BrowserFormNavi
             this.checkDBConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.copyrightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BFN_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TagAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClassAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataTestIdAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AriaPressedAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataInterestIdAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RoleAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TypeAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NameAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IDAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CheckedAttribute = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AlgoInvoke = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -141,7 +152,8 @@ namespace BrowserFormNavi
             this.TagAttribute,
             this.ClassAttribute,
             this.DataTestIdAttribute,
-            this.AriaPressed,
+            this.AriaPressedAttribute,
+            this.DataInterestIdAttribute,
             this.RoleAttribute,
             this.TypeAttribute,
             this.NameAttribute,
@@ -153,107 +165,6 @@ namespace BrowserFormNavi
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(1201, 392);
             this.dataGridView1.TabIndex = 2;
-            // 
-            // BFN_ID
-            // 
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Gray;
-            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle1;
-            this.BFN_ID.FillWeight = 50F;
-            this.BFN_ID.Frozen = true;
-            this.BFN_ID.HeaderText = "BFN_ID";
-            this.BFN_ID.Name = "BFN_ID";
-            this.BFN_ID.ReadOnly = true;
-            this.BFN_ID.Width = 50;
-            // 
-            // TagAttribute
-            // 
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Gray;
-            this.TagAttribute.DefaultCellStyle = dataGridViewCellStyle2;
-            this.TagAttribute.Frozen = true;
-            this.TagAttribute.HeaderText = "Tag";
-            this.TagAttribute.Name = "TagAttribute";
-            this.TagAttribute.ReadOnly = true;
-            this.TagAttribute.Width = 50;
-            // 
-            // ClassAttribute
-            // 
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Gray;
-            this.ClassAttribute.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ClassAttribute.Frozen = true;
-            this.ClassAttribute.HeaderText = "Class";
-            this.ClassAttribute.Name = "ClassAttribute";
-            this.ClassAttribute.ReadOnly = true;
-            // 
-            // DataTestIdAttribute
-            // 
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Gray;
-            this.DataTestIdAttribute.DefaultCellStyle = dataGridViewCellStyle4;
-            this.DataTestIdAttribute.Frozen = true;
-            this.DataTestIdAttribute.HeaderText = "Data-testid";
-            this.DataTestIdAttribute.Name = "DataTestIdAttribute";
-            this.DataTestIdAttribute.ReadOnly = true;
-            // 
-            // AriaPressed
-            // 
-            this.AriaPressed.Frozen = true;
-            this.AriaPressed.HeaderText = "aria-pressed";
-            this.AriaPressed.Name = "AriaPressed";
-            this.AriaPressed.ReadOnly = true;
-            // 
-            // RoleAttribute
-            // 
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Gray;
-            this.RoleAttribute.DefaultCellStyle = dataGridViewCellStyle5;
-            this.RoleAttribute.Frozen = true;
-            this.RoleAttribute.HeaderText = "Role";
-            this.RoleAttribute.Name = "RoleAttribute";
-            this.RoleAttribute.ReadOnly = true;
-            // 
-            // TypeAttribute
-            // 
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Gray;
-            this.TypeAttribute.DefaultCellStyle = dataGridViewCellStyle6;
-            this.TypeAttribute.Frozen = true;
-            this.TypeAttribute.HeaderText = "Type";
-            this.TypeAttribute.Name = "TypeAttribute";
-            this.TypeAttribute.ReadOnly = true;
-            // 
-            // NameAttribute
-            // 
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Gray;
-            this.NameAttribute.DefaultCellStyle = dataGridViewCellStyle7;
-            this.NameAttribute.Frozen = true;
-            this.NameAttribute.HeaderText = "Name";
-            this.NameAttribute.Name = "NameAttribute";
-            this.NameAttribute.ReadOnly = true;
-            // 
-            // IDAttribute
-            // 
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Gray;
-            this.IDAttribute.DefaultCellStyle = dataGridViewCellStyle8;
-            this.IDAttribute.Frozen = true;
-            this.IDAttribute.HeaderText = "ID";
-            this.IDAttribute.Name = "IDAttribute";
-            this.IDAttribute.ReadOnly = true;
-            // 
-            // ValueAttribute
-            // 
-            this.ValueAttribute.Frozen = true;
-            this.ValueAttribute.HeaderText = "Value";
-            this.ValueAttribute.Name = "ValueAttribute";
-            // 
-            // CheckedAttribute
-            // 
-            this.CheckedAttribute.Frozen = true;
-            this.CheckedAttribute.HeaderText = "Checked";
-            this.CheckedAttribute.Name = "CheckedAttribute";
-            // 
-            // AlgoInvoke
-            // 
-            this.AlgoInvoke.FillWeight = 50F;
-            this.AlgoInvoke.HeaderText = "AlgoInvoke";
-            this.AlgoInvoke.Name = "AlgoInvoke";
-            this.AlgoInvoke.ReadOnly = true;
             // 
             // BFN_IDInvoke
             // 
@@ -305,13 +216,15 @@ namespace BrowserFormNavi
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.stoppable);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.refreshable);
             this.groupBox1.Controls.Add(this.InvokationDone);
             this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.relaodIFNoInvoke);
             this.groupBox1.Controls.Add(this.ruleAppliance);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.fillPredefinedData);
-            this.groupBox1.Controls.Add(this.performLoop);
             this.groupBox1.Controls.Add(this.autoRestart);
             this.groupBox1.Controls.Add(this.timerSaveData);
             this.groupBox1.Controls.Add(this.timerCopyToBrowser);
@@ -332,6 +245,38 @@ namespace BrowserFormNavi
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Perform recursively automated";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(446, 130);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(50, 13);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "AlgoStop";
+            // 
+            // stoppable
+            // 
+            this.stoppable.Location = new System.Drawing.Point(517, 127);
+            this.stoppable.Name = "stoppable";
+            this.stoppable.Size = new System.Drawing.Size(38, 20);
+            this.stoppable.TabIndex = 32;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(446, 102);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.TabIndex = 31;
+            this.label1.Text = "AlgoRefresh";
+            // 
+            // refreshable
+            // 
+            this.refreshable.Location = new System.Drawing.Point(517, 99);
+            this.refreshable.Name = "refreshable";
+            this.refreshable.Size = new System.Drawing.Size(38, 20);
+            this.refreshable.TabIndex = 30;
+            // 
             // InvokationDone
             // 
             this.InvokationDone.Location = new System.Drawing.Point(305, 160);
@@ -348,16 +293,6 @@ namespace BrowserFormNavi
             this.label8.Size = new System.Drawing.Size(84, 13);
             this.label8.TabIndex = 28;
             this.label8.Text = "Invokation done";
-            // 
-            // relaodIFNoInvoke
-            // 
-            this.relaodIFNoInvoke.AutoSize = true;
-            this.relaodIFNoInvoke.Location = new System.Drawing.Point(442, 74);
-            this.relaodIFNoInvoke.Name = "relaodIFNoInvoke";
-            this.relaodIFNoInvoke.Size = new System.Drawing.Size(114, 17);
-            this.relaodIFNoInvoke.TabIndex = 27;
-            this.relaodIFNoInvoke.Text = "reload if no Invoke";
-            this.relaodIFNoInvoke.UseVisualStyleBackColor = true;
             // 
             // ruleAppliance
             // 
@@ -385,22 +320,10 @@ namespace BrowserFormNavi
             this.fillPredefinedData.TabIndex = 24;
             this.fillPredefinedData.Text = "Rules set";
             // 
-            // performLoop
-            // 
-            this.performLoop.AutoSize = true;
-            this.performLoop.Checked = true;
-            this.performLoop.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.performLoop.Location = new System.Drawing.Point(442, 30);
-            this.performLoop.Name = "performLoop";
-            this.performLoop.Size = new System.Drawing.Size(84, 17);
-            this.performLoop.TabIndex = 23;
-            this.performLoop.Text = "perform loop";
-            this.performLoop.UseVisualStyleBackColor = true;
-            // 
             // autoRestart
             // 
             this.autoRestart.AutoSize = true;
-            this.autoRestart.Location = new System.Drawing.Point(442, 51);
+            this.autoRestart.Location = new System.Drawing.Point(442, 35);
             this.autoRestart.Name = "autoRestart";
             this.autoRestart.Size = new System.Drawing.Size(108, 17);
             this.autoRestart.TabIndex = 22;
@@ -486,11 +409,11 @@ namespace BrowserFormNavi
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(442, 0);
+            this.buttonStart.Location = new System.Drawing.Point(421, 0);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(54, 22);
+            this.buttonStart.Size = new System.Drawing.Size(75, 22);
             this.buttonStart.TabIndex = 11;
-            this.buttonStart.Text = "Start";
+            this.buttonStart.Text = "Start loop";
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.StartTheNavigation);
             // 
@@ -517,11 +440,19 @@ namespace BrowserFormNavi
             treeNode8.Text = "data-testid=UFI2ReactionLink";
             treeNode9.Name = "a";
             treeNode9.Text = "a";
+            treeNode10.Name = "li-class-interests-catalog__item js-interest-add";
+            treeNode10.Text = "class=interests-add";
+            treeNode11.Name = "li-class-interests-catalog__item interests-catalog__item--more js-interests-ideas" +
+    "";
+            treeNode11.Text = "class=interests-catalog";
+            treeNode12.Name = "li";
+            treeNode12.Text = "li";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode2,
             treeNode4,
             treeNode6,
-            treeNode9});
+            treeNode9,
+            treeNode12});
             this.treeView1.Size = new System.Drawing.Size(146, 134);
             this.treeView1.TabIndex = 14;
             // 
@@ -597,6 +528,120 @@ namespace BrowserFormNavi
             this.copyrightToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.copyrightToolStripMenuItem.Text = "Copyright";
             // 
+            // BFN_ID
+            // 
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Gray;
+            this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle1;
+            this.BFN_ID.FillWeight = 50F;
+            this.BFN_ID.Frozen = true;
+            this.BFN_ID.HeaderText = "BFN_ID";
+            this.BFN_ID.Name = "BFN_ID";
+            this.BFN_ID.ReadOnly = true;
+            this.BFN_ID.Width = 50;
+            // 
+            // TagAttribute
+            // 
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Gray;
+            this.TagAttribute.DefaultCellStyle = dataGridViewCellStyle2;
+            this.TagAttribute.Frozen = true;
+            this.TagAttribute.HeaderText = "Tag";
+            this.TagAttribute.Name = "TagAttribute";
+            this.TagAttribute.ReadOnly = true;
+            this.TagAttribute.Width = 50;
+            // 
+            // ClassAttribute
+            // 
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Gray;
+            this.ClassAttribute.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ClassAttribute.Frozen = true;
+            this.ClassAttribute.HeaderText = "Class";
+            this.ClassAttribute.Name = "ClassAttribute";
+            this.ClassAttribute.ReadOnly = true;
+            // 
+            // DataTestIdAttribute
+            // 
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Gray;
+            this.DataTestIdAttribute.DefaultCellStyle = dataGridViewCellStyle4;
+            this.DataTestIdAttribute.Frozen = true;
+            this.DataTestIdAttribute.HeaderText = "Data-testid";
+            this.DataTestIdAttribute.Name = "DataTestIdAttribute";
+            this.DataTestIdAttribute.ReadOnly = true;
+            // 
+            // AriaPressedAttribute
+            // 
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Gray;
+            this.AriaPressedAttribute.DefaultCellStyle = dataGridViewCellStyle5;
+            this.AriaPressedAttribute.Frozen = true;
+            this.AriaPressedAttribute.HeaderText = "aria-pressed";
+            this.AriaPressedAttribute.Name = "AriaPressedAttribute";
+            this.AriaPressedAttribute.ReadOnly = true;
+            // 
+            // DataInterestIdAttribute
+            // 
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Gray;
+            this.DataInterestIdAttribute.DefaultCellStyle = dataGridViewCellStyle6;
+            this.DataInterestIdAttribute.Frozen = true;
+            this.DataInterestIdAttribute.HeaderText = "data-interest-id";
+            this.DataInterestIdAttribute.Name = "DataInterestIdAttribute";
+            this.DataInterestIdAttribute.ReadOnly = true;
+            // 
+            // RoleAttribute
+            // 
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Gray;
+            this.RoleAttribute.DefaultCellStyle = dataGridViewCellStyle7;
+            this.RoleAttribute.Frozen = true;
+            this.RoleAttribute.HeaderText = "Role";
+            this.RoleAttribute.Name = "RoleAttribute";
+            this.RoleAttribute.ReadOnly = true;
+            // 
+            // TypeAttribute
+            // 
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Gray;
+            this.TypeAttribute.DefaultCellStyle = dataGridViewCellStyle8;
+            this.TypeAttribute.Frozen = true;
+            this.TypeAttribute.HeaderText = "Type";
+            this.TypeAttribute.Name = "TypeAttribute";
+            this.TypeAttribute.ReadOnly = true;
+            // 
+            // NameAttribute
+            // 
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Gray;
+            this.NameAttribute.DefaultCellStyle = dataGridViewCellStyle9;
+            this.NameAttribute.Frozen = true;
+            this.NameAttribute.HeaderText = "Name";
+            this.NameAttribute.Name = "NameAttribute";
+            this.NameAttribute.ReadOnly = true;
+            // 
+            // IDAttribute
+            // 
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Gray;
+            this.IDAttribute.DefaultCellStyle = dataGridViewCellStyle10;
+            this.IDAttribute.Frozen = true;
+            this.IDAttribute.HeaderText = "ID";
+            this.IDAttribute.Name = "IDAttribute";
+            this.IDAttribute.ReadOnly = true;
+            // 
+            // ValueAttribute
+            // 
+            this.ValueAttribute.Frozen = true;
+            this.ValueAttribute.HeaderText = "Value";
+            this.ValueAttribute.Name = "ValueAttribute";
+            // 
+            // CheckedAttribute
+            // 
+            this.CheckedAttribute.Frozen = true;
+            this.CheckedAttribute.HeaderText = "Checked";
+            this.CheckedAttribute.Name = "CheckedAttribute";
+            // 
+            // AlgoInvoke
+            // 
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Gray;
+            this.AlgoInvoke.DefaultCellStyle = dataGridViewCellStyle11;
+            this.AlgoInvoke.FillWeight = 50F;
+            this.AlgoInvoke.HeaderText = "AlgoInvoke";
+            this.AlgoInvoke.Name = "AlgoInvoke";
+            this.AlgoInvoke.ReadOnly = true;
+            // 
             // FormNavi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -641,7 +686,6 @@ namespace BrowserFormNavi
         public Label label2;
         public ComboBox timerExtractFromBrowser;
         public Label fillPredefinedData;
-        public CheckBox performLoop;
         public CheckBox autoRestart;
         public ComboBox timerSaveData;
         public ComboBox timerCopyToBrowser;
@@ -656,12 +700,18 @@ namespace BrowserFormNavi
         private ToolStripMenuItem checkDBConnectionToolStripMenuItem;
         private ToolStripMenuItem infoToolStripMenuItem1;
         private ToolStripMenuItem copyrightToolStripMenuItem;
-        public CheckBox relaodIFNoInvoke;
+        private Label label8;
+        public TextBox InvokationDone;
+        private Label label1;
+        public TextBox refreshable;
+        private Label label3;
+        public TextBox stoppable;
         private DataGridViewTextBoxColumn BFN_ID;
         private DataGridViewTextBoxColumn TagAttribute;
         private DataGridViewTextBoxColumn ClassAttribute;
         private DataGridViewTextBoxColumn DataTestIdAttribute;
-        private DataGridViewTextBoxColumn AriaPressed;
+        private DataGridViewTextBoxColumn AriaPressedAttribute;
+        private DataGridViewTextBoxColumn DataInterestIdAttribute;
         private DataGridViewTextBoxColumn RoleAttribute;
         private DataGridViewTextBoxColumn TypeAttribute;
         private DataGridViewTextBoxColumn NameAttribute;
@@ -669,8 +719,6 @@ namespace BrowserFormNavi
         private DataGridViewTextBoxColumn ValueAttribute;
         private DataGridViewTextBoxColumn CheckedAttribute;
         private DataGridViewTextBoxColumn AlgoInvoke;
-        private Label label8;
-        public TextBox InvokationDone;
     }
 }
 

@@ -9,14 +9,21 @@ namespace BrowserFormNavi
 {
     public static class Program
     {
+        public enum LogLevel
+        {
+            Info,
+            Warning,
+            Error
+        }
+
         // Global var to stop the navigation loop from the thread 
         public static bool keepTheNavigationLoopRunning;
 
         // Controller objects
         public static Automation automation;
         public static Navigation navigation;
-        public static ReadingDataGridForm readingBrowserForm;
-        public static WritingDataGridForm writingBrowserForm;
+        public static HTMLDoc htmlDoc;
+        public static Controller.DataGrid dataGrid;
         public static WebMiner webMiner;
         public static Random rnd;
 
@@ -29,6 +36,7 @@ namespace BrowserFormNavi
         public static BrowserData browserData;
         public static DBAccess dBAccess;
         public static FormData formData;
+        public static PredictedData predictedData;
 
         // View objects
         public static BrowserView browserView;
@@ -49,8 +57,8 @@ namespace BrowserFormNavi
             // Controller objects
             automation = new Automation();
             navigation = new Navigation();
-            readingBrowserForm = new ReadingDataGridForm();
-            writingBrowserForm = new WritingDataGridForm();
+            htmlDoc = new HTMLDoc();
+            dataGrid = new Controller.DataGrid();
             webMiner = new WebMiner();
             rnd = new Random();
 
@@ -63,9 +71,9 @@ namespace BrowserFormNavi
             browserData = new BrowserData();
             dBAccess = new DBAccess();
             formData = new FormData();
-
+            
             // View objects
-            browserView = new BrowserView();
+            //browserView = new BrowserView();
 
             Application.Run(formNavi = new FormNavi());
 

@@ -1,16 +1,17 @@
-﻿using System;
+﻿using BrowserFormNavi.Model;
+using System;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace BrowserFormNavi.View
 {
     public partial class BrowserView : Form
     {
-        internal delegate WebBrowserReadyState GetReadyStateDelegate();
-        internal delegate HtmlDocument GetHtmlDocumentDelegate();
-        internal delegate string GetHtmlDocumentNameDelegate();
-        internal delegate string GetHtmlDocumentUrlDelegate();
+        internal delegate void WebBrowserNavigateDelegate(string Url);
         internal delegate void ShowBrowserViewDelegate();
+        internal delegate void CleanUpDelegate();
+        internal delegate void InitializeComponentDelegate();
 
         internal delegate object GetPropertyValueDelegate(object instance, string strPropertyName);
         internal delegate void SetPropertyValueDelegate(dynamic instance, string strPropertyName, object newValue);
@@ -19,6 +20,19 @@ namespace BrowserFormNavi.View
         public BrowserView()
         {
             InitializeComponent();
+        }
+
+        public void WebBrowserNavigate(string Url)
+        {
+            if (InvokeRequired)
+            {
+                WebBrowserNavigateDelegate wbn = new WebBrowserNavigateDelegate(WebBrowserNavigate);
+                Invoke(wbn, new object[] { Url });
+            }
+            else
+            {
+                webBrowser1.Navigate(Url);
+            }
         }
 
         public void ShowBrowserView()
@@ -30,16 +44,43 @@ namespace BrowserFormNavi.View
             }
             else
             {
-                //Thread viewerThread = new Thread(delegate ()
-                //{
                 Show();
-                //});
-
-                //viewerThread.SetApartmentState(ApartmentState.STA); // needs to be STA or throws exception
-                //viewerThread.Start();
-                
             }
         }
+
+        public void InitializeWebBrowser()
+        {
+            if (InvokeRequired)
+            {
+                InitializeComponentDelegate icd = new InitializeComponentDelegate(InitializeComponent);
+                Invoke(icd, new object[] { });
+            }
+            else
+            {
+                InitializeComponent();
+            }
+        }
+
+
+        public void CleanUp()
+        {
+            if (InvokeRequired)
+            {
+                CleanUpDelegate cud = new CleanUpDelegate(CleanUp);
+                Invoke(cud, new object[] { });
+            }
+            else
+            {
+                if (webBrowser1 != null)
+                {
+                    webBrowser1.Dispose();
+                    webBrowser1 = null;
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
+            }
+        }
+
 
         public object GetPropertyValue(dynamic instance, string strPropertyName)
         {

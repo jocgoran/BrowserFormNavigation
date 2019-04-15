@@ -1,11 +1,12 @@
 ﻿using BrowserFormNavi.Model;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static BrowserFormNavi.Program;
 
 namespace BrowserFormNavi.Controller
 {
@@ -14,6 +15,36 @@ namespace BrowserFormNavi.Controller
 
         private HashSet<string> icTagsToExport;
         HashSet<string> icAttributesToExport;
+
+        private int WaitSomeIncrementalDownloads()
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            Console.WriteLine();
+            
+            // wait until page is completly loaded
+            while ((WebBrowserReadyState)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "ReadyState") != WebBrowserReadyState.Complete)
+                Thread.Sleep(100);
+            LogWriter.LogWrite(LogLevel.Info, "Elapsed time for ReadyState: " + sw.ElapsedMilliseconds);
+
+            while ((bool)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "IsBusy"))
+                Thread.Sleep(100);
+            LogWriter.LogWrite(LogLevel.Info, "Elapsed time for IsBusy: " + sw.ElapsedMilliseconds);
+
+            // get the Browser document thread safe
+            HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
+
+            // work only with html elements
+            int elementCount = -1;
+            while (elementCount != htmlDocument.All.Count)
+            {
+                elementCount = htmlDocument.All.Count;
+                Thread.Sleep(300);
+            }
+            LogWriter.LogWrite(LogLevel.Info, "Elapsed time for elementCount method: " + sw.ElapsedMilliseconds);
+            sw.Stop();
+
+            return 0;
+        }
 
         public int DocumentMining()
         {
@@ -40,56 +71,54 @@ namespace BrowserFormNavi.Controller
             icTagsToExport = new HashSet<string>(tagsToExport, StringComparer.InvariantCultureIgnoreCase);
             icAttributesToExport = new HashSet<string>(attributesToExport, StringComparer.InvariantCultureIgnoreCase);
 
-            // waith until page is completly loaded
-            while ((WebBrowserReadyState)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "ReadyState") != WebBrowserReadyState.Complete)
-                Thread.Sleep(500);
-
-            // check that the document has the ending tag
-            string htmlDocumentText = (string)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "DocumentText");
-            while (htmlDocumentText.IndexOf("</html>", htmlDocumentText.Length - 100, StringComparison.OrdinalIgnoreCase) < 0)
-                Thread.Sleep(2000);
+            // some checks to load the page
+            WaitSomeIncrementalDownloads();
 
             // get the Browser document thread safe
             HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
             HtmlElementCollection htmlElements = htmlDocument.All;
-            Parallel.For(0, htmlDocument.All.Count, i =>
+            Parallel.For(0, htmlElements.Count, i =>
             {
+                // elements can be changed dynamically - prevent outOfIndex
+                if (i >= htmlElements.Count) return;
+
+                // prevent outOfIndex
                 try
                 {
-                    HtmlElement htmlElement=htmlElements[i];
+
+                    //check if the TagName match with what to extract    
+                    if (!TagExactMatch(htmlElements[i])) return;
+
+                    //check if the Attribute Value match with what to extract
+                    if (!AttributesExactMatch(htmlElements[i])) return;
+
+                    // copy browser form data to Form
+                    Program.formNavi.AddRowToDataGrid(new object[] {i,
+                                                                htmlElements[i].TagName,
+                                                                htmlElements[i].GetAttribute("className"),
+                                                                htmlElements[i].GetAttribute("data-testid"),
+                                                                htmlElements[i].GetAttribute("aria-pressed"),
+                                                                htmlElements[i].GetAttribute("data-interest-id"),
+                                                                htmlElements[i].GetAttribute("role"),
+                                                                htmlElements[i].GetAttribute("type"),
+                                                                htmlElements[i].GetAttribute("name"),
+                                                                htmlElements[i].GetAttribute("id"),
+                                                                htmlElements[i].GetAttribute("value"),
+                                                                string.IsNullOrEmpty(htmlElements[i].GetAttribute("checked"))?"":"checked",
+                                                                "0"});
+
+                    // set the BrowserFormNavi specific ID of the tag
+                    htmlElements[i].SetAttribute("BFN_ID", i.ToString());
+
+                    // add the ID of submit input
+                    if (SubmitTaxonomie(htmlElements[i]))
+                        Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, i.ToString());
                 }
-                catch(Exception)
+                catch (Exception)
                 {
-                    LogWriter.LogWrite("Not found element: " + i.ToString());
+                    LogWriter.LogWrite(LogLevel.Warning, "In WebMiner, not found element: " + i.ToString());
                     return;
                 }
-
-                //check if the TagName match with what to extract    
-                if (!TagExactMatch(htmlElements[i])) return;
-
-                //check if the Attribute Value match with what to extract
-                if (!AttributesExactMatch(htmlElements[i])) return;
-
-                // copy browser form data to Form
-                Program.formNavi.AddRowToDataGrid(new object[] {i,
-                                                            htmlElements[i].TagName,
-                                                            htmlElements[i].GetAttribute("className"),
-                                                            htmlElements[i].GetAttribute("data-testid"),
-                                                            htmlElements[i].GetAttribute("aria-pressed"),
-                                                            htmlElements[i].GetAttribute("role"),
-                                                            htmlElements[i].GetAttribute("type"),
-                                                            htmlElements[i].GetAttribute("name"),
-                                                            htmlElements[i].GetAttribute("id"),
-                                                            htmlElements[i].GetAttribute("value"),
-                                                            htmlElements[i].GetAttribute("checked")=="False"?"":"checked",
-                                                            "0"});
-
-                // set the BrowserFormNavi specific ID of the tag
-                htmlElements[i].SetAttribute("BFN_ID", i.ToString());
-
-                // add the ID of submit input
-                if (SubmitTaxonomie(htmlElements[i]))
-                    Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, i.ToString());
             });
 
             // sort the BFN_ID ascending
@@ -126,6 +155,11 @@ namespace BrowserFormNavi.Controller
             if (icAttributesToExport.Contains(attributeNameValue))
                 return true;
 
+            string classAttribute = tagElement.GetAttribute("className");
+            attributeNameValue = tagElement.TagName + "-class-" + classAttribute;
+            if (icAttributesToExport.Contains(attributeNameValue))
+                return true;
+
             return false;
         }
 
@@ -153,6 +187,9 @@ namespace BrowserFormNavi.Controller
 
             if (string.Equals(tagElement.TagName, "a", StringComparison.OrdinalIgnoreCase)
                 && string.Equals(roleAttribute, "button", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (string.Equals(tagElement.TagName, "li", StringComparison.OrdinalIgnoreCase))
                 return true;
 
             return false;

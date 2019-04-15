@@ -35,11 +35,6 @@ namespace BrowserFormNavi
             backgroundWorker1.RunWorkerCompleted += BackgroundWorker1_RunWorkerCompleted;  //Tell the user how the process went
             backgroundWorker1.WorkerSupportsCancellation = true; //Allow for the process to be cancelled
 
-            // this is used to open a Browser view in a separate thread
-            //backgroundWorker2.DoWork += BackgroundWorker2_DoWork;
-            // backgroundWorker2.RunWorkerCompleted += BackgroundWorker2_RunWorkerCompleted;  //Tell the user how the process went
-            //backgroundWorker2.WorkerSupportsCancellation = true; //Allow for the process to be cancelled
-
             // load all the domains that have dataMiningSettings
             DataTable domainsWithDataMiningSettings = new DataTable();
             Program.dBAccess.GetDBData("DomainsWithDataMiningSettings", new object[] { }, ref domainsWithDataMiningSettings);
@@ -64,13 +59,7 @@ namespace BrowserFormNavi
         private void OpenPage(object sender, System.EventArgs e)
         {
             Program.navigation.OpenPage();
-            //backgroundWorker2.RunWorkerAsync();
         }
-
-        //private void BackgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        //{
-        //    Program.navigation.OpenPage();
-        //}
 
         private void CopyDataToBrowser(object sender, System.EventArgs e)
         {
@@ -218,7 +207,7 @@ namespace BrowserFormNavi
             }
             else
             {
-                dataGridView1.Rows.Add(rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8], rowData[9], rowData[10], rowData[11]);
+                dataGridView1.Rows.Add(rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8], rowData[9], rowData[10], rowData[11], rowData[12]);
             }
         }
 

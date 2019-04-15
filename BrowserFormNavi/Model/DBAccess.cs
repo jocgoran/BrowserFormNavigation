@@ -131,10 +131,10 @@ namespace BrowserFormNavi.Model
 
         public int InsertInputFormData(object[] parameters)
         {
-            DBAdapter.InsertCommand.CommandText = "INSERT INTO UIComponent (url, domain_id, tag, class, dataTestId, ariaPressed, role, type, name, inputFieldID) " +
-                                                "SELECT @url, @domain_id, @tag, @class, @dataTestId, @ariaPressed, @role, @type, @name, @inputFieldID " +
+            DBAdapter.InsertCommand.CommandText = "INSERT INTO UIComponent (url, domain_id, tag, class, dataTestId, ariaPressed, dataInterestId, role, type, name, inputFieldID) " +
+                                                "SELECT @url, @domain_id, @tag, @class, @dataTestId, @ariaPressed, @dataInterestId, @role, @type, @name, @inputFieldID " +
                                                 "WHERE NOT EXISTS " +
-                                                "(SELECT * FROM UIComponent WHERE url=@url AND domain_id=@domain_id AND tag=@tag AND class=@class AND dataTestId=@dataTestId AND ariaPressed=@ariaPressed AND role=@role AND type=@type AND name=@name AND inputFieldID=@inputFieldID) ";
+                                                "(SELECT * FROM UIComponent WHERE url=@url AND domain_id=@domain_id AND tag=@tag AND class=@class AND dataTestId=@dataTestId AND ariaPressed=@ariaPressed AND dataInterestId=@dataInterestId AND role=@role AND type=@type AND name=@name AND inputFieldID=@inputFieldID) ";
 
             DBAdapter.InsertCommand.Parameters.AddWithValue("@url", parameters[0].ToString());
             DBAdapter.InsertCommand.Parameters.AddWithValue("@domain_id", Convert.ToInt32(parameters[1]));
@@ -142,10 +142,11 @@ namespace BrowserFormNavi.Model
             DBAdapter.InsertCommand.Parameters.AddWithValue("@class", parameters[3].ToString());
             DBAdapter.InsertCommand.Parameters.AddWithValue("@dataTestId", parameters[4].ToString());
             DBAdapter.InsertCommand.Parameters.AddWithValue("@ariaPressed", parameters[5].ToString());
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@role", parameters[6].ToString());
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@type", parameters[7].ToString());
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@name", parameters[8].ToString());
-            DBAdapter.InsertCommand.Parameters.AddWithValue("@inputFieldID", parameters[9].ToString());
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@dataInterestId", parameters[6]);
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@role", parameters[7].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@type", parameters[8].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@name", parameters[9].ToString());
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@inputFieldID", parameters[10].ToString());
 
             return 0;
         }
@@ -162,6 +163,7 @@ namespace BrowserFormNavi.Model
                                                     "AND class=@class " +
                                                     "AND dataTestId=@dataTestId " +
                                                     "AND ariaPressed=@ariaPressed " +
+                                                    "AND dataInterestId=@dataInterestId " +
                                                     "AND role=@role " +
                                                     "AND type=@type " +
                                                     "AND name=@name " +
@@ -173,10 +175,11 @@ namespace BrowserFormNavi.Model
             DBAdapter.SelectCommand.Parameters.AddWithValue("@class", parameters[3]);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@dataTestId", parameters[4]);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@ariaPressed", parameters[5]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", parameters[6]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", parameters[7]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", parameters[8]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", parameters[9]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@dataInterestId", parameters[6]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", parameters[7]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", parameters[8]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", parameters[9]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", parameters[10]);
 
             return 0;
         }
@@ -190,6 +193,9 @@ namespace BrowserFormNavi.Model
                                                     "AND domain_id=@domain_id " +
                                                     "AND tag=@tag " +
                                                     "AND class=@class " +
+                                                    "AND dataTestid=@dataTestid " +
+                                                    "AND ariaPressed=@ariaPressed " +
+                                                    "AND dataInterestId=@dataInterestId " +
                                                     "AND role=@role " +
                                                     "AND type=@type " +
                                                     "AND name=@name " +
@@ -201,10 +207,13 @@ namespace BrowserFormNavi.Model
             DBAdapter.SelectCommand.Parameters.AddWithValue("@domain_id", parameters[1]);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@tag", parameters[2]);
             DBAdapter.SelectCommand.Parameters.AddWithValue("@class", parameters[3]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", parameters[4]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", parameters[5]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", parameters[6]);
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", parameters[7]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@dataTestid", parameters[4]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@ariaPressed", parameters[5]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@dataInterestId", parameters[6]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@role", parameters[7]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@type", parameters[8]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@name", parameters[9]);
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@inputFieldID", parameters[10]);
 
             return 0;
         }

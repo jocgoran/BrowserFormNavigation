@@ -6,32 +6,51 @@ using System.Data;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using static BrowserFormNavi.Program;
 
 namespace BrowserFormNavi.Controller
 {
     public class Navigation
     {
+
+        private int CreateWebBrowser()
+        {
+            Program.browserView = new BrowserView();
+            return 0;
+        }
+
         public int OpenPage()
         {
             // recreate if the form was closed by user
-            if (Program.browserView.IsDisposed)
+            if (Program.browserView == null || (bool)Program.browserView.GetPropertyValue(Program.browserView, "IsDisposed"))
             {
-                Program.browserView = new BrowserView();
+                Thread wBThread = new Thread(() => CreateWebBrowser());
+                wBThread.SetApartmentState(ApartmentState.STA);
+                wBThread.Start();
+                wBThread.Join();
             }
 
             // Display the new form.  
-            if (!Program.browserView.Visible)
+            if (!(bool)Program.browserView.GetPropertyValue(Program.browserView, "Visible"))
             {
                 Program.browserView.ShowBrowserView();
             }
 
+            // recreate if the form was closed by user
+            if (Program.browserView.webBrowser1 == null || (bool)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "IsDisposed"))
+            {
+                Program.browserView.InitializeWebBrowser();
+            }
+            Thread.Sleep(500);
+
             //navigate to you destination 
             string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.navigationURL, "Text");
 
-            //start the navigation in a new thread 
-            Thread thread = new Thread(() => Program.browserView.webBrowser1.Navigate(url));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            //start the navigation in a new thread
+            //Thread thread = new Thread(() => Program.browserView.webBrowser1.Navigate(url));
+            //thread.SetApartmentState(ApartmentState.STA);
+            //thread.Start();
+            Program.browserView.WebBrowserNavigate(url);
 
             return 0;
         }
@@ -39,7 +58,7 @@ namespace BrowserFormNavi.Controller
         public int WriteBrowserFormToGrid()
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.ExtractFormFromBrowser, "BackColor", Color.Green);
-            Program.readingBrowserForm.ExtractBrowserForm();
+            Program.htmlDoc.ExtractBrowserForm();
             Program.formNavi.SetPropertyValue(Program.formNavi.ExtractFormFromBrowser, "BackColor", Color.LightGray);
             return 0;
         }
@@ -47,7 +66,7 @@ namespace BrowserFormNavi.Controller
         public int CopyFromGridToBrowser()
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
-            Program.writingBrowserForm.CopyDataToBrowser();
+            Program.dataGrid.CopyDataToBrowser();
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.LightGray);
             return 0;
         }
@@ -55,7 +74,7 @@ namespace BrowserFormNavi.Controller
         public int InvokeSubmit()
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
-            Program.writingBrowserForm.InvoikeSubmitValue();
+            Program.dataGrid.InvoikeSubmitValue();
             Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.LightGray);
             return 0;
         }
@@ -71,7 +90,7 @@ namespace BrowserFormNavi.Controller
         public int SaveBrowserFilledValuesToDatabase()
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.Green);
-            Program.readingBrowserForm.SaveBrowserValuesToDatabase();
+            Program.htmlDoc.SaveBrowserValuesToDatabase();
             Program.formNavi.SetPropertyValue(Program.formNavi.SaveBrowserValuesToDB, "BackColor", Color.LightGray);
             return 0;
         }
@@ -128,17 +147,12 @@ namespace BrowserFormNavi.Controller
                     Program.formNavi.SetPropertyValue(Program.formNavi.Submit, "BackColor", Color.Green);
                     if (!Program.keepTheNavigationLoopRunning) break;
                     InvokeSubmit();
-
-                    if ((bool)Program.formNavi.GetPropertyValue(Program.formNavi.performLoop, "Checked") == false)
-                    {
-                        Program.keepTheNavigationLoopRunning = false;
-                    }
                 }
                 catch (Exception ex)
                 {
                     // Extract some information from this exception, and then 
-                    LogWriter.LogWrite("Catch Exception source: " + ex.InnerException);
-                    LogWriter.LogWrite("Catch Exception source: " + ex.Message);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception source: " + ex.InnerException);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception source: " + ex.Message);
 
                     // if loop stop without user decision, restart the program
                     if (Program.keepTheNavigationLoopRunning && (bool)Program.formNavi.GetPropertyValue(Program.formNavi.autoRestart, "Checked"))
