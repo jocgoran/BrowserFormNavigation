@@ -64,7 +64,6 @@ namespace BrowserFormNavi.Model
             // execute the insert
             DBAdapter.InsertCommand.ExecuteNonQuery();
 
-            // DBAdapter.InsertCommand.ExecuteNonQuery();
             sqlConnection.Close();
 
             // release mutual exclusion code
@@ -142,7 +141,7 @@ namespace BrowserFormNavi.Model
             DBAdapter.InsertCommand.Parameters.AddWithValue("@class", parameters[3].ToString());
             DBAdapter.InsertCommand.Parameters.AddWithValue("@dataTestId", parameters[4].ToString());
             DBAdapter.InsertCommand.Parameters.AddWithValue("@ariaPressed", parameters[5].ToString());
-            DBAdapter.SelectCommand.Parameters.AddWithValue("@dataInterestId", parameters[6]);
+            DBAdapter.InsertCommand.Parameters.AddWithValue("@dataInterestId", parameters[6].ToString());
             DBAdapter.InsertCommand.Parameters.AddWithValue("@role", parameters[7].ToString());
             DBAdapter.InsertCommand.Parameters.AddWithValue("@type", parameters[8].ToString());
             DBAdapter.InsertCommand.Parameters.AddWithValue("@name", parameters[9].ToString());
@@ -218,6 +217,19 @@ namespace BrowserFormNavi.Model
             return 0;
         }
 
+        public int HistoricDataOfAttributeName(object[] parameters)
+        {
+            // select the exact match 
+            DBAdapter.SelectCommand.CommandText = "Select historicalParam.* " +
+                                                    "FROM UIComponent INNER JOIN historicalParam ON UIComponent.id = UIComponent_id " +
+                                                    "WHERE dataInterestId=@dataInterestId " +
+                                                    "AND error = 0 ";
+
+            DBAdapter.SelectCommand.Parameters.AddWithValue("@dataInterestId", parameters[0]);
+
+            return 0;
+        }
+
         //public int RetriveSimilarValue(object[] parameters)
         //{
         //    // select the exact match 
@@ -232,15 +244,16 @@ namespace BrowserFormNavi.Model
         //    return 0;
         //}
 
-        public int SaveHistorcalInputParam(object[] parameters)
+            public int SaveHistorcalInputParam(object[] parameters)
         {
-            DBAdapter.UpdateCommand.CommandText = "UPDATE historicalParam SET count = count+1 WHERE UIComponent_id=@UIComponent_id AND value=@value AND checked=@sChecked " +
+            DBAdapter.UpdateCommand.CommandText = "UPDATE historicalParam SET count = count+1 WHERE UIComponent_id=@UIComponent_id AND value=@value AND checked=@sChecked AND invoked=@bInvoked " +
                                                      "IF @@ROWCOUNT = 0 " +
-                                                     "INSERT INTO historicalParam(UIComponent_id, value, checked) VALUES(@UIComponent_id, @value, @sChecked)";
+                                                     "INSERT INTO historicalParam(UIComponent_id, value, checked, invoked) VALUES(@UIComponent_id, @value, @sChecked, @bInvoked)";
 
             DBAdapter.UpdateCommand.Parameters.AddWithValue("@UIComponent_id", parameters[0]);
             DBAdapter.UpdateCommand.Parameters.AddWithValue("@value", parameters[1]);
             DBAdapter.UpdateCommand.Parameters.AddWithValue("@sChecked", parameters[2]);
+            DBAdapter.UpdateCommand.Parameters.AddWithValue("@bInvoked", Convert.ToInt32(parameters[3]));
             return 0;
         }
 

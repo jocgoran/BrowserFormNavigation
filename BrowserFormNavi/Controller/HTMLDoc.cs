@@ -55,6 +55,10 @@ namespace BrowserFormNavi.Controller
             DataTable domain = new DataTable();
             Program.dBAccess.GetDBData("Domain", new object[] { Program.browserData.domain }, ref domain);
 
+            // get the BFN_IDInvoke  
+            string ChoosenBFNID = (string)Program.formNavi.GetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem");
+            if (string.IsNullOrEmpty(ChoosenBFNID)) ChoosenBFNID = "-1";
+
             // get the Browser document thread safe
             HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
 
@@ -69,43 +73,44 @@ namespace BrowserFormNavi.Controller
                 try
                 {
 
-                // elaborate only htmlElments with BFN_ID
-                if (string.IsNullOrEmpty(htmlElements[i].GetAttribute("BFN_ID"))) return;
+                    // elaborate only htmlElments with BFN_ID
+                    if (string.IsNullOrEmpty(htmlElements[i].GetAttribute("BFN_ID"))) return;
 
-                // extract the input values
-                string tag = htmlElements[i].TagName;
-                string classAttribute = htmlElements[i].GetAttribute("className");
-                string dataTestId = htmlElements[i].GetAttribute("data-testid");
-                string ariaPressed = htmlElements[i].GetAttribute("aria-pressed");
-                string dataInterestId = htmlElements[i].GetAttribute("data-interest-id");
-                string role = htmlElements[i].GetAttribute("role");
-                string type = htmlElements[i].GetAttribute("type");
-                string name = htmlElements[i].GetAttribute("name");
-                string inputFieldID = htmlElements[i].GetAttribute("id");
+                    // extract the input values
+                    string tag = htmlElements[i].TagName;
+                    string classAttribute = htmlElements[i].GetAttribute("className");
+                    string dataTestId = htmlElements[i].GetAttribute("data-testid");
+                    string ariaPressed = htmlElements[i].GetAttribute("aria-pressed");
+                    string dataInterestId = htmlElements[i].GetAttribute("data-interest-id");
+                    string role = htmlElements[i].GetAttribute("role");
+                    string type = htmlElements[i].GetAttribute("type");
+                    string name = htmlElements[i].GetAttribute("name");
+                    string inputFieldID = htmlElements[i].GetAttribute("id");
 
-                // insert IF NOT EXISTS description of User Interface Component
-                int error = Program.dBAccess.InsertDBData("InsertInputFormData", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, dataTestId, ariaPressed, dataInterestId, role, type, name, inputFieldID });
+                    // insert IF NOT EXISTS description of User Interface Component
+                    int error = Program.dBAccess.InsertDBData("InsertInputFormData", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, dataTestId, ariaPressed, dataInterestId, role, type, name, inputFieldID });
 
-                // get the FormPK of which to save parameters
-                DataTable UIComponentPrimaryKey = new DataTable();
-                Program.dBAccess.GetDBData("UIComponentPrimaryKey", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, dataTestId, ariaPressed, dataInterestId, role, type, name, inputFieldID },ref UIComponentPrimaryKey);
+                    // get the FormPK of UIComponent to save parameters
+                    DataTable UIComponentPrimaryKey = new DataTable();
+                    Program.dBAccess.GetDBData("UIComponentPrimaryKey", new object[] { url, domain.Rows[0]["id"], tag, classAttribute, dataTestId, ariaPressed, dataInterestId, role, type, name, inputFieldID },ref UIComponentPrimaryKey);
 
-                string value = htmlElements[i].GetAttribute("value");
-                string sChecked = string.IsNullOrEmpty(htmlElements[i].GetAttribute("checked")) ? "" : "checked";
-                //string AlgoInvoke = tagElement.GetAttribute("AlgoInvoke");
+                    // set what you need to have in the history table
+                    string value = htmlElements[i].GetAttribute("value");
+                    string sChecked = string.IsNullOrEmpty(htmlElements[i].GetAttribute("checked")) ? "" : "checked";
+                    int invoked = (string.Equals(ChoosenBFNID, htmlElements[i].GetAttribute("BFN_ID"))) ? 1 : 0;
 
-                if (htmlElements[i].GetAttribute("type") != "hidden")
-                {
-                    //save value and checkbox
-                    Program.dBAccess.UpdateDBData("SaveHistorcalInputParam", new object[] { UIComponentPrimaryKey.Rows[0]["id"], value, sChecked });
+
+                    //save value, checkbox and invoke on UIComponent
+                    if(!string.IsNullOrEmpty(value) || !string.IsNullOrEmpty(sChecked) || invoked==1)
+                        Program.dBAccess.UpdateDBData("SaveHistorcalInputParam", new object[] { UIComponentPrimaryKey.Rows[0]["id"], value, sChecked, invoked});
+
+                    // dispose the DataTable
+                    UIComponentPrimaryKey.Dispose();
                 }
-
-                // dispose the DataTable
-                UIComponentPrimaryKey.Dispose();
-                }
-                    catch (Exception)
+                    catch (Exception e)
                 {
                     LogWriter.LogWrite(LogLevel.Warning, "In HTMLDoc, not found element: " + i.ToString());
+                    LogWriter.LogWrite(LogLevel.Error, "Exception caught." + e);
                     return;
                 }
         }); // end loop over htmlElements

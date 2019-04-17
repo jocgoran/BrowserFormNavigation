@@ -40,6 +40,10 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                 {
                     Program.formNavi.SetDataGridCell(row, "CheckedAttribute", exactFormParamValue["checked"].ToString());
                 }
+                if (exactFormParamValue["invoked"].Equals(1))
+                {
+                    Program.formNavi.SetDataGridCell(row, "AlgoInvoke", "1");
+                }
 
             }
 

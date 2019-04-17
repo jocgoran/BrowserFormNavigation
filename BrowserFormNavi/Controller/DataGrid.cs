@@ -16,7 +16,7 @@ namespace BrowserFormNavi.Controller
         [DllImport("KERNEL32.DLL", EntryPoint = "GetCurrentProcess", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         internal static extern IntPtr GetCurrentProcess();
 
-        public int CopyDataToBrowser()
+        public int PushDataToBrowser()
         {
             // get the Browser document thread safe
             HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
@@ -59,9 +59,10 @@ namespace BrowserFormNavi.Controller
 
                     } // end htmlElements loop
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     LogWriter.LogWrite(LogLevel.Warning, "In DataGrid, not found element: " + i.ToString());
+                    LogWriter.LogWrite(LogLevel.Error, "Exception caught." + e);
                     return;
                 }
 
@@ -69,10 +70,11 @@ namespace BrowserFormNavi.Controller
             return 0;
         }
 
-        public int CopyDataToInvokeComboBox()
+        public int PushDataToInvokeComboBox()
         {
             double maxAlgoInvoke = 0;
             string BFNIDToInvoke = "";
+
             // loop over all the rows of data grid and apply the find the matching submit button
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
@@ -91,11 +93,11 @@ namespace BrowserFormNavi.Controller
             }
 
             //checkif exact match is requested
-            bool exactMatch = true;
+            bool exactMatch = false;
             if ( (exactMatch && maxAlgoInvoke == 1)
                 || !exactMatch)
             {
-                //set if there is at least one value that return a small probability to be correct
+                //set invoke of biggest probability to be correct
                 Program.formNavi.SetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem", BFNIDToInvoke);
             }
             
@@ -104,24 +106,26 @@ namespace BrowserFormNavi.Controller
 
         public int InvoikeSubmitValue()
         {
-            // read the form that have to be submitted  
-            object SelectedItem = Program.formNavi.GetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem");
 
-            //handle the nothing to submit
-            if (SelectedItem == null)
-            {   // reload if nothing to invoke
-                if ((string)Program.formNavi.GetPropertyValue(Program.formNavi.refreshable, "Text") == "1.00")
-                {
-                    Program.browserView.CleanUp();
-                    Program.navigation.OpenPage();
-                    //Program.browserView.webBrowser1.Refresh(WebBrowserRefreshOption.Completely);
-                    //Program.browserView.GetMethod(Program.browserView.webBrowser1, "Refresh", new object[] { });
-                }
+            // reload if rule says so
+            if ((string)Program.formNavi.GetPropertyValue(Program.formNavi.refreshable, "Text") == "1.00")
+            {
+                Program.browserView.CleanUp();
+                Program.navigation.OpenPage();
+                //Program.browserView.webBrowser1.Refresh(WebBrowserRefreshOption.Completely);
+                //Program.browserView.GetMethod(Program.browserView.webBrowser1, "Refresh", new object[] { });
                 return 0;
             }
-            
-            // convert to indexID
-            int ChoosenBFNID = Convert.ToInt32(SelectedItem);
+
+            // read the form that have to be submitted  
+            string ChoosenBFNID = (string)Program.formNavi.GetPropertyValue(Program.formNavi.BFN_IDInvoke, "SelectedItem");
+
+            //handle the nothing to submit
+            if (string.IsNullOrEmpty(ChoosenBFNID))
+            {
+                Program.keepTheNavigationLoopRunning = false;
+                return 0;
+            }
 
             // get the Browser document thread safe
             HtmlDocument htmlDocument = (HtmlDocument)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "Document");
@@ -140,7 +144,7 @@ namespace BrowserFormNavi.Controller
                     if (string.IsNullOrEmpty(htmlElements[i].GetAttribute("BFN_ID"))) return;
 
                     // reset id of row that don't contain the invoked BFN_ID
-                    if (string.Equals(ChoosenBFNID.ToString(), htmlElements[i].GetAttribute("BFN_ID")) == false)
+                    if (string.Equals(ChoosenBFNID, htmlElements[i].GetAttribute("BFN_ID")) == false)
                         {
                         htmlElements[i].SetAttribute("BFN_ID", "");
                         return;
@@ -150,7 +154,7 @@ namespace BrowserFormNavi.Controller
                     htmlElements[i].InvokeMember("click");
 
                     // invoke can shift elements, avoid another "wrong" invoke
-                    ChoosenBFNID = -1;
+                    ChoosenBFNID = "-1";
 
                     // Count the invokations 
                     object invokationsCount = Program.formNavi.GetPropertyValue(Program.formNavi.InvokationDone, "Text");
@@ -163,9 +167,10 @@ namespace BrowserFormNavi.Controller
                     htmlElements[i].SetAttribute("BFN_ID", "");
 
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     LogWriter.LogWrite(LogLevel.Warning, "In Invoke, not found element: " + i.ToString());
+                    LogWriter.LogWrite(LogLevel.Error, "Exception caught." + e);
                     return;
                 }
             });

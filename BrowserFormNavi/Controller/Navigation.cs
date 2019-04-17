@@ -66,7 +66,7 @@ namespace BrowserFormNavi.Controller
         public int CopyFromGridToBrowser()
         {
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.Green);
-            Program.dataGrid.CopyDataToBrowser();
+            Program.dataGrid.PushDataToBrowser();
             Program.formNavi.SetPropertyValue(Program.formNavi.CopyToBrowser, "BackColor", Color.LightGray);
             return 0;
         }

@@ -32,7 +32,7 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                     foreach (DataRow conditionRow in conditions.Rows)
                     {
                         // check each condition on all data grid rows
-                        checkCondition(conditionRow);
+                        CheckCondition(conditionRow);
                     } // loop over the conditions
 
                     // add fuzzy result to a specific set
@@ -40,35 +40,35 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                     {
                         // setValue
                         case 1:
-                            {
-                                break;
-                            }
+                        {
+                            break;
+                        }
                         // setChecked
                         case 2:
-                            {
-                                break;
-                            }
+                        {
+                            break;
+                        }
                         // invoke
                         case 3:
-                            {
-                                // add result to the defined action
-                                Program.predictedData.AddFuzzyConditionResultToActionInvokeResults();
-                                break;
-                            }
+                        {
+                            // add result to the defined action
+                            Program.predictedData.AddFuzzyConditionResultToActionInvokeResults();
+                            break;
+                        }
                         // refresh
                         case 4:
-                            {
-                                // add result to the defined action
-                                Program.predictedData.AddFuzzyConditionResultToActionRefreshResults();
-                                break;
-                            }
+                        {
+                            // add result to the defined action
+                            Program.predictedData.AddFuzzyConditionResultToActionRefreshResults();
+                            break;
+                        }
                         // stop
                         case 5:
-                            {
-                                // add result to the defined action
-                                Program.predictedData.AddFuzzyConditionResultToActionStopResults();
-                                break;
-                            }
+                        {
+                            // add result to the defined action
+                            Program.predictedData.AddFuzzyConditionResultToActionStopResults();
+                            break;
+                        }
 
                     } // end switch
 
@@ -101,10 +101,9 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
             return 0;
         }
 
-
-        public int checkCondition(DataRow conditionRow)
+        public int CheckCondition(DataRow conditionRow)
         {
-            // value that we have
+            // value that we have to match
             string attributeName = conditionRow["attributeName"].ToString();
             string conditionValue = conditionRow["attributeValue"].ToString();
 
@@ -113,38 +112,60 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
             {
                 // setValue
                 case "is":
+                {
+                    // loop over all the rows of data grid
+                    foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
                     {
-                        // loop over all the rows of data grid and apply the find the matching submit button
-                        foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
-                        {
-                            string dataGridValue = row.Cells[attributeName].Value.ToString();
-                            string BFN_ID = row.Cells["BFN_ID"].Value.ToString();
+                        string dataGridValue = row.Cells[attributeName].Value.ToString();
+                        string BFN_ID = row.Cells["BFN_ID"].Value.ToString();
 
-                            // check if match the condition
-                            if (string.Equals(dataGridValue, conditionValue, StringComparison.OrdinalIgnoreCase) == true)
-                            {
-                                // if true: add 1 to listArray
-                                Program.predictedData.conditionsResults[BFN_ID].Add(1);
-                            }
-                            else
-                            {
-                                // IF different: add 0 to listArray
-                                Program.predictedData.conditionsResults[BFN_ID].Add(0);
-                            }
-                        } // loop over a DataGrid
-                        break;
-                    }
+                        // check if match the condition
+                        if (string.Equals(dataGridValue, conditionValue, StringComparison.OrdinalIgnoreCase) == true)
+                        {
+                            // if true: add 1 to listArray
+                            Program.predictedData.conditionsResults[BFN_ID].Add(1);
+                        }
+                        else
+                        {
+                            // IF different: add 0 to listArray
+                            Program.predictedData.conditionsResults[BFN_ID].Add(0);
+                        }
+                    } // loop over a DataGrid
+                    break;
+                }
+                case "is not":
+                {
+                    // loop over all the rows of data grid
+                    foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
+                    {
+                        string dataGridValue = row.Cells[attributeName].Value.ToString();
+                        string BFN_ID = row.Cells["BFN_ID"].Value.ToString();
+
+                        // check if match the condition
+                        if (string.Equals(dataGridValue, conditionValue, StringComparison.OrdinalIgnoreCase) == true)
+                        {
+                            // if true: add 0 to listArray
+                            Program.predictedData.conditionsResults[BFN_ID].Add(0);
+                        }
+                        else
+                        {
+                            // IF different: add 1 to listArray
+                            Program.predictedData.conditionsResults[BFN_ID].Add(1);
+                        }
+                    } // loop over a DataGrid
+                    break;
+                }
                 case "have all":
                 {
                     List<int> conditionMatch = new List<int>();
 
-                    // loop over all the rows of data grid and apply the find the matching submit button
+                    // loop over all the rows of data grid
                     foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
                     {
                         string dataGridValue = row.Cells[attributeName].Value.ToString();
 
                         // check if match the condition
-                        if (string.Equals(dataGridValue, conditionValue, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(dataGridValue, conditionValue, StringComparison.OrdinalIgnoreCase) == true)
                         {
                             // IF equal: match is true
                             conditionMatch.Add(1);
@@ -160,7 +181,6 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                     // fuzzy of "ALL" conditional match
                     double predicted=(double)conditionMatch.Sum()/conditionMatch.Count;
 
-
                     // if no one is different: add 1 to each row's listArray
                     foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
                     {
@@ -173,13 +193,13 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                 {
                     List<int> conditionMatch = new List<int>();
 
-                    // loop over all the rows of data grid and apply the find the matching submit button
+                    // loop over all the rows of data grid
                     foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
                     {
                         string dataGridValue = row.Cells[attributeName].Value.ToString();
 
                         // check if perhaps one match the condition
-                        if (string.Equals(dataGridValue, conditionValue, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(dataGridValue, conditionValue, StringComparison.OrdinalIgnoreCase)==true)
                         {
                             // IF one match: condition is wrong
                             conditionMatch.Add(0);
@@ -201,8 +221,85 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                     }
                     break;
                 } // end case
+
+                case "was once":
+                {
+
+                    // loop over all the rows of data grid and apply the find the matching submit button
+                    foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
+                    {
+                        string dataGridValue = row.Cells[attributeName].Value.ToString();
+                        string BFN_ID = row.Cells["BFN_ID"].Value.ToString();
+                        bool conditionMatch = false;
+
+                        // get HistoricData ot AttributeName
+                        DataTable historicData = new DataTable();
+                        Program.dBAccess.GetDBData("HistoricDataOfAttributeName", new object[] { dataGridValue }, ref historicData);
+
+                        //loop over each historicData
+                        foreach (DataRow historicDataRow in historicData.Rows)
+                        {
+                            // check the match of condition match     
+                            string invoked = historicDataRow[conditionValue].ToString();
+
+                            // check if once
+                            if (string.Equals(invoked, "1", StringComparison.OrdinalIgnoreCase) == true)
+                            {
+                                Program.predictedData.conditionsResults[BFN_ID].Add(1);
+                                conditionMatch = true;
+                                break;
+                            }
+                        }
+
+                        // really never
+                        if (conditionMatch==false)
+                            Program.predictedData.conditionsResults[BFN_ID].Add(0);
+
+                        }// loop over a DataGrid
+
+                    break;
+                }//end case
+
+                case "was never":
+                {
+
+                    // loop over all the rows of data grid and apply the find the matching submit button
+                    foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
+                    {
+                        string dataGridValue = row.Cells[attributeName].Value.ToString();
+                        string BFN_ID = row.Cells["BFN_ID"].Value.ToString();
+                        bool conditionMatch = true;
+
+                        // get HistoricData ot AttributeName
+                        DataTable historicData = new DataTable();
+                        Program.dBAccess.GetDBData("HistoricDataOfAttributeName", new object[] { dataGridValue }, ref historicData);
+
+                        //loop over each historicData
+                        foreach (DataRow historicDataRow in historicData.Rows)
+                        {
+                            // check the match of condition match     
+                            string invoked = historicDataRow[conditionValue].ToString();
+
+                            // check if once
+                            if (string.Equals(invoked, "1", StringComparison.OrdinalIgnoreCase) == true)
+                            {
+                                Program.predictedData.conditionsResults[BFN_ID].Add(0);
+                                conditionMatch = false;
+                                break;
+                            }
+                        }
+
+                        // really never
+                        if(conditionMatch)
+                            Program.predictedData.conditionsResults[BFN_ID].Add(1);
+
+                    }// loop over a DataGrid
+
+                    break;
+                }//end case
             } //endswitch
         return 0;
-        }
+        } // end of CheckCondition
+
     }
 }

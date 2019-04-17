@@ -480,7 +480,7 @@ namespace BrowserFormNavi
             this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1225, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1299, 24);
             this.menuStrip1.TabIndex = 17;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -533,7 +533,6 @@ namespace BrowserFormNavi
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Gray;
             this.BFN_ID.DefaultCellStyle = dataGridViewCellStyle1;
             this.BFN_ID.FillWeight = 50F;
-            this.BFN_ID.Frozen = true;
             this.BFN_ID.HeaderText = "BFN_ID";
             this.BFN_ID.Name = "BFN_ID";
             this.BFN_ID.ReadOnly = true;
@@ -543,7 +542,6 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Gray;
             this.TagAttribute.DefaultCellStyle = dataGridViewCellStyle2;
-            this.TagAttribute.Frozen = true;
             this.TagAttribute.HeaderText = "Tag";
             this.TagAttribute.Name = "TagAttribute";
             this.TagAttribute.ReadOnly = true;
@@ -553,7 +551,6 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Gray;
             this.ClassAttribute.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ClassAttribute.Frozen = true;
             this.ClassAttribute.HeaderText = "Class";
             this.ClassAttribute.Name = "ClassAttribute";
             this.ClassAttribute.ReadOnly = true;
@@ -562,7 +559,6 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Gray;
             this.DataTestIdAttribute.DefaultCellStyle = dataGridViewCellStyle4;
-            this.DataTestIdAttribute.Frozen = true;
             this.DataTestIdAttribute.HeaderText = "Data-testid";
             this.DataTestIdAttribute.Name = "DataTestIdAttribute";
             this.DataTestIdAttribute.ReadOnly = true;
@@ -571,7 +567,6 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Gray;
             this.AriaPressedAttribute.DefaultCellStyle = dataGridViewCellStyle5;
-            this.AriaPressedAttribute.Frozen = true;
             this.AriaPressedAttribute.HeaderText = "aria-pressed";
             this.AriaPressedAttribute.Name = "AriaPressedAttribute";
             this.AriaPressedAttribute.ReadOnly = true;
@@ -580,7 +575,6 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Gray;
             this.DataInterestIdAttribute.DefaultCellStyle = dataGridViewCellStyle6;
-            this.DataInterestIdAttribute.Frozen = true;
             this.DataInterestIdAttribute.HeaderText = "data-interest-id";
             this.DataInterestIdAttribute.Name = "DataInterestIdAttribute";
             this.DataInterestIdAttribute.ReadOnly = true;
@@ -589,7 +583,6 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Gray;
             this.RoleAttribute.DefaultCellStyle = dataGridViewCellStyle7;
-            this.RoleAttribute.Frozen = true;
             this.RoleAttribute.HeaderText = "Role";
             this.RoleAttribute.Name = "RoleAttribute";
             this.RoleAttribute.ReadOnly = true;
@@ -598,7 +591,6 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Gray;
             this.TypeAttribute.DefaultCellStyle = dataGridViewCellStyle8;
-            this.TypeAttribute.Frozen = true;
             this.TypeAttribute.HeaderText = "Type";
             this.TypeAttribute.Name = "TypeAttribute";
             this.TypeAttribute.ReadOnly = true;
@@ -607,7 +599,6 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Gray;
             this.NameAttribute.DefaultCellStyle = dataGridViewCellStyle9;
-            this.NameAttribute.Frozen = true;
             this.NameAttribute.HeaderText = "Name";
             this.NameAttribute.Name = "NameAttribute";
             this.NameAttribute.ReadOnly = true;
@@ -616,20 +607,17 @@ namespace BrowserFormNavi
             // 
             dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Gray;
             this.IDAttribute.DefaultCellStyle = dataGridViewCellStyle10;
-            this.IDAttribute.Frozen = true;
             this.IDAttribute.HeaderText = "ID";
             this.IDAttribute.Name = "IDAttribute";
             this.IDAttribute.ReadOnly = true;
             // 
             // ValueAttribute
             // 
-            this.ValueAttribute.Frozen = true;
             this.ValueAttribute.HeaderText = "Value";
             this.ValueAttribute.Name = "ValueAttribute";
             // 
             // CheckedAttribute
             // 
-            this.CheckedAttribute.Frozen = true;
             this.CheckedAttribute.HeaderText = "Checked";
             this.CheckedAttribute.Name = "CheckedAttribute";
             // 
@@ -646,7 +634,7 @@ namespace BrowserFormNavi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1225, 770);
+            this.ClientSize = new System.Drawing.Size(1299, 770);
             this.Controls.Add(this.domains);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.treeView1);
