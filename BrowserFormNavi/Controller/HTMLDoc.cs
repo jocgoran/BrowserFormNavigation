@@ -107,10 +107,11 @@ namespace BrowserFormNavi.Controller
                     // dispose the DataTable
                     UIComponentPrimaryKey.Dispose();
                 }
-                    catch (Exception e)
+                    catch (Exception ex)
                 {
                     LogWriter.LogWrite(LogLevel.Warning, "In HTMLDoc, not found element: " + i.ToString());
-                    LogWriter.LogWrite(LogLevel.Error, "Exception caught." + e);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.Message);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.StackTrace);
                     return;
                 }
         }); // end loop over htmlElements

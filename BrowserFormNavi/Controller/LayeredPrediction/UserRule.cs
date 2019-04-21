@@ -254,6 +254,9 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                         // really never
                         if (conditionMatch==false)
                             Program.predictedData.conditionsResults[BFN_ID].Add(0);
+                        
+                        // dispose the DataTable
+                        historicData.Dispose();
 
                         }// loop over a DataGrid
 
@@ -293,7 +296,10 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                         if(conditionMatch)
                             Program.predictedData.conditionsResults[BFN_ID].Add(1);
 
-                    }// loop over a DataGrid
+                        // dispose the DataTable
+                        historicData.Dispose();
+
+                        }// loop over a DataGrid
 
                     break;
                 }//end case

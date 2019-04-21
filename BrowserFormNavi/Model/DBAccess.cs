@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using static BrowserFormNavi.Program;
 
 namespace BrowserFormNavi.Model
 {
@@ -58,11 +59,20 @@ namespace BrowserFormNavi.Model
             sqlConnection.Open();
 
             // invoke correct method
-            MethodInfo method = this.GetType().GetMethod(methodName);
-            method.Invoke(this, new object[] { parameters });
+            try
+            {
+                MethodInfo method = this.GetType().GetMethod(methodName);
+                method.Invoke(this, new object[] { parameters });
 
-            // execute the insert
-            DBAdapter.InsertCommand.ExecuteNonQuery();
+                // execute the insert
+                DBAdapter.InsertCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Extract some information from this exception, and then 
+                LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.Message);
+                LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.StackTrace);
+            }
 
             sqlConnection.Close();
 
@@ -87,12 +97,21 @@ namespace BrowserFormNavi.Model
             //openconnection
             sqlConnection.Open();
 
+            try
+            {
             // invoke correct method
             MethodInfo method = this.GetType().GetMethod(methodName);
             method.Invoke(this, new object[] { parameters });
 
             // execute the insert
             DBAdapter.UpdateCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Extract some information from this exception, and then 
+                LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.Message);
+                LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.StackTrace);
+            }
 
             sqlConnection.Close();
 
@@ -114,12 +133,22 @@ namespace BrowserFormNavi.Model
             //openconnection
             sqlConnection.Open();
 
-            // invoke correct method
-            MethodInfo method = this.GetType().GetMethod(methodName);
-            method.Invoke(this, new object[] { parameters });
+            try
+            { 
+                // invoke correct method
+                MethodInfo method = this.GetType().GetMethod(methodName);
+                method.Invoke(this, new object[] { parameters });
 
-            // fill values and close connection
-            DBAdapter.Fill(contextualDataTable);
+                // fill values and close connection
+                DBAdapter.Fill(contextualDataTable);
+            }
+            catch (Exception ex)
+            {
+                // Extract some information from this exception, and then 
+                LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.Message);
+                LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.StackTrace);
+            }
+
             sqlConnection.Close();
 
             // release mutual exclusion code

@@ -151,8 +151,8 @@ namespace BrowserFormNavi.Controller
                 catch (Exception ex)
                 {
                     // Extract some information from this exception, and then 
-                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception source: " + ex.InnerException);
-                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception source: " + ex.Message);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.Message);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.StackTrace);
 
                     // if loop stop without user decision, restart the program
                     if (Program.keepTheNavigationLoopRunning && (bool)Program.formNavi.GetPropertyValue(Program.formNavi.autoRestart, "Checked"))

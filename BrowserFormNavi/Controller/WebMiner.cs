@@ -114,10 +114,11 @@ namespace BrowserFormNavi.Controller
                     if (SubmitTaxonomie(htmlElements[i]))
                         Program.formNavi.AddItemToComboBox(Program.formNavi.BFN_IDInvoke, i.ToString());
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
                     LogWriter.LogWrite(LogLevel.Warning, "In WebMiner, not found element: " + i.ToString());
-                    LogWriter.LogWrite(LogLevel.Error, "Exception caught." + e);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.Message);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.StackTrace);
                     return;
                 }
             });

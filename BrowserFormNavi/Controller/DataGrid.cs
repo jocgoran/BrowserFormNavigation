@@ -59,10 +59,11 @@ namespace BrowserFormNavi.Controller
 
                     } // end htmlElements loop
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
                     LogWriter.LogWrite(LogLevel.Warning, "In DataGrid, not found element: " + i.ToString());
-                    LogWriter.LogWrite(LogLevel.Error, "Exception caught." + e);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.Message);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.StackTrace);
                     return;
                 }
 
@@ -167,10 +168,11 @@ namespace BrowserFormNavi.Controller
                     htmlElements[i].SetAttribute("BFN_ID", "");
 
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
                     LogWriter.LogWrite(LogLevel.Warning, "In Invoke, not found element: " + i.ToString());
-                    LogWriter.LogWrite(LogLevel.Error, "Exception caught." + e);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.Message);
+                    LogWriter.LogWrite(LogLevel.Error, "Catch Exception: " + ex.StackTrace);
                     return;
                 }
             });
