@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using static BrowserFormNavi.Program;
+using System.Configuration;
 
 namespace BrowserFormNavi.Model
 {
@@ -24,7 +23,7 @@ namespace BrowserFormNavi.Model
 
         public DBAccess()
         {
-            connectionString = @"Data Source=localhost;Initial Catalog=Browserformnavi;User ID=sa;Password=sa;";
+            connectionString = ConfigurationManager.ConnectionStrings["BrowserFormNavigation"].ConnectionString; 
             // Set the connection string with pooling option
             connectionString += "Connection Timeout = 30; Connection Lifetime = 0; Min Pool Size = 0; Max Pool Size = 100; pooling = true; ";
 
