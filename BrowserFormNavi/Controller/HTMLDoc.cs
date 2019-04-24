@@ -20,14 +20,14 @@ namespace BrowserFormNavi.Controller
             string BrowserTitel= (string)Program.browserView.GetPropertyValue(Program.browserView.webBrowser1, "DocumentTitle");
             Program.browserView.SetPropertyValue(Program.browserView, "Text", BrowserTitel);
 
+            // passing the document for elaboration
+            Program.webMiner.DocumentMining();
+
             //copy URl To Form
             CopyUrlToForm();
 
             //update domainId
             UpdateDomain();
-
-            // passing the document for elaboration
-            Program.webMiner.DocumentMining();
 
             return 0;
         }

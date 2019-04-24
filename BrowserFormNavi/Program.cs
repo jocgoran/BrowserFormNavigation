@@ -41,6 +41,7 @@ namespace BrowserFormNavi
         // View objects
         public static BrowserView browserView;
         public static FormNavi formNavi;
+        public static Info info;
 
         // Globalerror code
         public static int error=0;

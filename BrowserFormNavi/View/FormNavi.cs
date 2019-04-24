@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using BrowserFormNavi.View;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -287,6 +288,12 @@ namespace BrowserFormNavi
             RegistryKey key = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION\\");
             key.SetValue("BrowserFormNavi.exe", "11000", RegistryValueKind.DWord);
             key.Close();
+        }
+
+        private void OpenInfo(object sender, EventArgs e)
+        {
+            Program.info = new Info();
+            Program.info.Show();
         }
     }
 }

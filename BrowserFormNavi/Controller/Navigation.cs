@@ -47,10 +47,9 @@ namespace BrowserFormNavi.Controller
             string url = (string)Program.formNavi.GetPropertyValue(Program.formNavi.navigationURL, "Text");
 
             //start the navigation in a new thread
-            //Thread thread = new Thread(() => Program.browserView.webBrowser1.Navigate(url));
-            //thread.SetApartmentState(ApartmentState.STA);
-            //thread.Start();
-            Program.browserView.WebBrowserNavigate(url);
+            Thread thread = new Thread(() => Program.browserView.webBrowser1.Navigate(url));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
 
             return 0;
         }

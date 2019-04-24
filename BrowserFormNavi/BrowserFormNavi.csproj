@@ -84,6 +84,12 @@
     <Compile Include="Model\DBAccess.cs" />
     <Compile Include="Model\LogWriter.cs" />
     <Compile Include="Model\PredictedData.cs" />
+    <Compile Include="View\Info.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Info.Designer.cs">
+      <DependentUpon>Info.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\FormNavi.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     <Compile Include="View\BrowserView.Designer.cs">
       <DependentUpon>BrowserView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="View\Info.resx">
+      <DependentUpon>Info.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\FormNavi.resx">
       <DependentUpon>FormNavi.cs</DependentUpon>
     </EmbeddedResource>
