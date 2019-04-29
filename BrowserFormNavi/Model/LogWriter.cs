@@ -24,7 +24,6 @@ namespace BrowserFormNavi.Model
                     {
                     // don't write info logs    
                     return;
-                    break;
                     }
             }
             m_exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);

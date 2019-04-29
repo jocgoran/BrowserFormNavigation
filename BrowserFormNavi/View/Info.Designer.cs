@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace BrowserFormNavi.View
 {
@@ -37,33 +38,32 @@ namespace BrowserFormNavi.View
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // product
+            // Product
             // 
             this.Product.AutoSize = true;
             this.Product.Location = new System.Drawing.Point(6, 29);
-            this.Product.Name = "product";
-            this.Product.Size = new System.Drawing.Size(120, 13);
+            this.Product.Name = "Product";
+            this.Product.Size = new System.Drawing.Size(186, 13);
             this.Product.TabIndex = 0;
-            this.Product.Text = "Browser form navigation";
+            this.Product.Text = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyTitleAttribute), false)).Title;
             // 
-            // version
+            // Softility
             // 
             this.Softility.AutoSize = true;
             this.Softility.Location = new System.Drawing.Point(6, 69);
-            this.Softility.Name = "version";
+            this.Softility.Name = "Softility";
             this.Softility.Size = new System.Drawing.Size(42, 13);
             this.Softility.TabIndex = 1;
             this.Softility.Text = "Version" + Assembly.GetEntryAssembly().GetName().Version;
             // 
-            // company
+            // Company
             // 
             this.Company.AutoSize = true;
             this.Company.Location = new System.Drawing.Point(6, 111);
-            this.Company.Name = "company";
-            this.Company.Size = new System.Drawing.Size(94, 13);
+            this.Company.Name = "Company";
+            this.Company.Size = new System.Drawing.Size(211, 13);
             this.Company.TabIndex = 2;
-            this.Company.Text = "Created by Softility";
-
+            this.Company.Text = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute), false)).Copyright;
             // 
             // groupBox1
             // 
@@ -72,7 +72,7 @@ namespace BrowserFormNavi.View
             this.groupBox1.Controls.Add(this.Company);
             this.groupBox1.Location = new System.Drawing.Point(13, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(136, 144);
+            this.groupBox1.Size = new System.Drawing.Size(222, 144);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             // 
@@ -80,7 +80,7 @@ namespace BrowserFormNavi.View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(161, 166);
+            this.ClientSize = new System.Drawing.Size(247, 166);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "Info";

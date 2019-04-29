@@ -34,7 +34,8 @@ namespace BrowserFormNavi
 
         // Model Objects
         public static BrowserData browserData;
-        public static DBAccess dBAccess;
+        //public static MSSQLAccess dBAccess;
+        public static SQLiteAccess dBAccess;
         public static FormData formData;
         public static PredictedData predictedData;
 
@@ -70,7 +71,7 @@ namespace BrowserFormNavi
 
             // Model Objects
             browserData = new BrowserData();
-            dBAccess = new DBAccess();
+            dBAccess = new SQLiteAccess();
             formData = new FormData();
             
             // View objects
