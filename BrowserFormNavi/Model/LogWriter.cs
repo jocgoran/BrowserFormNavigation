@@ -38,6 +38,7 @@ namespace BrowserFormNavi.Model
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
 
         }
@@ -52,6 +53,7 @@ namespace BrowserFormNavi.Model
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
         }
     }

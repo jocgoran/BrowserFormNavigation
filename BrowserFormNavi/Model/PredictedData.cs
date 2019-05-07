@@ -40,19 +40,13 @@ namespace BrowserFormNavi.Model
             }
         }
 
-        ~PredictedData()
-        {
-            // destroy all the 
-        }
-
-
         public int AddFuzzyConditionResultToActionInvokeResults()
         {
             // loop over all the rows of data grid
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
                 string BFN_ID = row.Cells["BFN_ID"].Value.ToString();
-                double predicted = fuzzyConditionsResult(BFN_ID);
+                double predicted = FuzzyConditionsResult(BFN_ID);
                 ruleActionInvokeResults[BFN_ID].Add(predicted);
             }
             return 0;
@@ -65,7 +59,7 @@ namespace BrowserFormNavi.Model
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
                 string BFN_ID = row.Cells["BFN_ID"].Value.ToString();
-                double predicted = fuzzyConditionsResult(BFN_ID);
+                double predicted = FuzzyConditionsResult(BFN_ID);
                 ruleActionRefresh[BFN_ID].Add(predicted);
             }
             return 0;
@@ -77,7 +71,7 @@ namespace BrowserFormNavi.Model
             foreach (DataGridViewRow row in Program.formNavi.dataGridView1.Rows)
             {
                 string BFN_ID = row.Cells["BFN_ID"].Value.ToString();
-                double predicted = fuzzyConditionsResult(BFN_ID);
+                double predicted = FuzzyConditionsResult(BFN_ID);
                 ruleActionStop[BFN_ID].Add(predicted);
             }
             return 0;
@@ -109,7 +103,7 @@ namespace BrowserFormNavi.Model
         }
 
 
-        private double fuzzyConditionsResult(string BFN_ID)
+        private double FuzzyConditionsResult(string BFN_ID)
         {
             List<double> conditionsResult = conditionsResults[BFN_ID];
 

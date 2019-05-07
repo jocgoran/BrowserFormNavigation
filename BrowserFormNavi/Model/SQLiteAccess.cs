@@ -12,7 +12,6 @@ namespace BrowserFormNavi.Model
 
     public class SQLiteAccess
     {
-        private static string connectionString;
         private static SQLiteConnection sqLiteConnection;
         private static SQLiteCommand sqLiteCommand;
         private static SQLiteDataAdapter sqLiteDataAdapter;
@@ -23,8 +22,8 @@ namespace BrowserFormNavi.Model
 
         public SQLiteAccess()
         {
-            // Set the connection string with pooling option
-            connectionString = "Data Source=BrowserFormNavi.sqlite; Version = 3; New = True; Compress = True;";
+            // Set the connection string to SQLite
+            string connectionString = "Data Source=BrowserFormNavi.sqlite; Version = 3; New = True; Compress = True;";
 
             // create connection
             sqLiteConnection = new SQLiteConnection(connectionString);
@@ -32,9 +31,11 @@ namespace BrowserFormNavi.Model
             // create command
             sqLiteCommand = sqLiteConnection.CreateCommand();
 
-            sqLiteDataAdapter = new SQLiteDataAdapter("", sqLiteConnection);
-            sqLiteDataAdapter.InsertCommand = sqLiteCommand;
-            sqLiteDataAdapter.UpdateCommand = sqLiteCommand;
+            sqLiteDataAdapter = new SQLiteDataAdapter(sqLiteCommand)
+            {
+                InsertCommand = sqLiteCommand,
+                UpdateCommand = sqLiteCommand
+            };
         }
 
         public int CheckDBConnection()
