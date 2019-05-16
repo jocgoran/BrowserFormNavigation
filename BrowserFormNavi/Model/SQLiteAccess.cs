@@ -23,7 +23,7 @@ namespace BrowserFormNavi.Model
         public SQLiteAccess()
         {
             // Set the connection string to SQLite
-            string connectionString = "Data Source=BrowserFormNavi.sqlite; Version = 3; New = True; Compress = True;";
+            string connectionString = "Data Source=BrowserFormNavi.sqlite; Version = 3; Pooling=True; Max Pool Size=100; Compress = True;";
 
             // create connection
             sqLiteConnection = new SQLiteConnection(connectionString);

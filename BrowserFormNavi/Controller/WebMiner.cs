@@ -157,6 +157,11 @@ namespace BrowserFormNavi.Controller
             if (icAttributesToExport.Contains(attributeNameValue))
                 return true;
 
+            string ariaPressedAttribute = tagElement.GetAttribute("aria-pressed");
+            attributeNameValue = tagElement.TagName + "-aria-pressed-" + ariaPressedAttribute;
+            if (icAttributesToExport.Contains(attributeNameValue))
+                return true;
+
             string classAttribute = tagElement.GetAttribute("className");
             attributeNameValue = tagElement.TagName + "-class-" + classAttribute;
             if (icAttributesToExport.Contains(attributeNameValue))
