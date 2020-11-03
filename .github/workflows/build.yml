@@ -39,5 +39,5 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"jocgoran_BrowserFormNavigation" /o:"jocgoran" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" C:\Users\jocgr\source\repos\BrowserFormNavi\BrowserFormNavi\BrowserFormNavi.csproj /t:Clean;Rebuild
+          MSBuild.exe BrowserFormNavi\BrowserFormNavi\BrowserFormNavi.csproj /t:Clean;Rebuild
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
