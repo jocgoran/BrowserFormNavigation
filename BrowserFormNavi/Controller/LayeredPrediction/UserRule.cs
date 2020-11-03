@@ -40,36 +40,38 @@ namespace BrowserFormNavi.Controller.LayeredPrediction
                     {
                         // setValue
                         case 1:
-                        {
-                            break;
-                        }
+                            {
+                                break;
+                            }
                         // setChecked
                         case 2:
-                        {
-                            break;
-                        }
+                            {
+                                break;
+                            }
                         // invoke
                         case 3:
-                        {
-                            // add result to the defined action
-                            Program.predictedData.AddFuzzyConditionResultToActionInvokeResults();
-                            break;
-                        }
+                            {
+                                // add result to the defined action
+                                Program.predictedData.AddFuzzyConditionResultToActionInvokeResults();
+                                break;
+                            }
                         // refresh
                         case 4:
-                        {
-                            // add result to the defined action
-                            Program.predictedData.AddFuzzyConditionResultToActionRefreshResults();
-                            break;
-                        }
+                            {
+                                // add result to the defined action
+                                Program.predictedData.AddFuzzyConditionResultToActionRefreshResults();
+                                break;
+                            }
                         // stop
                         case 5:
-                        {
-                            // add result to the defined action
-                            Program.predictedData.AddFuzzyConditionResultToActionStopResults();
-                            break;
-                        }
+                            {
+                                // add result to the defined action
+                                Program.predictedData.AddFuzzyConditionResultToActionStopResults();
+                                break;
+                            }
 
+                        default:
+                            break;
                     } // end switch
 
                     // add caluculated values to the GUI for special condition

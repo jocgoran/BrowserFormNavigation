@@ -314,7 +314,7 @@ namespace BrowserFormNavi.Model
 #pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
         {
             // select the eisting settings
-            sqLiteDataAdapter.SelectCommand.CommandText = "Select * from ruleAppliance";
+            sqLiteDataAdapter.SelectCommand.CommandText = "Select * from ruleAppliance ORDER BY ruleAppliance.priority asc";
             return 0;
         }
 
@@ -324,7 +324,8 @@ namespace BrowserFormNavi.Model
             sqLiteDataAdapter.SelectCommand.CommandText = "SELECT [rule].* " +
                                                     "FROM ruleAppliance " +
                                                     "INNER JOIN [rule] ON ruleAppliance.id = appliance_id " +
-                                                    "WHERE appliance = @appliance";
+                                                    "WHERE appliance = @appliance " +
+                                                    "ORDER BY ruleAppliance.priority asc";
             sqLiteDataAdapter.SelectCommand.Parameters.AddWithValue("@appliance", parameters[0]);
             return 0;
         }
